@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using IrisRobloxMultiTool.Forms;
+using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -74,6 +75,11 @@ namespace IrisRobloxMultiTool
             }
         }
 
+        private bool LoggedIn()
+        {
+            return false;
+        }
+
         public Main()
         {
             InitializeComponent();
@@ -83,6 +89,18 @@ namespace IrisRobloxMultiTool
         {
             FirstSetup();
             CheckWebView();
+
+            Login LoginForm = new Login();
+            LoginForm.ShowDialog();
+
+            Username.Text = Program.RbxApi.AccountData.Name;
+            Username.LinkClicked += (s, er) => { Process.Start(Program.RbxApi.AccountData.ProfileUrl); };
+            RobuxText.Text = Program.RbxApi.AccountData.RobuxCount;
+            UserPFP.LoadAsync(Program.RbxApi.AccountData.ProfilePicture);
+            if (!Program.RbxApi.AccountData.IsVerified)
+            {
+                Verified.Visible = false;
+            }
         }
     }
 }
