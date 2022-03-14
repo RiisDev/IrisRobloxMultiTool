@@ -37,7 +37,7 @@ namespace IrisRobloxMultiTool
                 AccountData.IsVerified = Convert.ToBoolean(Data["IsEmailVerified"].ToString());
                 AccountData.ProfileUrl = $"https://www.roblox.com/users/{AccountData.ID}/profile";
 
-                JData = Client.DownloadString($"https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds={AccountData.ID}&size=150x150&format=Png&isCircular=false");
+                JData = Client.DownloadString($"https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds={AccountData.ID}&size=150x150&format=Png&isCircular=true");
                 Data = JObject.Parse(JData);
 
                 AccountData.ProfilePicture = Data["data"][0]["imageUrl"].ToString();

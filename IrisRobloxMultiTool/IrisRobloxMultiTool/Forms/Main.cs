@@ -18,7 +18,10 @@ namespace IrisRobloxMultiTool
 {
     public partial class Main : Form
     {
-        
+        AssetDownloader assetDownloader = new AssetDownloader();
+        Home home = new Home();
+        GroupScanner scanner = new GroupScanner();
+
         private bool WebViewInstalled()
         {
             string regKey = @"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients";
@@ -85,13 +88,18 @@ namespace IrisRobloxMultiTool
             InitializeComponent();
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        private async void Main_Load(object sender, EventArgs e)
         {
             FirstSetup();
             CheckWebView();
 
             Login LoginForm = new Login();
             LoginForm.ShowDialog();
+            TopMost = true;
+            await Task.Delay(25);
+            TopMost = false;
+
+            HomeButton.PerformClick();
 
             Username.Text = Program.RbxApi.AccountData.Name;
             Username.LinkClicked += (s, er) => { Process.Start(Program.RbxApi.AccountData.ProfileUrl); };
@@ -101,6 +109,94 @@ namespace IrisRobloxMultiTool
             {
                 Verified.Visible = false;
             }
+        }
+
+        private void LogOutButton_Click(object sender, EventArgs e)
+        {
+            Directory.Delete($"{Program.Directory}\\IrisRobloxMultiTool.exe.WebView2", true);
+            Program.Global.SafeShutdown();
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            Program.Global.SafeShutdown();
+        }
+
+        private void MinimizeButton_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void SupportMe_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.twitch.tv/irisdev");
+            Process.Start("https://www.youtube.com/channel/UC7eKTp0XmY1WwrLBndraSHA?sub_confirmation=1");
+            Process.Start("https://paypal.me/IrisDev");
+        }
+
+        private void HideForms()
+        {
+            foreach (Form frm in FormHolder.Controls)
+                frm.Hide();
+        }
+
+        private void AssetDownloaderButton_Click(object sender, EventArgs e)
+        {
+            HideForms();
+            if (assetDownloader == null)
+            {
+                assetDownloader = new AssetDownloader();
+            }
+
+            if (!FormHolder.Controls.Contains(assetDownloader))
+            {
+                assetDownloader.TopLevel = false;
+                assetDownloader.AutoScroll = true;
+                assetDownloader.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(assetDownloader);
+            }
+
+            assetDownloader.Show();
+        }
+
+        private void HomeButton_Click(object sender, EventArgs e)
+        {
+            HideForms();
+
+            if (home == null)
+            {
+                home = new Home();
+            }
+
+            if (!FormHolder.Controls.Contains(home))
+            {
+                home.TopLevel = false;
+                home.AutoScroll = true;
+                home.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(home);
+            }
+
+            home.Show();
+        }
+
+        private void GroupScannerButton_Click(object sender, EventArgs e)
+        {
+            HideForms();
+
+            if (scanner == null)
+            {
+                scanner = new GroupScanner();
+            }
+
+            if (!FormHolder.Controls.Contains(scanner))
+            {
+                scanner.TopLevel = false;
+                scanner.AutoScroll = true;
+                scanner.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(scanner);
+            }
+
+            scanner.Show();
         }
     }
 }

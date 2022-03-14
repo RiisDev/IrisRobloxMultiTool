@@ -196,6 +196,24 @@
   <ItemGroup>
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\GlobalCalls.cs" />
+    <Compile Include="Forms\AssetDownloader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AssetDownloader.Designer.cs">
+      <DependentUpon>AssetDownloader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GroupScanner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GroupScanner.Designer.cs">
+      <DependentUpon>GroupScanner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Home.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +229,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\RobloxAPI.cs" />
+    <EmbeddedResource Include="Forms\AssetDownloader.resx">
+      <DependentUpon>AssetDownloader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GroupScanner.resx">
+      <DependentUpon>GroupScanner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -243,6 +270,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Guna.UI2.dll" />
+    <None Include="Resources\People.png" />
+    <None Include="Resources\Smile.png" />
+    <None Include="Resources\Download.png" />
+    <None Include="Resources\Home.png" />
+    <None Include="Resources\Logout.png" />
     <None Include="Resources\Robux.png" />
     <None Include="Resources\Verified.png" />
   </ItemGroup>

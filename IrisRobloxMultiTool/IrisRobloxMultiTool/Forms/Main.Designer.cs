@@ -31,54 +31,102 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.TopBar = new System.Windows.Forms.Panel();
+            this.MinimizeButton = new Guna.UI2.WinForms.Guna2Button();
+            this.CloseButton = new Guna.UI2.WinForms.Guna2Button();
+            this.Title = new System.Windows.Forms.Label();
             this.TabPageButtons = new System.Windows.Forms.Panel();
-            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.UserInfoHolder = new System.Windows.Forms.Panel();
+            this.Username = new System.Windows.Forms.LinkLabel();
+            this.RobuxText = new System.Windows.Forms.Label();
+            this.DragControl = new Guna.UI2.WinForms.Guna2DragControl(this.components);
+            this.FormHolder = new System.Windows.Forms.Panel();
+            this.GroupScannerButton = new Guna.UI2.WinForms.Guna2Button();
+            this.SupportMeButton = new Guna.UI2.WinForms.Guna2Button();
+            this.AssetDownloaderButton = new Guna.UI2.WinForms.Guna2Button();
+            this.LogOutButton = new Guna.UI2.WinForms.Guna2Button();
+            this.HomeButton = new Guna.UI2.WinForms.Guna2Button();
             this.Robux = new Guna.UI2.WinForms.Guna2PictureBox();
             this.Verified = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.RobuxText = new System.Windows.Forms.Label();
             this.UserPFP = new Guna.UI2.WinForms.Guna2CirclePictureBox();
-            this.Username = new System.Windows.Forms.LinkLabel();
-            this.DragControl = new Guna.UI2.WinForms.Guna2DragControl(this.components);
+            this.ButtonHolder = new System.Windows.Forms.FlowLayoutPanel();
+            this.TopBar.SuspendLayout();
             this.TabPageButtons.SuspendLayout();
             this.UserInfoHolder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Robux)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Verified)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UserPFP)).BeginInit();
+            this.ButtonHolder.SuspendLayout();
             this.SuspendLayout();
             // 
             // TopBar
             // 
             this.TopBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.TopBar.Controls.Add(this.MinimizeButton);
+            this.TopBar.Controls.Add(this.CloseButton);
+            this.TopBar.Controls.Add(this.Title);
             this.TopBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopBar.Location = new System.Drawing.Point(0, 0);
             this.TopBar.Name = "TopBar";
             this.TopBar.Size = new System.Drawing.Size(727, 26);
             this.TopBar.TabIndex = 0;
             // 
+            // MinimizeButton
+            // 
+            this.MinimizeButton.Animated = true;
+            this.MinimizeButton.CheckedState.Parent = this.MinimizeButton;
+            this.MinimizeButton.CustomImages.Parent = this.MinimizeButton;
+            this.MinimizeButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.MinimizeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.MinimizeButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MinimizeButton.ForeColor = System.Drawing.Color.White;
+            this.MinimizeButton.HoverState.Parent = this.MinimizeButton;
+            this.MinimizeButton.Location = new System.Drawing.Point(675, 0);
+            this.MinimizeButton.Name = "MinimizeButton";
+            this.MinimizeButton.ShadowDecoration.Parent = this.MinimizeButton;
+            this.MinimizeButton.Size = new System.Drawing.Size(26, 26);
+            this.MinimizeButton.TabIndex = 2;
+            this.MinimizeButton.Text = "─";
+            this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.Animated = true;
+            this.CloseButton.CheckedState.Parent = this.CloseButton;
+            this.CloseButton.CustomImages.Parent = this.CloseButton;
+            this.CloseButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.CloseButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.CloseButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CloseButton.ForeColor = System.Drawing.Color.White;
+            this.CloseButton.HoverState.Parent = this.CloseButton;
+            this.CloseButton.Location = new System.Drawing.Point(701, 0);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.ShadowDecoration.Parent = this.CloseButton;
+            this.CloseButton.Size = new System.Drawing.Size(26, 26);
+            this.CloseButton.TabIndex = 1;
+            this.CloseButton.Text = "✕";
+            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+            // 
+            // Title
+            // 
+            this.Title.AutoSize = true;
+            this.Title.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold);
+            this.Title.ForeColor = System.Drawing.Color.White;
+            this.Title.Location = new System.Drawing.Point(2, 2);
+            this.Title.Name = "Title";
+            this.Title.Size = new System.Drawing.Size(180, 19);
+            this.Title.TabIndex = 0;
+            this.Title.Text = "Iris\'s Roblox Multi Tool";
+            // 
             // TabPageButtons
             // 
-            this.TabPageButtons.Controls.Add(this.guna2Button1);
+            this.TabPageButtons.Controls.Add(this.ButtonHolder);
+            this.TabPageButtons.Controls.Add(this.SupportMeButton);
+            this.TabPageButtons.Controls.Add(this.LogOutButton);
             this.TabPageButtons.Controls.Add(this.UserInfoHolder);
-            this.TabPageButtons.Location = new System.Drawing.Point(0, 32);
+            this.TabPageButtons.Location = new System.Drawing.Point(1, 26);
             this.TabPageButtons.Name = "TabPageButtons";
-            this.TabPageButtons.Size = new System.Drawing.Size(186, 401);
+            this.TabPageButtons.Size = new System.Drawing.Size(186, 410);
             this.TabPageButtons.TabIndex = 1;
-            // 
-            // guna2Button1
-            // 
-            this.guna2Button1.CheckedState.Parent = this.guna2Button1;
-            this.guna2Button1.CustomImages.Parent = this.guna2Button1;
-            this.guna2Button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.guna2Button1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.guna2Button1.ForeColor = System.Drawing.Color.White;
-            this.guna2Button1.HoverState.Parent = this.guna2Button1;
-            this.guna2Button1.Location = new System.Drawing.Point(0, 57);
-            this.guna2Button1.Name = "guna2Button1";
-            this.guna2Button1.ShadowDecoration.Parent = this.guna2Button1;
-            this.guna2Button1.Size = new System.Drawing.Size(186, 45);
-            this.guna2Button1.TabIndex = 1;
-            this.guna2Button1.Text = "guna2Button1";
             // 
             // UserInfoHolder
             // 
@@ -92,6 +140,154 @@
             this.UserInfoHolder.Name = "UserInfoHolder";
             this.UserInfoHolder.Size = new System.Drawing.Size(186, 57);
             this.UserInfoHolder.TabIndex = 2;
+            // 
+            // Username
+            // 
+            this.Username.ActiveLinkColor = System.Drawing.Color.White;
+            this.Username.AutoSize = true;
+            this.Username.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold);
+            this.Username.ForeColor = System.Drawing.Color.White;
+            this.Username.LinkColor = System.Drawing.Color.White;
+            this.Username.Location = new System.Drawing.Point(57, 3);
+            this.Username.Name = "Username";
+            this.Username.Size = new System.Drawing.Size(59, 18);
+            this.Username.TabIndex = 6;
+            this.Username.TabStop = true;
+            this.Username.Text = "lrisDev";
+            this.Username.VisitedLinkColor = System.Drawing.Color.White;
+            // 
+            // RobuxText
+            // 
+            this.RobuxText.AutoSize = true;
+            this.RobuxText.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobuxText.ForeColor = System.Drawing.Color.Green;
+            this.RobuxText.Location = new System.Drawing.Point(109, 27);
+            this.RobuxText.Name = "RobuxText";
+            this.RobuxText.Size = new System.Drawing.Size(28, 15);
+            this.RobuxText.TabIndex = 2;
+            this.RobuxText.Text = "850";
+            // 
+            // DragControl
+            // 
+            this.DragControl.TargetControl = this.TopBar;
+            this.DragControl.UseTransparentDrag = true;
+            // 
+            // FormHolder
+            // 
+            this.FormHolder.Dock = System.Windows.Forms.DockStyle.Right;
+            this.FormHolder.Location = new System.Drawing.Point(189, 26);
+            this.FormHolder.Name = "FormHolder";
+            this.FormHolder.Size = new System.Drawing.Size(538, 408);
+            this.FormHolder.TabIndex = 2;
+            // 
+            // GroupScannerButton
+            // 
+            this.GroupScannerButton.Animated = true;
+            this.GroupScannerButton.CheckedState.Parent = this.GroupScannerButton;
+            this.GroupScannerButton.CustomImages.Parent = this.GroupScannerButton;
+            this.GroupScannerButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.GroupScannerButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.GroupScannerButton.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupScannerButton.ForeColor = System.Drawing.Color.White;
+            this.GroupScannerButton.HoverState.Parent = this.GroupScannerButton;
+            this.GroupScannerButton.Image = global::IrisRobloxMultiTool.Properties.Resources.People;
+            this.GroupScannerButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.GroupScannerButton.ImageSize = new System.Drawing.Size(33, 33);
+            this.GroupScannerButton.Location = new System.Drawing.Point(3, 105);
+            this.GroupScannerButton.Name = "GroupScannerButton";
+            this.GroupScannerButton.ShadowDecoration.Parent = this.GroupScannerButton;
+            this.GroupScannerButton.Size = new System.Drawing.Size(186, 45);
+            this.GroupScannerButton.TabIndex = 6;
+            this.GroupScannerButton.Text = "Group Scanner";
+            this.GroupScannerButton.TextOffset = new System.Drawing.Point(22, 0);
+            this.GroupScannerButton.Click += new System.EventHandler(this.GroupScannerButton_Click);
+            // 
+            // SupportMeButton
+            // 
+            this.SupportMeButton.Animated = true;
+            this.SupportMeButton.CheckedState.Parent = this.SupportMeButton;
+            this.SupportMeButton.CustomImages.Parent = this.SupportMeButton;
+            this.SupportMeButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.SupportMeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.SupportMeButton.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SupportMeButton.ForeColor = System.Drawing.Color.White;
+            this.SupportMeButton.HoverState.Parent = this.SupportMeButton;
+            this.SupportMeButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Smile;
+            this.SupportMeButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.SupportMeButton.ImageSize = new System.Drawing.Size(33, 33);
+            this.SupportMeButton.Location = new System.Drawing.Point(0, 320);
+            this.SupportMeButton.Name = "SupportMeButton";
+            this.SupportMeButton.ShadowDecoration.Parent = this.SupportMeButton;
+            this.SupportMeButton.Size = new System.Drawing.Size(186, 45);
+            this.SupportMeButton.TabIndex = 5;
+            this.SupportMeButton.Text = "Support Me!";
+            this.SupportMeButton.TextOffset = new System.Drawing.Point(10, 0);
+            this.SupportMeButton.Click += new System.EventHandler(this.SupportMe_Click);
+            // 
+            // AssetDownloaderButton
+            // 
+            this.AssetDownloaderButton.Animated = true;
+            this.AssetDownloaderButton.CheckedState.Parent = this.AssetDownloaderButton;
+            this.AssetDownloaderButton.CustomImages.Parent = this.AssetDownloaderButton;
+            this.AssetDownloaderButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AssetDownloaderButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.AssetDownloaderButton.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetDownloaderButton.ForeColor = System.Drawing.Color.White;
+            this.AssetDownloaderButton.HoverState.Parent = this.AssetDownloaderButton;
+            this.AssetDownloaderButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Download;
+            this.AssetDownloaderButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.AssetDownloaderButton.ImageSize = new System.Drawing.Size(33, 33);
+            this.AssetDownloaderButton.Location = new System.Drawing.Point(3, 54);
+            this.AssetDownloaderButton.Name = "AssetDownloaderButton";
+            this.AssetDownloaderButton.ShadowDecoration.Parent = this.AssetDownloaderButton;
+            this.AssetDownloaderButton.Size = new System.Drawing.Size(186, 45);
+            this.AssetDownloaderButton.TabIndex = 4;
+            this.AssetDownloaderButton.Text = "Asset Downloader";
+            this.AssetDownloaderButton.TextOffset = new System.Drawing.Point(20, 0);
+            this.AssetDownloaderButton.Click += new System.EventHandler(this.AssetDownloaderButton_Click);
+            // 
+            // LogOutButton
+            // 
+            this.LogOutButton.Animated = true;
+            this.LogOutButton.CheckedState.Parent = this.LogOutButton;
+            this.LogOutButton.CustomImages.Parent = this.LogOutButton;
+            this.LogOutButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.LogOutButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.LogOutButton.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LogOutButton.ForeColor = System.Drawing.Color.White;
+            this.LogOutButton.HoverState.Parent = this.LogOutButton;
+            this.LogOutButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Logout;
+            this.LogOutButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.LogOutButton.ImageSize = new System.Drawing.Size(33, 33);
+            this.LogOutButton.Location = new System.Drawing.Point(0, 365);
+            this.LogOutButton.Name = "LogOutButton";
+            this.LogOutButton.ShadowDecoration.Parent = this.LogOutButton;
+            this.LogOutButton.Size = new System.Drawing.Size(186, 45);
+            this.LogOutButton.TabIndex = 3;
+            this.LogOutButton.Text = "Log Out";
+            this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
+            // 
+            // HomeButton
+            // 
+            this.HomeButton.Animated = true;
+            this.HomeButton.CheckedState.Parent = this.HomeButton;
+            this.HomeButton.CustomImages.Parent = this.HomeButton;
+            this.HomeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.HomeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.HomeButton.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HomeButton.ForeColor = System.Drawing.Color.White;
+            this.HomeButton.HoverState.Parent = this.HomeButton;
+            this.HomeButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Home;
+            this.HomeButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.HomeButton.ImageSize = new System.Drawing.Size(33, 33);
+            this.HomeButton.Location = new System.Drawing.Point(3, 3);
+            this.HomeButton.Name = "HomeButton";
+            this.HomeButton.ShadowDecoration.Parent = this.HomeButton;
+            this.HomeButton.Size = new System.Drawing.Size(186, 45);
+            this.HomeButton.TabIndex = 1;
+            this.HomeButton.Text = "Home Page";
+            this.HomeButton.TextOffset = new System.Drawing.Point(5, 0);
+            this.HomeButton.Click += new System.EventHandler(this.HomeButton_Click);
             // 
             // Robux
             // 
@@ -116,17 +312,6 @@
             this.Verified.TabIndex = 3;
             this.Verified.TabStop = false;
             // 
-            // RobuxText
-            // 
-            this.RobuxText.AutoSize = true;
-            this.RobuxText.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobuxText.ForeColor = System.Drawing.Color.Green;
-            this.RobuxText.Location = new System.Drawing.Point(109, 27);
-            this.RobuxText.Name = "RobuxText";
-            this.RobuxText.Size = new System.Drawing.Size(28, 15);
-            this.RobuxText.TabIndex = 2;
-            this.RobuxText.Text = "850";
-            // 
             // UserPFP
             // 
             this.UserPFP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -139,25 +324,17 @@
             this.UserPFP.TabIndex = 0;
             this.UserPFP.TabStop = false;
             // 
-            // Username
+            // ButtonHolder
             // 
-            this.Username.ActiveLinkColor = System.Drawing.Color.White;
-            this.Username.AutoSize = true;
-            this.Username.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold);
-            this.Username.ForeColor = System.Drawing.Color.White;
-            this.Username.LinkColor = System.Drawing.Color.White;
-            this.Username.Location = new System.Drawing.Point(57, 3);
-            this.Username.Name = "Username";
-            this.Username.Size = new System.Drawing.Size(59, 18);
-            this.Username.TabIndex = 6;
-            this.Username.TabStop = true;
-            this.Username.Text = "lrisDev";
-            this.Username.VisitedLinkColor = System.Drawing.Color.White;
-            // 
-            // DragControl
-            // 
-            this.DragControl.TargetControl = this.TopBar;
-            this.DragControl.UseTransparentDrag = true;
+            this.ButtonHolder.AutoSize = true;
+            this.ButtonHolder.Controls.Add(this.HomeButton);
+            this.ButtonHolder.Controls.Add(this.AssetDownloaderButton);
+            this.ButtonHolder.Controls.Add(this.GroupScannerButton);
+            this.ButtonHolder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonHolder.Location = new System.Drawing.Point(0, 57);
+            this.ButtonHolder.Name = "ButtonHolder";
+            this.ButtonHolder.Size = new System.Drawing.Size(186, 263);
+            this.ButtonHolder.TabIndex = 7;
             // 
             // Main
             // 
@@ -165,18 +342,23 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(727, 434);
+            this.Controls.Add(this.FormHolder);
             this.Controls.Add(this.TabPageButtons);
             this.Controls.Add(this.TopBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Main";
             this.Text = "Main";
             this.Load += new System.EventHandler(this.Main_Load);
+            this.TopBar.ResumeLayout(false);
+            this.TopBar.PerformLayout();
             this.TabPageButtons.ResumeLayout(false);
+            this.TabPageButtons.PerformLayout();
             this.UserInfoHolder.ResumeLayout(false);
             this.UserInfoHolder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Robux)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Verified)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UserPFP)).EndInit();
+            this.ButtonHolder.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -185,7 +367,6 @@
 
         private System.Windows.Forms.Panel TopBar;
         private System.Windows.Forms.Panel TabPageButtons;
-        private Guna.UI2.WinForms.Guna2Button guna2Button1;
         private System.Windows.Forms.Panel UserInfoHolder;
         private Guna.UI2.WinForms.Guna2PictureBox Verified;
         private System.Windows.Forms.Label RobuxText;
@@ -193,6 +374,16 @@
         private Guna.UI2.WinForms.Guna2PictureBox Robux;
         private System.Windows.Forms.LinkLabel Username;
         private Guna.UI2.WinForms.Guna2DragControl DragControl;
+        private Guna.UI2.WinForms.Guna2Button HomeButton;
+        private Guna.UI2.WinForms.Guna2Button LogOutButton;
+        private Guna.UI2.WinForms.Guna2Button MinimizeButton;
+        private Guna.UI2.WinForms.Guna2Button CloseButton;
+        private System.Windows.Forms.Label Title;
+        private Guna.UI2.WinForms.Guna2Button AssetDownloaderButton;
+        private Guna.UI2.WinForms.Guna2Button SupportMeButton;
+        private Guna.UI2.WinForms.Guna2Button GroupScannerButton;
+        private System.Windows.Forms.Panel FormHolder;
+        private System.Windows.Forms.FlowLayoutPanel ButtonHolder;
     }
 }
 
