@@ -1,6 +1,6 @@
 ﻿namespace IrisRobloxMultiTool.Forms
 {
-    partial class GroupScanner
+    partial class ToolsDownloader
     {
         /// <summary>
         /// Required designer variable.
@@ -30,15 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // GroupScanner
+            // ToolsDownloader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(649, 365);
+            this.ClientSize = new System.Drawing.Size(633, 326);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "GroupScanner";
-            this.Text = "GroupScanner";
+            this.Name = "ToolsDownloader";
+            this.Text = "ToolsDownloader";
             this.ResumeLayout(false);
 
         }

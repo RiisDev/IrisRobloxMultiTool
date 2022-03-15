@@ -21,6 +21,8 @@ namespace IrisRobloxMultiTool
         AssetDownloader assetDownloader = new AssetDownloader();
         Home home = new Home();
         GroupScanner scanner = new GroupScanner();
+        ToolsDownloader toolsDownloader = new ToolsDownloader();
+        WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
 
         private bool WebViewInstalled()
         {
@@ -78,11 +80,6 @@ namespace IrisRobloxMultiTool
             }
         }
 
-        private bool LoggedIn()
-        {
-            return false;
-        }
-
         public Main()
         {
             InitializeComponent();
@@ -90,11 +87,17 @@ namespace IrisRobloxMultiTool
 
         private async void Main_Load(object sender, EventArgs e)
         {
+            ButtonHolder.HorizontalScroll.Maximum = 0;
+            ButtonHolder.HorizontalScroll.Visible = false;
+            ButtonHolder.HorizontalScroll.Enabled = false;
+            ButtonHolder.AutoScroll = true;
+
             FirstSetup();
             CheckWebView();
 
             Login LoginForm = new Login();
             LoginForm.ShowDialog();
+            LoginForm.Dispose();
             TopMost = true;
             await Task.Delay(25);
             TopMost = false;
@@ -111,8 +114,10 @@ namespace IrisRobloxMultiTool
             }
         }
 
-        private void LogOutButton_Click(object sender, EventArgs e)
+        private async void LogOutButton_Click(object sender, EventArgs e)
         {
+            home.Dispose();
+            await Task.Delay(25);
             Directory.Delete($"{Program.Directory}\\IrisRobloxMultiTool.exe.WebView2", true);
             Program.Global.SafeShutdown();
         }
@@ -194,6 +199,46 @@ namespace IrisRobloxMultiTool
                 scanner.AutoScroll = true;
                 scanner.Dock = DockStyle.Fill;
                 FormHolder.Controls.Add(scanner);
+            }
+
+            scanner.Show();
+        }
+
+        private void ToolDownloader_Click(object sender, EventArgs e)
+        {
+            HideForms();
+
+            if (toolsDownloader == null)
+            {
+                toolsDownloader = new ToolsDownloader();
+            }
+
+            if (!FormHolder.Controls.Contains(scanner))
+            {
+                toolsDownloader.TopLevel = false;
+                toolsDownloader.AutoScroll = true;
+                toolsDownloader.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(toolsDownloader);
+            }
+
+            scanner.Show();
+        }
+
+        private void WeAreDevsKeygenButton_Click(object sender, EventArgs e)
+        {
+            HideForms();
+
+            if (KeyGen == null)
+            {
+                KeyGen = new WeAreDevsKeygen();
+            }
+
+            if (!FormHolder.Controls.Contains(scanner))
+            {
+                KeyGen.TopLevel = false;
+                KeyGen.AutoScroll = true;
+                KeyGen.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(KeyGen);
             }
 
             scanner.Show();

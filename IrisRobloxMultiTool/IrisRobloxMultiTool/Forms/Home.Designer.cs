@@ -39,7 +39,7 @@
             this.HomePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HomePage.Location = new System.Drawing.Point(0, 0);
             this.HomePage.Name = "HomePage";
-            this.HomePage.Size = new System.Drawing.Size(524, 369);
+            this.HomePage.Size = new System.Drawing.Size(649, 365);
             this.HomePage.TabIndex = 0;
             this.HomePage.ZoomFactor = 1D;
             this.HomePage.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.HomePage_CoreWebView2InitializationCompleted);
@@ -49,7 +49,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.ClientSize = new System.Drawing.Size(524, 369);
+            this.ClientSize = new System.Drawing.Size(649, 365);
             this.Controls.Add(this.HomePage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Home";
