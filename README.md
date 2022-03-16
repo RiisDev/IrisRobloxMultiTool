@@ -4,7 +4,7 @@
 
 Offers a selection of tools to help within your roblox experience.
 
-[![](https://img.shields.io/badge/License-GNU%20APGL%20v3-yellow.svg)](https://opensource.org/licenses/) ![](https://img.shields.io/github/downloads/IrisV3rm/IrisRobloxMultiTool/total) ![](https://img.shields.io/twitch/status/irisdev?style=social)
+[![](https://img.shields.io/badge/License-GNU%20AGPL%20v3-yellow.svg)](https://opensource.org/licenses/) ![](https://img.shields.io/github/downloads/IrisV3rm/IrisRobloxMultiTool/total) ![](https://img.shields.io/twitch/status/irisdev?style=social)
 ![](https://img.shields.io/youtube/channel/subscribers/UC7eKTp0XmY1WwrLBndraSHA?style=social)
 ## Features
 
