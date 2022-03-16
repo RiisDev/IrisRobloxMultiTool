@@ -213,7 +213,7 @@ namespace IrisRobloxMultiTool
                 toolsDownloader = new ToolsDownloader();
             }
 
-            if (!FormHolder.Controls.Contains(scanner))
+            if (!FormHolder.Controls.Contains(toolsDownloader))
             {
                 toolsDownloader.TopLevel = false;
                 toolsDownloader.AutoScroll = true;
@@ -221,7 +221,7 @@ namespace IrisRobloxMultiTool
                 FormHolder.Controls.Add(toolsDownloader);
             }
 
-            scanner.Show();
+            toolsDownloader.Show();
         }
 
         private void WeAreDevsKeygenButton_Click(object sender, EventArgs e)
@@ -233,15 +233,16 @@ namespace IrisRobloxMultiTool
                 KeyGen = new WeAreDevsKeygen();
             }
 
-            if (!FormHolder.Controls.Contains(scanner))
+            if (!FormHolder.Controls.Contains(KeyGen))
             {
                 KeyGen.TopLevel = false;
                 KeyGen.AutoScroll = true;
                 KeyGen.Dock = DockStyle.Fill;
                 FormHolder.Controls.Add(KeyGen);
+                KeyGen.BringToFront();
             }
 
-            scanner.Show();
+            KeyGen.Show();
         }
     }
 }

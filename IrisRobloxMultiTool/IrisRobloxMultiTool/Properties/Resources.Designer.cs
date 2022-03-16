@@ -153,6 +153,16 @@ namespace IrisRobloxMultiTool.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TSO {
+            get {
+                object obj = ResourceManager.GetObject("TSO", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Verified {
             get {
                 object obj = ResourceManager.GetObject("Verified", resourceCulture);

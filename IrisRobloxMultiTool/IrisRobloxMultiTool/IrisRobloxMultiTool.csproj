@@ -291,6 +291,7 @@
     <Content Include="Guna.UI2.dll" />
     <None Include="Resources\Key.png" />
     <None Include="Resources\Tools.png" />
+    <None Include="Resources\TSO.png" />
     <Content Include="VertexFramework.dll" />
     <None Include="Resources\People.png" />
     <None Include="Resources\Smile.png" />
