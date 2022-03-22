@@ -41,6 +41,7 @@
             this.GroupScannerButton = new Guna.UI2.WinForms.Guna2Button();
             this.WeAreDevsKeygenButton = new Guna.UI2.WinForms.Guna2Button();
             this.ToolDownloader = new Guna.UI2.WinForms.Guna2Button();
+            this.IrisStuff = new Guna.UI2.WinForms.Guna2Button();
             this.SupportMeButton = new Guna.UI2.WinForms.Guna2Button();
             this.LogOutButton = new Guna.UI2.WinForms.Guna2Button();
             this.UserInfoHolder = new System.Windows.Forms.Panel();
@@ -138,6 +139,7 @@
             this.ButtonHolder.Controls.Add(this.GroupScannerButton);
             this.ButtonHolder.Controls.Add(this.WeAreDevsKeygenButton);
             this.ButtonHolder.Controls.Add(this.ToolDownloader);
+            this.ButtonHolder.Controls.Add(this.IrisStuff);
             this.ButtonHolder.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonHolder.Location = new System.Drawing.Point(0, 57);
             this.ButtonHolder.Name = "ButtonHolder";
@@ -258,6 +260,30 @@
             this.ToolDownloader.Text = "Tool Downloads";
             this.ToolDownloader.TextOffset = new System.Drawing.Point(15, 0);
             this.ToolDownloader.Click += new System.EventHandler(this.ToolDownloader_Click);
+            // 
+            // IrisStuff
+            // 
+            this.IrisStuff.Animated = true;
+            this.IrisStuff.CheckedState.Parent = this.IrisStuff;
+            this.IrisStuff.CustomImages.Parent = this.IrisStuff;
+            this.IrisStuff.Dock = System.Windows.Forms.DockStyle.Top;
+            this.IrisStuff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.IrisStuff.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.IrisStuff.ForeColor = System.Drawing.Color.White;
+            this.IrisStuff.HoverState.Parent = this.IrisStuff;
+            this.IrisStuff.Image = global::IrisRobloxMultiTool.Properties.Resources.ForIris2White;
+            this.IrisStuff.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.IrisStuff.ImageSize = new System.Drawing.Size(33, 33);
+            this.IrisStuff.Location = new System.Drawing.Point(3, 258);
+            this.IrisStuff.MaximumSize = new System.Drawing.Size(170, 45);
+            this.IrisStuff.Name = "IrisStuff";
+            this.IrisStuff.ShadowDecoration.Parent = this.IrisStuff;
+            this.IrisStuff.Size = new System.Drawing.Size(170, 45);
+            this.IrisStuff.TabIndex = 9;
+            this.IrisStuff.Text = "iris Stuff";
+            this.IrisStuff.TextOffset = new System.Drawing.Point(15, 0);
+            this.IrisStuff.Visible = false;
+            this.IrisStuff.Click += new System.EventHandler(this.IrisStuff_Click);
             // 
             // SupportMeButton
             // 
@@ -439,6 +465,7 @@
         private System.Windows.Forms.FlowLayoutPanel ButtonHolder;
         private Guna.UI2.WinForms.Guna2Button WeAreDevsKeygenButton;
         private Guna.UI2.WinForms.Guna2Button ToolDownloader;
+        private Guna.UI2.WinForms.Guna2Button IrisStuff;
     }
 }
 

@@ -179,6 +179,8 @@ namespace IrisRobloxMultiTool.Forms
                     string SongUrlP1 = NewBlock.Substring(NewBlock.IndexOf("-url=") + 6);
                     string SongUrl = SongUrlP1.Substring(0, SongUrlP1.IndexOf("\""));
 
+                    if (SongData.ContainsKey(SongTitle))
+                        SongTitle = SongTitle + RandomInt().ToString();
                     SongData.Add(SongTitle, SongUrl);
                 }
             }

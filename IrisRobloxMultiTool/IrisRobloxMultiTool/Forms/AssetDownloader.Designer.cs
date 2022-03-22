@@ -212,7 +212,22 @@
             "7",
             "8",
             "9",
-            "10"});
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            });
             this.PageCountForAudio.Location = new System.Drawing.Point(169, 68);
             this.PageCountForAudio.Name = "PageCountForAudio";
             this.PageCountForAudio.Size = new System.Drawing.Size(121, 21);

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +16,8 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
+        CoreWebView2HttpRequestHeaders Headers;
+
         public void LogData(LogType logType, string Message = "")
         {
             LogBox.Invoke(new Action(() =>
@@ -58,13 +62,18 @@ namespace IrisRobloxMultiTool.Forms
         {
             Console.WriteLine(Data);
         }
-
+        public string btoa(string toEncode)
+        {
+            byte[] bytes = Encoding.GetEncoding(28591).GetBytes(toEncode);
+            string toReturn = System.Convert.ToBase64String(bytes);
+            return toReturn;
+        }
         private void LinkVertiseBrowser_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
         {
-            LinkVertiseBrowser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            LinkVertiseBrowser.CoreWebView2.Settings.AreDevToolsEnabled = false;
-            LinkVertiseBrowser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
-            LinkVertiseBrowser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0";
+            LinkVertiseBrowser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
+           // LinkVertiseBrowser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+            LinkVertiseBrowser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = true;
+            LinkVertiseBrowser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
             LinkVertiseBrowser.CoreWebView2.AddWebResourceRequestedFilter("kiwiexploits.com/*", Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
 
             LinkVertiseBrowser.CoreWebView2.NavigationStarting += (o, er) =>
@@ -72,14 +81,24 @@ namespace IrisRobloxMultiTool.Forms
                 if (er.Uri.Contains("linkvertise"))
                     panel1.Visible = false;
 
+                er.RequestHeaders.SetHeader("sec-ch-ua", "\" Not A; Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Microsoft Edge\";v=\"99\"");
+                er.RequestHeaders.SetHeader("referer", CurrentUrl);
+
+                Headers = er.RequestHeaders; 
+
                 CurrentUrl = er.Uri;
             };
-            LinkVertiseBrowser.CoreWebView2.NewWindowRequested += (o, er) =>
+
+            LinkVertiseBrowser.CoreWebView2.NewWindowRequested += async (o, er) =>
             {
-                er.Handled = true;
+                await Task.Delay(2000);
+                er.NewWindow = LinkVertiseBrowser.CoreWebView2;
             };
+
+
             LinkVertiseBrowser.CoreWebView2.NavigationCompleted += async (o, er) =>
             {
+                
                 if (CurrentUrl == null) return;
                 LogData(LogType.Info, CurrentUrl);
 
@@ -95,12 +114,47 @@ namespace IrisRobloxMultiTool.Forms
 
                     JToken JData = JToken.Parse(Data);
 
-                    LinkVertiseBrowser.CoreWebView2.ExecuteScriptAsync("$(\":contains('Direct Access with Premium')\").last().click()");
+                    //LinkVertiseBrowser.CoreWebView2.ExecuteScriptAsync("$(\":contains('Direct Access with Premium')\").last().click()");
 
                     if (SelectedExploit.Text.Contains("Kiwi"))
                         await Task.Delay(2000);
                     else if (SelectedExploit.Text.Contains("Oxygen"))
                         await Task.Delay(5000);
+                    else if (SelectedExploit.Text == "Fluxus")
+                    {
+                        panel1.Visible = true;
+
+                        //Task<string> PathName = LinkVertiseBrowser.CoreWebView2.ExecuteScriptAsync("location.pathname");
+
+                        //while (PathName.Status != TaskStatus.RanToCompletion)
+                        //    await Task.Delay(5);
+
+                        //string LinkVertiseData = PathName.Result.Substring(1, PathName.Result.LastIndexOf("/") - 1);
+                        //Data = new WebClient().DownloadString($"https://publisher.linkvertise.com/api/v1/redirect/link/static{LinkVertiseData}");
+
+                        //JData = JToken.Parse(Data);
+
+                        //if (JData["data"]["link"]["id"] != null)
+                        //{
+                        //    Dictionary<string, string> JsonData = new Dictionary<string, string>()
+                        //    {
+                        //        ["timestamp"] = (((DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1))).TotalMilliseconds + .5).ToString(),
+                        //        ["random"] = "6548307",
+                        //        ["link_id"] = JData["data"]["link"]["id"].ToString(),
+                        //    };
+
+                        //    string Return = new WebClient().UploadString($"https://publisher.linkvertise.com/api/v1/redirect/link{LinkVertiseData}/target?serial={btoa(Newtonsoft.Json.JsonConvert.SerializeObject(JsonData))}", "");
+                        //    JData = JToken.Parse(Return);
+
+                        //    if (JData["data"]["target"] != null)
+                        //    {
+                        //        LinkVertiseBrowser.CoreWebView2.Navigate(JData["data"]["target"].ToString());
+                        //    }
+                        //}
+
+                        return;
+
+                    }
 
 
                     if (Convert.ToBoolean(JData["success"].ToString()))
@@ -178,14 +232,6 @@ namespace IrisRobloxMultiTool.Forms
                 Console.WriteLine("captcha");
                 panel1.Visible = true;
             }
-            else if (WebPage.Result.Contains("It looks like you never used"))
-            {
-                MessageBox.Show("Please get a new starter url via Comet client!", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else if (WebPage.Result.Contains("Comet Key") && (!WebPage.Result.Contains("It looks like you never used Fluxus before, Please open it and press") || !WebPage.Result.Contains("rethink")))
-            {
-                
-            }
         }
 
         private async void DoFluxusBypasses(string Url)
@@ -203,16 +249,7 @@ namespace IrisRobloxMultiTool.Forms
             
             if (WebPage.Result.Contains("hcaptcha.com/captcha/v1/") || WebPage.Result.Contains("recaptcha") || WebPage.Result.Contains("https://hCaptcha.com/1/api.js"))
             {
-                Console.WriteLine("captcha");
                 panel1.Visible = true;
-            }
-            else if (WebPage.Result.Contains("It looks like you never used"))
-            {
-                MessageBox.Show("Please get a new starter url via Fluxus client!", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else if (WebPage.Result.Contains("Fluxus Key") && (!WebPage.Result.Contains("It looks like you never used Fluxus before, Please open it and press") || !WebPage.Result.Contains("rethink")))
-            {
-                
             }
         }
 
@@ -318,7 +355,8 @@ namespace IrisRobloxMultiTool.Forms
                 case "Coco Z":
                     break;
                 case "Fluxus":
-                    MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    StarterUrl.Text = "https://fluxteam.xyz/ks/checkpoint/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
                     break;
                 case "Oxygen U":
                     MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);

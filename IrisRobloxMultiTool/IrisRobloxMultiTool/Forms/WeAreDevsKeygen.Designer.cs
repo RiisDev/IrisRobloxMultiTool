@@ -145,7 +145,7 @@
             this.LinkVertiseBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LinkVertiseBrowser.Location = new System.Drawing.Point(0, 0);
             this.LinkVertiseBrowser.Name = "LinkVertiseBrowser";
-            this.LinkVertiseBrowser.Size = new System.Drawing.Size(449, 364);
+            this.LinkVertiseBrowser.Size = new System.Drawing.Size(651, 364);
             this.LinkVertiseBrowser.TabIndex = 13;
             this.LinkVertiseBrowser.ZoomFactor = 1D;
             this.LinkVertiseBrowser.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.LinkVertiseBrowser_CoreWebView2InitializationCompleted);
@@ -153,9 +153,9 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.LinkVertiseBrowser);
-            this.panel1.Location = new System.Drawing.Point(112, 0);
+            this.panel1.Location = new System.Drawing.Point(-2, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(449, 364);
+            this.panel1.Size = new System.Drawing.Size(651, 364);
             this.panel1.TabIndex = 14;
             this.panel1.Visible = false;
             // 

@@ -215,6 +215,12 @@
     <Compile Include="Forms\Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\IStuff.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\IStuff.Designer.cs">
+      <DependentUpon>IStuff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\IStuff.resx">
+      <DependentUpon>IStuff.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -292,6 +301,7 @@
     <None Include="Resources\Key.png" />
     <None Include="Resources\Tools.png" />
     <None Include="Resources\TSO.png" />
+    <None Include="Resources\ForIris2White.png" />
     <Content Include="VertexFramework.dll" />
     <None Include="Resources\People.png" />
     <None Include="Resources\Smile.png" />

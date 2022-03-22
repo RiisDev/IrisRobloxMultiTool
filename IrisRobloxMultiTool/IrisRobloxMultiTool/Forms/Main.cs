@@ -23,6 +23,7 @@ namespace IrisRobloxMultiTool
         GroupScanner scanner = new GroupScanner();
         ToolsDownloader toolsDownloader = new ToolsDownloader();
         WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
+        IStuff istuff = new IStuff();
 
         private bool WebViewInstalled()
         {
@@ -243,6 +244,27 @@ namespace IrisRobloxMultiTool
             }
 
             KeyGen.Show();
+        }
+
+        private void IrisStuff_Click(object sender, EventArgs e)
+        {
+            HideForms();
+
+            if (istuff == null)
+            {
+                istuff = new IStuff();
+            }
+
+            if (!FormHolder.Controls.Contains(istuff))
+            {
+                istuff.TopLevel = false;
+                istuff.AutoScroll = true;
+                istuff.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(istuff);
+                istuff.BringToFront();
+            }
+
+            istuff.Show();
         }
     }
 }
