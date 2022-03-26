@@ -97,8 +97,6 @@
             this.SelectedExploit.ItemHeight = 30;
             this.SelectedExploit.Items.AddRange(new object[] {
             "Kiwi X",
-            "JJSploit",
-            "Coco Z",
             "Fluxus",
             "Oxygen U",
             "Comet"});
