@@ -75,8 +75,8 @@ namespace IrisRobloxMultiTool.Forms
         {
             CurrentBypasser = LinkVertiseBrowser;
 
-            //CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            // CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+            CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+            CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
             CurrentBypasser.CoreWebView2.AddWebResourceRequestedFilter("kiwiexploits.com/*", CoreWebView2WebResourceContext.All);
@@ -109,8 +109,8 @@ namespace IrisRobloxMultiTool.Forms
                 // CurrentBypasser.Dispose();
                 CurrentBypasser = web2;
 
-               // CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-                //CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
                 CurrentBypasser.CoreWebView2.AddWebResourceRequestedFilter("kiwiexploits.com/*", CoreWebView2WebResourceContext.All);
@@ -394,8 +394,7 @@ namespace IrisRobloxMultiTool.Forms
                     IsScary = true;
                     break;
                 case "Comet":
-                    //MessageBox.Show("Please get a starter url via Comet client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    StarterUrl.Text = "https://cometrbx.xyz/ks/start.php?HWID=bd69a7d29bc011ec913f806e6f6e69635bf140327325d99e39f0f98d95549282";
+                    MessageBox.Show("Please get a starter url via Comet client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     IsScary = true;
                     break;
             }
