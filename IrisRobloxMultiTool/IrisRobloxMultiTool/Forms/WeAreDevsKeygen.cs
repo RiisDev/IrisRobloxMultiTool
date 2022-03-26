@@ -20,11 +20,9 @@ namespace IrisRobloxMultiTool.Forms
         CoreWebView2HttpRequestHeaders Headers;
         CoreWebView2Deferral CurrentDefferal;
         CoreWebView2NewWindowRequestedEventArgs CurrentArgs;
-        Stream WebResponse;
         WebView2 CurrentBypasser;
-        private bool DoneCaptcha = false;
         string CurrentUrl;
-        private bool IsScary = false;
+        private bool FluxusKeySystem = false;
 
         public void LogData(LogType logType, string Message = "")
         {
@@ -79,9 +77,6 @@ namespace IrisRobloxMultiTool.Forms
             CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
-            CurrentBypasser.CoreWebView2.AddWebResourceRequestedFilter("kiwiexploits.com/*", CoreWebView2WebResourceContext.All);
-            CurrentBypasser.CoreWebView2.AddWebResourceRequestedFilter("*publisher.linkvertise.com/*", CoreWebView2WebResourceContext.All);
-
             CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
             CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
             CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
@@ -90,7 +85,7 @@ namespace IrisRobloxMultiTool.Forms
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs er)
         {
 
-            if (!IsScary) { er.Handled = true; return; }
+            if (!FluxusKeySystem) { er.Handled = true; return; }
 
             CurrentDefferal = er.GetDeferral();
             CurrentArgs = er;
@@ -106,14 +101,12 @@ namespace IrisRobloxMultiTool.Forms
                 web2.BringToFront();
                 CurrentArgs.NewWindow = web2.CoreWebView2;
                 CurrentDefferal.Complete();
-                // CurrentBypasser.Dispose();
                 CurrentBypasser = web2;
 
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
-                CurrentBypasser.CoreWebView2.AddWebResourceRequestedFilter("kiwiexploits.com/*", CoreWebView2WebResourceContext.All);
                 CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
                 CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
                 CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
@@ -184,16 +177,10 @@ namespace IrisRobloxMultiTool.Forms
 
                 if (Target != string.Empty)
                 {
-                    if (!IsScary)
+                    if (!FluxusKeySystem)
                         CurrentBypasser.CoreWebView2.Navigate(Target);
                     else
-                    {
                         CurrentBypasser.CoreWebView2.ExecuteScriptAsync($"window.open('{Target}')");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("CantBypass");
                 }
             }
             else if (CurrentUrl.ToLower().Contains("kiwi"))
@@ -226,12 +213,9 @@ namespace IrisRobloxMultiTool.Forms
             else if (WebPage.Result.Contains("It looks like you never used Oxygen before")) { MessageBox.Show("Please get a new starter url via Oxygen client!", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             else if (WebPage.Result.Contains("Copy Key"))
             {
-                Task<string> Keys = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("raw");
+                string Keys = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("raw");
 
-                while (Keys.Status != TaskStatus.RanToCompletion)
-                    await Task.Delay(5);
-
-                Key.Text = Keys.Result.Replace(" ", "").Replace("\"", "");
+                Key.Text = Keys.Replace(" ", "").Replace("\"", "");
             }
         }
 
@@ -261,29 +245,24 @@ namespace IrisRobloxMultiTool.Forms
         private async void DoFluxusBypasses(string Url)
         {
             panel1.Visible = false;
-            Task<string> WebPage = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
 
-            while (WebPage.Status != TaskStatus.RanToCompletion)
-                await Task.Delay(5);
+            string WebPage = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
 
             if (CurrentUrl.Contains("Start.php")) CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByTagName('iframe')[0].remove();");
-            if (WebPage.Result.Contains("hcaptcha.com/captcha/v1/") || WebPage.Result.Contains("recaptcha") || WebPage.Result.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
-            else if (WebPage.Result.Contains("Click to con"))
+            if (WebPage.Contains("hcaptcha.com/captcha/v1/") || WebPage.Contains("recaptcha") || WebPage.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
+            else if (WebPage.Contains("Click to con"))
             {
                 CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('input')[0].click();");
+
                 await Task.Delay(100);
 
-                Task<string> KeyReturn = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txt1').textContent;");
+                string KeyReturn = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txt1').textContent;");
 
-                while (KeyReturn.Status != TaskStatus.RanToCompletion)
-                    await Task.Delay(5);
-
-                Key.Text = KeyReturn.Result.Replace("Your Key: ", "");
+                Key.Text = KeyReturn.Replace("Your Key: ", "");
             }
-            else if (WebPage.Result.Contains("copyToClipboard()"))
+            else if (WebPage.Contains("copyToClipboard()"))
             {
-                string DocText = WebPage.Result;
-                string P1 = DocText.Substring(DocText.IndexOf("var e") + 10);
+                string P1 = WebPage.Substring(WebPage.IndexOf("var e") + 10);
                 string P2 = P1.Substring(0, P1.IndexOf(";") - 2);
                 Key.Text = P2;
             }
@@ -292,12 +271,10 @@ namespace IrisRobloxMultiTool.Forms
         private async void DoKiwiBypasses(string Url)
         {
             panel1.Visible = false;
-            Task<string> WebPage = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
+            string WebPage = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
 
-            while (WebPage.Status != TaskStatus.RanToCompletion)
-                await Task.Delay(5);
 
-            if (WebPage.Result.Contains("ad blocker"))
+            if (WebPage.Contains("ad blocker"))
             {
                 CurrentBypasser.CoreWebView2.ExecuteScriptAsync("$(\":contains('ad blocker')\").last().click()");
             }
@@ -318,10 +295,7 @@ namespace IrisRobloxMultiTool.Forms
             else if (CurrentUrl.Contains("https://kiwiexploits.com/KeySystems/index.php"))
             {
 
-                while (WebPage.Status != TaskStatus.RanToCompletion)
-                    await Task.Delay(5);
-
-                if (WebPage.Result.Contains("recaptcha"))
+                if (WebPage.Contains("recaptcha"))
                 {
                     await Task.Delay(100);
 
@@ -329,7 +303,7 @@ namespace IrisRobloxMultiTool.Forms
 
                     panel1.Visible = true;
                 }
-                else if (WebPage.Result.Contains("Your Key"))
+                else if (WebPage.Contains("Your Key"))
                 {
                     await Task.Delay(100);
                     Task<string> Yeet = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('key').innerText");
@@ -381,21 +355,21 @@ namespace IrisRobloxMultiTool.Forms
 
         private void SelectedExploit_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IsScary = false;
+            FluxusKeySystem = false;
             switch (SelectedExploit.Text)
             {
                 
                 case "Fluxus":
                     MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    IsScary = true;
+                    FluxusKeySystem = true;
                     break;
                 case "Oxygen U":
                     MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    IsScary = true;
+                    FluxusKeySystem = true;
                     break;
                 case "Comet":
                     MessageBox.Show("Please get a starter url via Comet client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    IsScary = true;
+                    FluxusKeySystem = true;
                     break;
             }
         }
