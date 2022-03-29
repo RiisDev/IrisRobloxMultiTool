@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.TopBar = new System.Windows.Forms.Panel();
+            this.UpdAv = new System.Windows.Forms.Label();
             this.MinimizeButton = new Guna.UI2.WinForms.Guna2Button();
             this.CloseButton = new Guna.UI2.WinForms.Guna2Button();
             this.Title = new System.Windows.Forms.Label();
@@ -52,7 +53,6 @@
             this.UserPFP = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.DragControl = new Guna.UI2.WinForms.Guna2DragControl(this.components);
             this.FormHolder = new System.Windows.Forms.Panel();
-            this.UpdAv = new System.Windows.Forms.Label();
             this.TopBar.SuspendLayout();
             this.TabPageButtons.SuspendLayout();
             this.ButtonHolder.SuspendLayout();
@@ -74,6 +74,18 @@
             this.TopBar.Name = "TopBar";
             this.TopBar.Size = new System.Drawing.Size(845, 26);
             this.TopBar.TabIndex = 0;
+            // 
+            // UpdAv
+            // 
+            this.UpdAv.AutoSize = true;
+            this.UpdAv.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.UpdAv.Location = new System.Drawing.Point(188, 6);
+            this.UpdAv.Name = "UpdAv";
+            this.UpdAv.Size = new System.Drawing.Size(108, 13);
+            this.UpdAv.TabIndex = 3;
+            this.UpdAv.Text = "* Update(s) available!";
+            this.UpdAv.Visible = false;
+            this.UpdAv.Click += new System.EventHandler(this.label1_Click);
             // 
             // MinimizeButton
             // 
@@ -417,18 +429,6 @@
             this.FormHolder.Size = new System.Drawing.Size(649, 365);
             this.FormHolder.TabIndex = 2;
             // 
-            // UpdAv
-            // 
-            this.UpdAv.AutoSize = true;
-            this.UpdAv.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.UpdAv.Location = new System.Drawing.Point(188, 6);
-            this.UpdAv.Name = "UpdAv";
-            this.UpdAv.Size = new System.Drawing.Size(108, 13);
-            this.UpdAv.TabIndex = 3;
-            this.UpdAv.Text = "* Update(s) available!";
-            this.UpdAv.Visible = false;
-            this.UpdAv.Click += new System.EventHandler(this.label1_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,6 +439,7 @@
             this.Controls.Add(this.TabPageButtons);
             this.Controls.Add(this.TopBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "Main";
             this.Load += new System.EventHandler(this.Main_Load);

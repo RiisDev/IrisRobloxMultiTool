@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>IRMTIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Guna.UI2, Version=2.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -302,6 +305,7 @@
     <None Include="Resources\Tools.png" />
     <None Include="Resources\TSO.png" />
     <None Include="Resources\ForIris2White.png" />
+    <Content Include="IRMTIcon.ico" />
     <Content Include="VertexFramework.dll" />
     <None Include="Resources\People.png" />
     <None Include="Resources\Smile.png" />
