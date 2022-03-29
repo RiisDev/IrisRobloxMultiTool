@@ -103,8 +103,8 @@ namespace IrisRobloxMultiTool.Forms
                 CurrentDefferal.Complete();
                 CurrentBypasser = web2;
 
-                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
+                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = true;
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
                 CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
@@ -216,6 +216,9 @@ namespace IrisRobloxMultiTool.Forms
                 string Keys = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("raw");
 
                 Key.Text = Keys.Replace(" ", "").Replace("\"", "");
+
+                LogData(LogType.Info, "Key has been grabbed!");
+                LogData(LogType.Info, "If you do not see the key above please retry!");
             }
         }
 
@@ -238,6 +241,8 @@ namespace IrisRobloxMultiTool.Forms
                     await Task.Delay(5);
 
                 Key.Text = DotIt.Result.Replace("\"", "").Replace("\\", "").Replace("/", "");
+                LogData(LogType.Info, "Key has been grabbed!");
+                LogData(LogType.Info, "If you do not see the key above please retry!");
                 panel1.Visible = false;
             }
         }
@@ -250,21 +255,24 @@ namespace IrisRobloxMultiTool.Forms
 
             if (CurrentUrl.Contains("Start.php")) CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByTagName('iframe')[0].remove();");
             if (WebPage.Contains("hcaptcha.com/captcha/v1/") || WebPage.Contains("recaptcha") || WebPage.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
-            else if (WebPage.Contains("Click to con"))
+            
+            if (WebPage.ToLower().Contains("click to continue"))
             {
-                CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('input')[0].click();");
+                string P1 = WebPage.Substring(WebPage.IndexOf("content =") + 11);
+                string P2 = P1.Substring(1, P1.IndexOf(")") -1);
 
-                await Task.Delay(100);
+                Key.Text = P2.Replace("\"", "").Replace("\\", "");
 
-                string KeyReturn = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txt1').textContent;");
-
-                Key.Text = KeyReturn.Replace("Your Key: ", "");
+                LogData(LogType.Info, "Key has been grabbed!");
+                LogData(LogType.Info, "If you do not see the key above please retry!");
             }
             else if (WebPage.Contains("copyToClipboard()"))
             {
                 string P1 = WebPage.Substring(WebPage.IndexOf("var e") + 10);
                 string P2 = P1.Substring(0, P1.IndexOf(";") - 2);
-                Key.Text = P2;
+                Key.Text = P2.Replace("\"", "").Replace("\\", "");
+                LogData(LogType.Info, "Key has been grabbed!");
+                LogData(LogType.Info, "If you do not see the key above please retry!");
             }
         }
 
@@ -320,7 +328,7 @@ namespace IrisRobloxMultiTool.Forms
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            panel1.Visible = true;
+            panel1.Visible = false;
             LogBox.Clear();
             LogData(LogType.System, "Running, please wait... (May take up to 30 seconds for some exploits)");
 
@@ -338,6 +346,8 @@ namespace IrisRobloxMultiTool.Forms
                 case "Comet":
                     CurrentBypasser.CoreWebView2.Navigate(StarterUrl.Text);
                     break;
+                case "":
+                    return;
             }
 
         }
