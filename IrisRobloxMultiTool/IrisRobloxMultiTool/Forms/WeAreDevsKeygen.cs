@@ -103,8 +103,8 @@ namespace IrisRobloxMultiTool.Forms
                 CurrentDefferal.Complete();
                 CurrentBypasser = web2;
 
-                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
-                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = true;
+                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
                 CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
                 CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
