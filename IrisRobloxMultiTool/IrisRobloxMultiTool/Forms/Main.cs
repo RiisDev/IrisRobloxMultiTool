@@ -1,6 +1,7 @@
 ﻿using IrisRobloxMultiTool.Forms;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -81,6 +82,35 @@ namespace IrisRobloxMultiTool
             }
         }
 
+        private void CheckForUpdates()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += (Yes, no) =>
+                {
+                    string CurrentVersion = Application.ProductVersion;
+
+                    JToken Token = JToken.Parse(no.Result);
+
+                    if (Token["tag_name"] != null)
+                    {
+                        if (CurrentVersion.Substring(0, CurrentVersion.LastIndexOf(".")) != Token["tag_name"].ToString())
+                        {
+                            UpdAv.Visible = true;
+                            DialogResult Diag = MessageBox.Show("There is an update, would you like to download now?", "IRMT", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (Diag == DialogResult.Yes)
+                            {
+                                Process.Start("https://github.com/IrisV3rm/IrisRobloxMultiTool/releases");
+                            }
+                        }
+                    }
+                };
+                client.Headers.Add(HttpRequestHeader.Accept, "application/vnd.github.v3+json");
+                client.Headers.Add(HttpRequestHeader.UserAgent, "request");
+                client.DownloadStringAsync(new Uri("https://api.github.com/repos/IrisV3rm/IrisRobloxMultiTool/releases/latest"));
+            }
+        }
+
         public Main()
         {
             InitializeComponent();
@@ -113,6 +143,8 @@ namespace IrisRobloxMultiTool
             {
                 Verified.Visible = false;
             }
+
+            CheckForUpdates();
         }
 
         private async void LogOutButton_Click(object sender, EventArgs e)
@@ -265,6 +297,11 @@ namespace IrisRobloxMultiTool
             }
 
             istuff.Show();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/IrisV3rm/IrisRobloxMultiTool/releases");
         }
     }
 }
