@@ -255,8 +255,7 @@ namespace IrisRobloxMultiTool.Forms
 
             if (CurrentUrl.Contains("Start.php")) CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByTagName('iframe')[0].remove();");
             if (WebPage.Contains("hcaptcha.com/captcha/v1/") || WebPage.Contains("recaptcha") || WebPage.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
-            
-            if (WebPage.ToLower().Contains("let content = (") && WebPage.ToLower().Contains("toclipbo"))
+            if (WebPage.ToLower().Contains("let content = (") )
             {
                 string P1 = WebPage.Substring(WebPage.IndexOf("content =") + 11);
                 string P2 = P1.Substring(1, P1.IndexOf(")") -1);
