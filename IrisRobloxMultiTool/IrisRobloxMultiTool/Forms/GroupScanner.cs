@@ -19,11 +19,7 @@ namespace IrisRobloxMultiTool.Forms
 
     public partial class GroupScanner : Form
     {
-        // https://groups.roblox.com/v1/groups/3423188
-        // https://groups.roblox.com/v1/groups/search?keyword=Yeet&prioritizeExactMatch=true&limit=100&cursor=
-        // https://groups.roblox.com/v1/groups/3423188/membership
-        // https://economy.roblox.com/v1/groups/3423188/currency
-
+  
         private List<long> Groups = new List<long>();
 
         public GroupScanner()
@@ -39,6 +35,23 @@ namespace IrisRobloxMultiTool.Forms
             GroupsHolder.HorizontalScroll.Visible = false;
             GroupsHolder.HorizontalScroll.Enabled = false;
             GroupsHolder.AutoScroll = true;
+
+            new Task(() =>
+            {
+                APIChecker Checker = new APIChecker();
+
+                Tuple<string, Color> Data = Checker.GetGroupScannerStatus();
+
+                Status.Invoke(new Action(() =>
+                {
+                    Status.Text = Data.Item1;
+                    Status.ForeColor = Data.Item2;
+                }));
+
+
+                Checker.Dispose();
+
+            }).Start();
         }
 
         private string DoNet(string Type, string RequestUrl, string PostParams = "")

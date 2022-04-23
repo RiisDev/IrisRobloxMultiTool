@@ -38,9 +38,13 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.StarterUrl = new Guna.UI2.WinForms.Guna2TextBox();
             this.TitleLabel = new System.Windows.Forms.Label();
+            this.StatusPanel = new Guna.UI2.WinForms.Guna2ShadowPanel();
+            this.Status = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LinkVertiseBrowser)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.StatusPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // guna2Button2
@@ -81,6 +85,7 @@
             this.guna2Button1.Size = new System.Drawing.Size(174, 36);
             this.guna2Button1.TabIndex = 11;
             this.guna2Button1.Text = "Copy";
+            this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
             // 
             // SelectedExploit
             // 
@@ -97,8 +102,8 @@
             this.SelectedExploit.ItemHeight = 30;
             this.SelectedExploit.Items.AddRange(new object[] {
             "Kiwi X",
-            "Fluxus",
-            "Oxygen U",
+            "Fluxus (Broken)",
+            "Oxygen U (Broken)",
             "Comet"});
             this.SelectedExploit.ItemsAppearance.Parent = this.SelectedExploit;
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);
@@ -224,6 +229,42 @@
             this.TitleLabel.TabIndex = 16;
             this.TitleLabel.Text = "Iris WRD Keygen";
             // 
+            // StatusPanel
+            // 
+            this.StatusPanel.BackColor = System.Drawing.Color.Transparent;
+            this.StatusPanel.Controls.Add(this.Status);
+            this.StatusPanel.Controls.Add(this.label1);
+            this.StatusPanel.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.StatusPanel.Location = new System.Drawing.Point(441, 292);
+            this.StatusPanel.Name = "StatusPanel";
+            this.StatusPanel.ShadowColor = System.Drawing.Color.Black;
+            this.StatusPanel.Size = new System.Drawing.Size(204, 69);
+            this.StatusPanel.TabIndex = 58;
+            // 
+            // Status
+            // 
+            this.Status.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Status.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(154)))), ((int)(((byte)(249)))));
+            this.Status.Location = new System.Drawing.Point(0, 31);
+            this.Status.Name = "Status";
+            this.Status.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            this.Status.Size = new System.Drawing.Size(204, 38);
+            this.Status.TabIndex = 4;
+            this.Status.Text = "Checking...";
+            this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(0, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(201, 22);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Bypass API Status";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // WeAreDevsKeygen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,6 +272,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(649, 365);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.StatusPanel);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "WeAreDevsKeygen";
@@ -240,6 +282,7 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.StatusPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -256,5 +299,8 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label TitleLabel;
         private Guna.UI2.WinForms.Guna2TextBox StarterUrl;
+        private Guna.UI2.WinForms.Guna2ShadowPanel StatusPanel;
+        private System.Windows.Forms.Label Status;
+        private System.Windows.Forms.Label label1;
     }
 }

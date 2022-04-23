@@ -76,10 +76,27 @@ namespace IrisRobloxMultiTool.Forms
             CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
             CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
-            CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
+            CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0";
             CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
             CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
             CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
+            CurrentBypasser.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
+        }
+
+        private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+        {
+            e.Request.Headers.SetHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
+            e.Request.Headers.SetHeader("Accept-Encoding", "gzip, deflate, br");
+            e.Request.Headers.SetHeader("Accept-Language", "en-US,en;q=0.5");
+            e.Request.Headers.SetHeader("Cache-Control", "no-cache");
+            e.Request.Headers.SetHeader("Connection", "keep-alive");
+            e.Request.Headers.SetHeader("Pragma", "no-cache");
+            e.Request.Headers.SetHeader("Referer", "https://linkvertise.com/");
+            e.Request.Headers.SetHeader("Sec-Fetch-Dest", "document");
+            e.Request.Headers.SetHeader("Sec-Fetch-Mode", "navigate");
+            e.Request.Headers.SetHeader("Sec-Fetch-Site", "cross-site");
+            e.Request.Headers.SetHeader("Sec-Fetch-User", "?1");
+            e.Request.Headers.SetHeader("Upgrade-Insecure-Requests", "1");
         }
 
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs er)
@@ -103,13 +120,15 @@ namespace IrisRobloxMultiTool.Forms
                 CurrentDefferal.Complete();
                 CurrentBypasser = web2;
 
-                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
+                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = true;
                 CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
-                CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46";
+                CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0";
+
                 CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
                 CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
                 CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
+                CurrentBypasser.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
             };
         }
 
@@ -249,7 +268,7 @@ namespace IrisRobloxMultiTool.Forms
 
         private async void DoFluxusBypasses(string Url)
         {
-            panel1.Visible = false;
+            panel1.Visible = true;
 
             string WebPage = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
 
@@ -353,7 +372,22 @@ namespace IrisRobloxMultiTool.Forms
 
         private void WeAreDevsKeygen_Load(object sender, EventArgs e)
         {
+            new Task(() =>
+            {
+                APIChecker Checker = new APIChecker();
 
+                Tuple<string, Color> Data = Checker.GetLinkvertiseStatus();
+
+                Status.Invoke(new Action(() =>
+                {
+                    Status.Text = Data.Item1;
+                    Status.ForeColor = Data.Item2;
+                }));
+
+
+                Checker.Dispose();
+
+            }).Start();
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
@@ -377,6 +411,9 @@ namespace IrisRobloxMultiTool.Forms
                     FluxusKeySystem = true;
                     break;
                 case "Oxygen U":
+                    #if DEBUG
+                        StarterUrl.Text = "https://oxygenu.xyz/KeySystem/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963";
+                    #endif
                     MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     FluxusKeySystem = true;
                     break;
@@ -385,6 +422,11 @@ namespace IrisRobloxMultiTool.Forms
                     FluxusKeySystem = true;
                     break;
             }
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Key.Text);
         }
     }
 }

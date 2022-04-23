@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,9 +20,33 @@ namespace IrisRobloxMultiTool
             public string ProfileUrl { get; set; }
             public bool IsVerified { get; set; }
             public string RobuxCount { get; set; }
+            public string XSRFToken { get; set; }
         }
 
         public Account AccountData = new Account();
+
+        public string GetXSRFToken(string Cookie)
+        {
+            string Return = string.Empty;
+            string RealCookie = Cookie.Replace(".ROBLOSECURITY=", "").Replace(" ", "");
+
+            using (HttpClientHandler Handler = new HttpClientHandler())
+            {
+                CookieContainer Cookies = new CookieContainer();
+                Cookies.Add(new Cookie(".ROBLOSECURITY", RealCookie) { Domain = "auth.roblox.com"});
+                Handler.UseCookies = true;
+                Handler.CookieContainer = Cookies;
+
+                using (HttpClient httpClient = new HttpClient(Handler))
+                {
+                    HttpResponseMessage Data = httpClient.PostAsync("https://auth.roblox.com/v2/logout", null).Result;
+                    Return = Data.Headers.GetValues("x-csrf-token").FirstOrDefault();
+                    Program.RbxApi.AccountData.XSRFToken = Return;
+                }
+            }
+
+            return Return;
+        }
 
         public void SetupAccount()
         {
@@ -46,6 +72,8 @@ namespace IrisRobloxMultiTool
                 Data = JObject.Parse(JData);
 
                 AccountData.RobuxCount = Data["robux"].ToString();
+
+                GetXSRFToken(AccountData.Cookie);
             }
         }
     }

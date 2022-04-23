@@ -26,7 +26,7 @@ namespace IrisRobloxMultiTool.Forms
         {
             HomePage.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             HomePage.CoreWebView2.Settings.AreDevToolsEnabled = false;
-            HomePage.CoreWebView2.Navigate("https://api.irisapp.ca/");
+            HomePage.CoreWebView2.Navigate("https://irisapp.ca/");
         }
 
     }

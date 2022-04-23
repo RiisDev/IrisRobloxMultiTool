@@ -19,12 +19,13 @@ namespace IrisRobloxMultiTool
 {
     public partial class Main : Form
     {
-        AssetDownloader assetDownloader = new AssetDownloader();
-        Home home = new Home();
-        GroupScanner scanner = new GroupScanner();
-        ToolsDownloader toolsDownloader = new ToolsDownloader();
-        WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
-        IStuff istuff = new IStuff();
+        public AssetDownloader assetDownloader = new AssetDownloader();
+        public Home home = new Home();
+        public GroupScanner scanner = new GroupScanner();
+        public ToolsDownloader toolsDownloader = new ToolsDownloader();
+        public WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
+        public APIChecker istuff = new APIChecker();
+        public AssetFavouriteBot FavBot = new AssetFavouriteBot();
 
         private bool WebViewInstalled()
         {
@@ -145,6 +146,12 @@ namespace IrisRobloxMultiTool
             }
 
             CheckForUpdates();
+            IrisStuff.PerformClick();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/IrisV3rm/IrisRobloxMultiTool/releases");
         }
 
         private async void LogOutButton_Click(object sender, EventArgs e)
@@ -178,130 +185,88 @@ namespace IrisRobloxMultiTool
                 frm.Hide();
         }
 
-        private void AssetDownloaderButton_Click(object sender, EventArgs e)
+        private void ShowForm(Form ToggledForm)
         {
             HideForms();
+            if (!FormHolder.Controls.Contains(ToggledForm))
+            {
+                ToggledForm.TopLevel = false;
+                ToggledForm.AutoScroll = true;
+                ToggledForm.Dock = DockStyle.Fill;
+                FormHolder.Controls.Add(ToggledForm);
+            }
+
+            ToggledForm.Show();
+        }
+
+        private void AssetDownloaderButton_Click(object sender, EventArgs e)
+        {
             if (assetDownloader == null)
             {
                 assetDownloader = new AssetDownloader();
             }
 
-            if (!FormHolder.Controls.Contains(assetDownloader))
-            {
-                assetDownloader.TopLevel = false;
-                assetDownloader.AutoScroll = true;
-                assetDownloader.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(assetDownloader);
-            }
-
-            assetDownloader.Show();
+            ShowForm(assetDownloader);
         }
 
         private void HomeButton_Click(object sender, EventArgs e)
         {
-            HideForms();
-
             if (home == null)
             {
                 home = new Home();
             }
 
-            if (!FormHolder.Controls.Contains(home))
-            {
-                home.TopLevel = false;
-                home.AutoScroll = true;
-                home.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(home);
-            }
-
-            home.Show();
+            ShowForm(home);
         }
 
         private void GroupScannerButton_Click(object sender, EventArgs e)
         {
-            HideForms();
-
             if (scanner == null)
             {
                 scanner = new GroupScanner();
             }
 
-            if (!FormHolder.Controls.Contains(scanner))
-            {
-                scanner.TopLevel = false;
-                scanner.AutoScroll = true;
-                scanner.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(scanner);
-            }
-
-            scanner.Show();
+            ShowForm(scanner);
         }
 
         private void ToolDownloader_Click(object sender, EventArgs e)
         {
-            HideForms();
-
             if (toolsDownloader == null)
             {
                 toolsDownloader = new ToolsDownloader();
             }
 
-            if (!FormHolder.Controls.Contains(toolsDownloader))
-            {
-                toolsDownloader.TopLevel = false;
-                toolsDownloader.AutoScroll = true;
-                toolsDownloader.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(toolsDownloader);
-            }
-
-            toolsDownloader.Show();
+            ShowForm(toolsDownloader);
         }
 
         private void WeAreDevsKeygenButton_Click(object sender, EventArgs e)
         {
-            HideForms();
-
             if (KeyGen == null)
             {
                 KeyGen = new WeAreDevsKeygen();
             }
 
-            if (!FormHolder.Controls.Contains(KeyGen))
-            {
-                KeyGen.TopLevel = false;
-                KeyGen.AutoScroll = true;
-                KeyGen.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(KeyGen);
-                KeyGen.BringToFront();
-            }
-
-            KeyGen.Show();
+            ShowForm(KeyGen);
         }
 
         private void IrisStuff_Click(object sender, EventArgs e)
         {
-            HideForms();
-
             if (istuff == null)
             {
-                istuff = new IStuff();
+                istuff = new APIChecker();
             }
 
-            if (!FormHolder.Controls.Contains(istuff))
-            {
-                istuff.TopLevel = false;
-                istuff.AutoScroll = true;
-                istuff.Dock = DockStyle.Fill;
-                FormHolder.Controls.Add(istuff);
-                istuff.BringToFront();
-            }
-
-            istuff.Show();
+            ShowForm(istuff);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void AssetFavouriteBot_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/IrisV3rm/IrisRobloxMultiTool/releases");
+            if (FavBot == null)
+            {
+                FavBot = new AssetFavouriteBot();
+            }
+
+            ShowForm(FavBot);
         }
     }
 }

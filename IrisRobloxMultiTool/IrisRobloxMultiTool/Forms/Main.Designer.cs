@@ -38,11 +38,12 @@
             this.TabPageButtons = new System.Windows.Forms.Panel();
             this.ButtonHolder = new System.Windows.Forms.FlowLayoutPanel();
             this.HomeButton = new Guna.UI2.WinForms.Guna2Button();
+            this.IrisStuff = new Guna.UI2.WinForms.Guna2Button();
             this.AssetDownloaderButton = new Guna.UI2.WinForms.Guna2Button();
             this.GroupScannerButton = new Guna.UI2.WinForms.Guna2Button();
             this.WeAreDevsKeygenButton = new Guna.UI2.WinForms.Guna2Button();
             this.ToolDownloader = new Guna.UI2.WinForms.Guna2Button();
-            this.IrisStuff = new Guna.UI2.WinForms.Guna2Button();
+            this.AssetFavouriteBot = new Guna.UI2.WinForms.Guna2Button();
             this.SupportMeButton = new Guna.UI2.WinForms.Guna2Button();
             this.LogOutButton = new Guna.UI2.WinForms.Guna2Button();
             this.UserInfoHolder = new System.Windows.Forms.Panel();
@@ -149,11 +150,12 @@
             // 
             this.ButtonHolder.AutoSize = true;
             this.ButtonHolder.Controls.Add(this.HomeButton);
+            this.ButtonHolder.Controls.Add(this.IrisStuff);
             this.ButtonHolder.Controls.Add(this.AssetDownloaderButton);
             this.ButtonHolder.Controls.Add(this.GroupScannerButton);
             this.ButtonHolder.Controls.Add(this.WeAreDevsKeygenButton);
             this.ButtonHolder.Controls.Add(this.ToolDownloader);
-            this.ButtonHolder.Controls.Add(this.IrisStuff);
+            this.ButtonHolder.Controls.Add(this.AssetFavouriteBot);
             this.ButtonHolder.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonHolder.Location = new System.Drawing.Point(0, 57);
             this.ButtonHolder.Name = "ButtonHolder";
@@ -183,6 +185,29 @@
             this.HomeButton.TextOffset = new System.Drawing.Point(5, 0);
             this.HomeButton.Click += new System.EventHandler(this.HomeButton_Click);
             // 
+            // IrisStuff
+            // 
+            this.IrisStuff.Animated = true;
+            this.IrisStuff.CheckedState.Parent = this.IrisStuff;
+            this.IrisStuff.CustomImages.Parent = this.IrisStuff;
+            this.IrisStuff.Dock = System.Windows.Forms.DockStyle.Top;
+            this.IrisStuff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.IrisStuff.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.IrisStuff.ForeColor = System.Drawing.Color.White;
+            this.IrisStuff.HoverState.Parent = this.IrisStuff;
+            this.IrisStuff.Image = global::IrisRobloxMultiTool.Properties.Resources.API;
+            this.IrisStuff.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.IrisStuff.ImageSize = new System.Drawing.Size(33, 33);
+            this.IrisStuff.Location = new System.Drawing.Point(3, 54);
+            this.IrisStuff.MaximumSize = new System.Drawing.Size(170, 45);
+            this.IrisStuff.Name = "IrisStuff";
+            this.IrisStuff.ShadowDecoration.Parent = this.IrisStuff;
+            this.IrisStuff.Size = new System.Drawing.Size(170, 45);
+            this.IrisStuff.TabIndex = 9;
+            this.IrisStuff.Text = "API Checker";
+            this.IrisStuff.TextOffset = new System.Drawing.Point(15, 0);
+            this.IrisStuff.Click += new System.EventHandler(this.IrisStuff_Click);
+            // 
             // AssetDownloaderButton
             // 
             this.AssetDownloaderButton.Animated = true;
@@ -196,7 +221,7 @@
             this.AssetDownloaderButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Download;
             this.AssetDownloaderButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.AssetDownloaderButton.ImageSize = new System.Drawing.Size(33, 33);
-            this.AssetDownloaderButton.Location = new System.Drawing.Point(3, 54);
+            this.AssetDownloaderButton.Location = new System.Drawing.Point(3, 105);
             this.AssetDownloaderButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.AssetDownloaderButton.Name = "AssetDownloaderButton";
             this.AssetDownloaderButton.ShadowDecoration.Parent = this.AssetDownloaderButton;
@@ -219,7 +244,7 @@
             this.GroupScannerButton.Image = global::IrisRobloxMultiTool.Properties.Resources.People;
             this.GroupScannerButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.GroupScannerButton.ImageSize = new System.Drawing.Size(33, 33);
-            this.GroupScannerButton.Location = new System.Drawing.Point(3, 105);
+            this.GroupScannerButton.Location = new System.Drawing.Point(3, 156);
             this.GroupScannerButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.GroupScannerButton.Name = "GroupScannerButton";
             this.GroupScannerButton.ShadowDecoration.Parent = this.GroupScannerButton;
@@ -242,7 +267,7 @@
             this.WeAreDevsKeygenButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Key;
             this.WeAreDevsKeygenButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.WeAreDevsKeygenButton.ImageSize = new System.Drawing.Size(33, 33);
-            this.WeAreDevsKeygenButton.Location = new System.Drawing.Point(3, 156);
+            this.WeAreDevsKeygenButton.Location = new System.Drawing.Point(3, 207);
             this.WeAreDevsKeygenButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.WeAreDevsKeygenButton.Name = "WeAreDevsKeygenButton";
             this.WeAreDevsKeygenButton.ShadowDecoration.Parent = this.WeAreDevsKeygenButton;
@@ -265,7 +290,7 @@
             this.ToolDownloader.Image = global::IrisRobloxMultiTool.Properties.Resources.Tools;
             this.ToolDownloader.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ToolDownloader.ImageSize = new System.Drawing.Size(33, 33);
-            this.ToolDownloader.Location = new System.Drawing.Point(3, 207);
+            this.ToolDownloader.Location = new System.Drawing.Point(3, 258);
             this.ToolDownloader.MaximumSize = new System.Drawing.Size(170, 45);
             this.ToolDownloader.Name = "ToolDownloader";
             this.ToolDownloader.ShadowDecoration.Parent = this.ToolDownloader;
@@ -275,29 +300,29 @@
             this.ToolDownloader.TextOffset = new System.Drawing.Point(15, 0);
             this.ToolDownloader.Click += new System.EventHandler(this.ToolDownloader_Click);
             // 
-            // IrisStuff
+            // AssetFavouriteBot
             // 
-            this.IrisStuff.Animated = true;
-            this.IrisStuff.CheckedState.Parent = this.IrisStuff;
-            this.IrisStuff.CustomImages.Parent = this.IrisStuff;
-            this.IrisStuff.Dock = System.Windows.Forms.DockStyle.Top;
-            this.IrisStuff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.IrisStuff.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.IrisStuff.ForeColor = System.Drawing.Color.White;
-            this.IrisStuff.HoverState.Parent = this.IrisStuff;
-            this.IrisStuff.Image = global::IrisRobloxMultiTool.Properties.Resources.ForIris2White;
-            this.IrisStuff.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.IrisStuff.ImageSize = new System.Drawing.Size(33, 33);
-            this.IrisStuff.Location = new System.Drawing.Point(3, 258);
-            this.IrisStuff.MaximumSize = new System.Drawing.Size(170, 45);
-            this.IrisStuff.Name = "IrisStuff";
-            this.IrisStuff.ShadowDecoration.Parent = this.IrisStuff;
-            this.IrisStuff.Size = new System.Drawing.Size(170, 45);
-            this.IrisStuff.TabIndex = 9;
-            this.IrisStuff.Text = "iris Stuff";
-            this.IrisStuff.TextOffset = new System.Drawing.Point(15, 0);
-            this.IrisStuff.Visible = false;
-            this.IrisStuff.Click += new System.EventHandler(this.IrisStuff_Click);
+            this.AssetFavouriteBot.Animated = true;
+            this.AssetFavouriteBot.CheckedState.Parent = this.AssetFavouriteBot;
+            this.AssetFavouriteBot.CustomImages.Parent = this.AssetFavouriteBot;
+            this.AssetFavouriteBot.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AssetFavouriteBot.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.AssetFavouriteBot.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetFavouriteBot.ForeColor = System.Drawing.Color.White;
+            this.AssetFavouriteBot.HoverState.Parent = this.AssetFavouriteBot;
+            this.AssetFavouriteBot.Image = global::IrisRobloxMultiTool.Properties.Resources.People;
+            this.AssetFavouriteBot.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.AssetFavouriteBot.ImageSize = new System.Drawing.Size(33, 33);
+            this.AssetFavouriteBot.Location = new System.Drawing.Point(3, 309);
+            this.AssetFavouriteBot.MaximumSize = new System.Drawing.Size(170, 45);
+            this.AssetFavouriteBot.Name = "AssetFavouriteBot";
+            this.AssetFavouriteBot.ShadowDecoration.Parent = this.AssetFavouriteBot;
+            this.AssetFavouriteBot.Size = new System.Drawing.Size(170, 45);
+            this.AssetFavouriteBot.TabIndex = 10;
+            this.AssetFavouriteBot.Text = "Bot Asset Fav";
+            this.AssetFavouriteBot.TextOffset = new System.Drawing.Point(22, 0);
+            this.AssetFavouriteBot.Visible = false;
+            this.AssetFavouriteBot.Click += new System.EventHandler(this.AssetFavouriteBot_Click);
             // 
             // SupportMeButton
             // 
@@ -482,6 +507,7 @@
         private Guna.UI2.WinForms.Guna2Button ToolDownloader;
         private Guna.UI2.WinForms.Guna2Button IrisStuff;
         private System.Windows.Forms.Label UpdAv;
+        private Guna.UI2.WinForms.Guna2Button AssetFavouriteBot;
     }
 }
 

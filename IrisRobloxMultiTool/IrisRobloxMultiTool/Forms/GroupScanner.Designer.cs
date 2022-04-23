@@ -48,7 +48,11 @@
             this.UseSearchCheck = new System.Windows.Forms.CheckBox();
             this.WriteToFile = new System.Windows.Forms.CheckBox();
             this.UseProxies = new System.Windows.Forms.CheckBox();
+            this.StatusPanel = new Guna.UI2.WinForms.Guna2ShadowPanel();
+            this.Status = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.GroupContext.SuspendLayout();
+            this.StatusPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // KeywordBox
@@ -323,12 +327,49 @@
             this.UseProxies.UseVisualStyleBackColor = true;
             this.UseProxies.CheckedChanged += new System.EventHandler(this.UseProxies_CheckedChanged);
             // 
+            // StatusPanel
+            // 
+            this.StatusPanel.BackColor = System.Drawing.Color.Transparent;
+            this.StatusPanel.Controls.Add(this.Status);
+            this.StatusPanel.Controls.Add(this.label1);
+            this.StatusPanel.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.StatusPanel.Location = new System.Drawing.Point(443, 295);
+            this.StatusPanel.Name = "StatusPanel";
+            this.StatusPanel.ShadowColor = System.Drawing.Color.Black;
+            this.StatusPanel.Size = new System.Drawing.Size(204, 69);
+            this.StatusPanel.TabIndex = 57;
+            // 
+            // Status
+            // 
+            this.Status.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Status.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(154)))), ((int)(((byte)(249)))));
+            this.Status.Location = new System.Drawing.Point(0, 31);
+            this.Status.Name = "Status";
+            this.Status.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            this.Status.Size = new System.Drawing.Size(204, 38);
+            this.Status.TabIndex = 4;
+            this.Status.Text = "Checking...";
+            this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(0, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(201, 22);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Scanner Status";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // GroupScanner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(649, 365);
+            this.Controls.Add(this.StatusPanel);
             this.Controls.Add(this.UseProxies);
             this.Controls.Add(this.WriteToFile);
             this.Controls.Add(this.UseSearchCheck);
@@ -350,6 +391,7 @@
             this.Text = "GroupScanner";
             this.Load += new System.EventHandler(this.GroupScanner_Load);
             this.GroupContext.ResumeLayout(false);
+            this.StatusPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,5 +419,8 @@
         private System.Windows.Forms.CheckBox UseSearchCheck;
         private System.Windows.Forms.CheckBox WriteToFile;
         private System.Windows.Forms.CheckBox UseProxies;
+        private Guna.UI2.WinForms.Guna2ShadowPanel StatusPanel;
+        private System.Windows.Forms.Label Status;
+        private System.Windows.Forms.Label label1;
     }
 }

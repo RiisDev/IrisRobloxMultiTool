@@ -490,6 +490,24 @@ namespace IrisRobloxMultiTool.Forms
             Directory.CreateDirectory(TempDir);
             PageCountForAudio.SelectedIndex = 0;
             ItemCount.SelectedIndex = 0;
+
+            new Task(() =>
+            {
+                APIChecker Checker = new APIChecker();
+
+                Tuple<string, Color> Data = Checker.GetAssetDownloaderStatus();
+
+                Status.Invoke(new Action(() =>
+                {
+                    Status.Text = Data.Item1;
+                    Status.ForeColor = Data.Item2;
+                }));
+
+
+                Checker.Dispose();
+
+            }).Start();
+
         }
 
         private void FindLocation_Click(object sender, EventArgs e)
