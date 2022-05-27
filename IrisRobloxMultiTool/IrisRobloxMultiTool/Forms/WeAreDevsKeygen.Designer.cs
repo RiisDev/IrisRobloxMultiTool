@@ -102,8 +102,6 @@
             this.SelectedExploit.ItemHeight = 30;
             this.SelectedExploit.Items.AddRange(new object[] {
             "Kiwi X",
-            "Fluxus (Broken)",
-            "Oxygen U (Broken)",
             "Comet"});
             this.SelectedExploit.ItemsAppearance.Parent = this.SelectedExploit;
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);

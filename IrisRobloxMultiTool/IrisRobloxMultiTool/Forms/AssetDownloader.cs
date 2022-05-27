@@ -512,20 +512,16 @@ namespace IrisRobloxMultiTool.Forms
 
         private void FindLocation_Click(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            MessageBox.Show("Make sure they are seperated by line!", "IRMT - Asset Downloader", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (OpenFileDialog Diag = new OpenFileDialog())
             {
-                dialog.ShowNewFolderButton = true;
-                dialog.Description = "Choose where the items will be saved to!";
+                Diag.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                Diag.CheckFileExists = true;
+                Diag.CheckPathExists = true;
 
-                DialogResult Result = dialog.ShowDialog();
-
-                if (Result == DialogResult.OK)
+                if (Diag.ShowDialog() == DialogResult.OK)
                 {
-                    if (Directory.Exists(dialog.SelectedPath))
-                    {
-                        IDListDir = dialog.SelectedPath;
-                        CustomIdLocBox.Text = IDListDir;
-                    }
+                    CustomIdLocBox.Text = Diag.FileName;
                 }
             }
         }
