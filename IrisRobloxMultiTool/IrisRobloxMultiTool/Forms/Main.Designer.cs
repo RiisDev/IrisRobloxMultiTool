@@ -44,6 +44,7 @@
             this.WeAreDevsKeygenButton = new Guna.UI2.WinForms.Guna2Button();
             this.ToolDownloader = new Guna.UI2.WinForms.Guna2Button();
             this.AssetFavouriteBot = new Guna.UI2.WinForms.Guna2Button();
+            this.ProxyChecker = new Guna.UI2.WinForms.Guna2Button();
             this.SupportMeButton = new Guna.UI2.WinForms.Guna2Button();
             this.LogOutButton = new Guna.UI2.WinForms.Guna2Button();
             this.UserInfoHolder = new System.Windows.Forms.Panel();
@@ -156,6 +157,7 @@
             this.ButtonHolder.Controls.Add(this.WeAreDevsKeygenButton);
             this.ButtonHolder.Controls.Add(this.ToolDownloader);
             this.ButtonHolder.Controls.Add(this.AssetFavouriteBot);
+            this.ButtonHolder.Controls.Add(this.ProxyChecker);
             this.ButtonHolder.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonHolder.Location = new System.Drawing.Point(0, 57);
             this.ButtonHolder.Name = "ButtonHolder";
@@ -323,6 +325,30 @@
             this.AssetFavouriteBot.TextOffset = new System.Drawing.Point(22, 0);
             this.AssetFavouriteBot.Visible = false;
             this.AssetFavouriteBot.Click += new System.EventHandler(this.AssetFavouriteBot_Click);
+            // 
+            // ProxyChecker
+            // 
+            this.ProxyChecker.Animated = true;
+            this.ProxyChecker.CheckedState.Parent = this.ProxyChecker;
+            this.ProxyChecker.CustomImages.Parent = this.ProxyChecker;
+            this.ProxyChecker.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ProxyChecker.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.ProxyChecker.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ProxyChecker.ForeColor = System.Drawing.Color.White;
+            this.ProxyChecker.HoverState.Parent = this.ProxyChecker;
+            this.ProxyChecker.Image = global::IrisRobloxMultiTool.Properties.Resources.Key;
+            this.ProxyChecker.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.ProxyChecker.ImageSize = new System.Drawing.Size(33, 33);
+            this.ProxyChecker.Location = new System.Drawing.Point(3, 360);
+            this.ProxyChecker.MaximumSize = new System.Drawing.Size(170, 45);
+            this.ProxyChecker.Name = "ProxyChecker";
+            this.ProxyChecker.ShadowDecoration.Parent = this.ProxyChecker;
+            this.ProxyChecker.Size = new System.Drawing.Size(170, 45);
+            this.ProxyChecker.TabIndex = 11;
+            this.ProxyChecker.Text = "Proxy Checker";
+            this.ProxyChecker.TextOffset = new System.Drawing.Point(15, 0);
+            this.ProxyChecker.Visible = false;
+            this.ProxyChecker.Click += new System.EventHandler(this.ProxyChecker_Click);
             // 
             // SupportMeButton
             // 
@@ -508,6 +534,7 @@
         private Guna.UI2.WinForms.Guna2Button IrisStuff;
         private System.Windows.Forms.Label UpdAv;
         private Guna.UI2.WinForms.Guna2Button AssetFavouriteBot;
+        private Guna.UI2.WinForms.Guna2Button ProxyChecker;
     }
 }
 

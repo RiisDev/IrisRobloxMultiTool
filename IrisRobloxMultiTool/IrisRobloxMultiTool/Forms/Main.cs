@@ -26,6 +26,7 @@ namespace IrisRobloxMultiTool
         public WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
         public APIChecker istuff = new APIChecker();
         public AssetFavouriteBot FavBot = new AssetFavouriteBot();
+        public ProxyChecker ProxyStuff = new ProxyChecker();
 
         private bool WebViewInstalled()
         {
@@ -119,6 +120,9 @@ namespace IrisRobloxMultiTool
 
         private async void Main_Load(object sender, EventArgs e)
         {
+            #if DEBUG
+                MessageBox.Show("This is a debug build, if you're seeing this please report it to Iris#0410!");
+            #endif
             ButtonHolder.HorizontalScroll.Maximum = 0;
             ButtonHolder.HorizontalScroll.Visible = false;
             ButtonHolder.HorizontalScroll.Enabled = false;
@@ -267,6 +271,16 @@ namespace IrisRobloxMultiTool
             }
 
             ShowForm(FavBot);
+        }
+
+        private void ProxyChecker_Click(object sender, EventArgs e)
+        {
+            if (ProxyStuff == null)
+            {
+                ProxyStuff = new ProxyChecker();
+            }
+
+            ShowForm(ProxyStuff);
         }
     }
 }

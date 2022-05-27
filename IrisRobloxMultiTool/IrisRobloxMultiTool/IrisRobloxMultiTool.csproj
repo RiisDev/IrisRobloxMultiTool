@@ -242,6 +242,12 @@
     <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProxyChecker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProxyChecker.Designer.cs">
+      <DependentUpon>ProxyChecker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ToolsDownloader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -277,6 +283,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProxyChecker.resx">
+      <DependentUpon>ProxyChecker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ToolsDownloader.resx">
       <DependentUpon>ToolsDownloader.cs</DependentUpon>
