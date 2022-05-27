@@ -198,10 +198,9 @@ namespace IrisRobloxMultiTool.Forms
 
         private void ManualIDs()
         {
-            if (IDListDir == null) return;
             if (CustomIdLocBox.Text == string.Empty) return;
 
-            foreach (string Id in File.ReadAllLines(IDListDir))
+            foreach (string Id in File.ReadAllLines(CustomIdLocBox.Text))
             {
                 long Out;
                 if (long.TryParse(Id, out Out))
