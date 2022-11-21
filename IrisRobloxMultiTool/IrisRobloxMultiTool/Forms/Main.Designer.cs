@@ -96,9 +96,9 @@
             this.MinimizeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.MinimizeButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeButton.ForeColor = System.Drawing.Color.White;
-            this.MinimizeButton.Location = new System.Drawing.Point(788, 0);
+            this.MinimizeButton.Location = new System.Drawing.Point(783, 0);
             this.MinimizeButton.Name = "MinimizeButton";
-            this.MinimizeButton.Size = new System.Drawing.Size(28, 26);
+            this.MinimizeButton.Size = new System.Drawing.Size(33, 26);
             this.MinimizeButton.TabIndex = 2;
             this.MinimizeButton.Text = "─";
             this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);

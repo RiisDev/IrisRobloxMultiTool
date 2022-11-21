@@ -1,0 +1,63 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Detect OS platform -->
+  <PropertyGroup>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(RuntimeIdentifier.StartsWith(&quot;win&quot;))'=='True' And '$(RuntimeIdentifier.Contains(&quot;x86&quot;))'=='True' ">win32</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(RuntimeIdentifier.StartsWith(&quot;win&quot;))'=='True' And '$(RuntimeIdentifier.Contains(&quot;x64&quot;))'=='True' ">win64</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(RuntimeIdentifier.StartsWith(&quot;osx&quot;))'=='True' And '$(RuntimeIdentifier.EndsWith(&quot;arm64&quot;))'=='False' ">mac64</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(RuntimeIdentifier.StartsWith(&quot;osx&quot;))'=='True' And '$(RuntimeIdentifier.EndsWith(&quot;arm64&quot;))'=='True' ">mac64arm</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(RuntimeIdentifier.StartsWith(&quot;linux&quot;))'=='True' ">linux64</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(OS)' == 'Windows_NT' And Exists ('$(windir)\SysWOW64')">win64</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(OS)' == 'Windows_NT'">win32</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(OS)' == 'Unix' And Exists ('/Applications') And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">mac64</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(OS)' == 'Unix' And Exists ('/Applications') And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' ">mac64arm</GeckoDriverPlatform>
+    <GeckoDriverPlatform Condition=" '$(GeckoDriverPlatform)' == '' And '$(OS)' == 'Unix' ">linux64</GeckoDriverPlatform>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeckoDriverName Condition="'$(GeckoDriverName)' == '' And ('$(GeckoDriverPlatform)' == 'win32' Or '$(GeckoDriverPlatform)' == 'win64') ">geckodriver.exe</GeckoDriverName>
+    <GeckoDriverName Condition="'$(GeckoDriverName)' == ''">geckodriver</GeckoDriverName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeckoDriverSrcPath Condition=" '$(GeckoDriverSrcPath)' == '' ">$(MSBuildThisFileDirectory)..\driver\$(GeckoDriverPlatform)\$(GeckoDriverName)</GeckoDriverSrcPath>
+    <GeckoDriverTargetDir Condition=" '$(GeckoDriverTargetDir)' == '' ">$(TargetDir)</GeckoDriverTargetDir>
+  </PropertyGroup>
+
+  <!-- Detect that the project type is Web or Not. -->
+  <PropertyGroup Condition="'$(ProjectTypeIsWeb)' == ''">
+    <ProjectTypeGuidsPadded Condition="'$(ProjectTypeGuidsPadded)' == ''">;$(ProjectTypeGuids);</ProjectTypeGuidsPadded>
+    <!-- Reference: http://www.mztools.com/Articles/2008/MZ2008017.aspx -->
+    <!-- HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\Projects -->
+    <ProjectTypeIsWeb Condition="$(ProjectTypeGuidsPadded.IndexOf(';{349c5851-65df-11da-9384-00065b846f21};')) != -1">true</ProjectTypeIsWeb>
+    <ProjectTypeIsWeb Condition="'$(ProjectTypeIsWeb)' == ''">false</ProjectTypeIsWeb>
+  </PropertyGroup>
+
+  <!-- Detect definition of compilation symbol that is "_PUBLISH_GECKODRIVER", or "PublishGeckoDriver" msbuild property. -->
+  <PropertyGroup Condition="'$(PublishGeckoDriver)' == ''">
+    <DefineConstantsPadded Condition="'$(DefineConstantsPadded)' == ''">;$(DefineConstants);</DefineConstantsPadded>
+    <PublishGeckoDriver Condition="$(DefineConstantsPadded.IndexOf(';_PUBLISH_GECKODRIVER;')) != -1">true</PublishGeckoDriver>
+    <PublishGeckoDriver Condition="'$(PublishGeckoDriver)' == ''">false</PublishGeckoDriver>
+  </PropertyGroup>
+
+  <!-- Setup driver file as project item if publishing driver file is enabled. -->
+
+  <ItemGroup Condition="'$(PublishGeckoDriver)|$(ProjectTypeIsWeb)' == 'true|true'">
+    <None Include="$(GeckoDriverSrcPath)">
+      <Link>$(GeckoDriverName)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(PublishGeckoDriver)|$(ProjectTypeIsWeb)' == 'true|false'">
+    <Content Include="$(GeckoDriverSrcPath)">
+      <Link>$(GeckoDriverName)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

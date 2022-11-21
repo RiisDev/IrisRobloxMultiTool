@@ -1,10 +1,17 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V105.WebAuthn;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,12 +24,15 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        CoreWebView2HttpRequestHeaders Headers;
-        CoreWebView2Deferral CurrentDefferal;
-        CoreWebView2NewWindowRequestedEventArgs CurrentArgs;
-        WebView2 CurrentBypasser;
-        string CurrentUrl;
+        Dictionary<BrowserType, string> DriverDownloads = new Dictionary<BrowserType, string>()
+        {
+            {BrowserType.Firefox, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070779513491506/geckodriver.exe" },
+            {BrowserType.Edge, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070770558636132/msedgedriver.exe" },
+            {BrowserType.Chrome, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070797565767740/chromedriver.exe" },
+        };
         private bool FluxusKeySystem = false;
+        BrowserType DetectedBrowser;
+        IWebDriver Driver;
 
         public void LogData(LogType logType, string Message = "")
         {
@@ -56,322 +66,59 @@ namespace IrisRobloxMultiTool.Forms
             Info,
         }
 
+        public enum BrowserType
+        {
+            Chrome,
+            Firefox,
+            Edge
+        }
+
         public WeAreDevsKeygen()
         {
             InitializeComponent();
-            LinkVertiseBrowser.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{Program.Directory}\\bin\\WebViewCache", null).Result);
-        }
-
-        public string btoa(string toEncode)
-        {
-            byte[] bytes = Encoding.GetEncoding(28591).GetBytes(toEncode);
-            string toReturn = Convert.ToBase64String(bytes);
-            return toReturn;
-        }
-
-        private void LinkVertiseBrowser_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        {
-            CurrentBypasser = LinkVertiseBrowser;
-
-            CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = false;
-            CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
-            CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0";
-            CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-            CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
-            CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
-            CurrentBypasser.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
-        }
-
-        private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
-        {
-            e.Request.Headers.SetHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
-            e.Request.Headers.SetHeader("Accept-Encoding", "gzip, deflate, br");
-            e.Request.Headers.SetHeader("Accept-Language", "en-US,en;q=0.5");
-            e.Request.Headers.SetHeader("Cache-Control", "no-cache");
-            e.Request.Headers.SetHeader("Connection", "keep-alive");
-            e.Request.Headers.SetHeader("Pragma", "no-cache");
-            e.Request.Headers.SetHeader("Referer", "https://linkvertise.com/");
-            e.Request.Headers.SetHeader("Sec-Fetch-Dest", "document");
-            e.Request.Headers.SetHeader("Sec-Fetch-Mode", "navigate");
-            e.Request.Headers.SetHeader("Sec-Fetch-Site", "cross-site");
-            e.Request.Headers.SetHeader("Sec-Fetch-User", "?1");
-            e.Request.Headers.SetHeader("Upgrade-Insecure-Requests", "1");
-        }
-
-        private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs er)
-        {
-
-            if (!FluxusKeySystem) { er.Handled = true; return; }
-
-            CurrentDefferal = er.GetDeferral();
-            CurrentArgs = er;
-
-            WebView2 web2 = new WebView2();
-            web2.Dock = DockStyle.Fill;
-            web2.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\WebViewCache", null).Result);
-            panel1.Controls.Add(web2);
-
-            web2.CoreWebView2InitializationCompleted += (fuck, me) =>
-            {
-                web2.Show();
-                web2.BringToFront();
-                CurrentArgs.NewWindow = web2.CoreWebView2;
-                CurrentDefferal.Complete();
-                CurrentBypasser = web2;
-
-                CurrentBypasser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
-                CurrentBypasser.CoreWebView2.Settings.AreDevToolsEnabled = true;
-                CurrentBypasser.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
-                CurrentBypasser.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0";
-
-                CurrentBypasser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-                CurrentBypasser.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
-                CurrentBypasser.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
-                CurrentBypasser.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
-            };
-        }
-
-        private string GetTargetUrl()
-        {
-            string Target = string.Empty;
-
-            string LinkVertiseData = CurrentUrl.Substring(CurrentUrl.IndexOf(".com")+4);
-
-            if (LinkVertiseData.Contains("?"))
-                LinkVertiseData = LinkVertiseData.Substring(0, LinkVertiseData.LastIndexOf("?"));
-
-            string Data = new WebClient().DownloadString($"https://publisher.linkvertise.com/api/v1/redirect/link/static{LinkVertiseData}");
-
-            JToken JData = JToken.Parse(Data);
-
-            if (JData["data"]["link"]["id"] != null)
-            {
-                Dictionary<string, string> JsonData = new Dictionary<string, string>()
-                {
-                    ["timestamp"] = (((DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1))).TotalMilliseconds + .5).ToString(),
-                    ["random"] = "6548307",
-                    ["link_id"] = JData["data"]["link"]["id"].ToString(),
-                };
-
-                string Return = new WebClient().UploadString($"https://publisher.linkvertise.com/api/v1/redirect/link{LinkVertiseData}/target?serial={btoa(Newtonsoft.Json.JsonConvert.SerializeObject(JsonData))}", "");
-                JData = JToken.Parse(Return);
-
-                if (JData["data"]["target"] != null)
-                {
-                    Target = JData["data"]["target"].ToString();
-                }
-            }
-
-            return Target;
-        }
-
-        private void CoreWebView2_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs er)
-        {
-            if (er.Uri.Contains("linkvertise"))
-                panel1.Visible = false;
-
-            er.RequestHeaders.SetHeader("sec-ch-ua", "\" Not A; Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Microsoft Edge\";v=\"99\"");
-            er.RequestHeaders.SetHeader("referer", CurrentUrl);
-
-            Headers = er.RequestHeaders;
-
-            CurrentUrl = er.Uri;
-        }
-
-        private async void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
-        {
-            panel1.Visible = false;
-            if (CurrentUrl == null) return;
-            LogData(LogType.Info, CurrentUrl);
-
-            if (CurrentUrl.Contains("linkvertise.download")) return;
-
-            else if (CurrentUrl.Contains("linkvertise"))
-            {
-                if (SelectedExploit.Text.Contains("Kiwi")) await Task.Delay(2000);
-                else if (SelectedExploit.Text.Contains("Oxygen")) await Task.Delay(6000);
-
-                string Target = GetTargetUrl();
-
-                if (Target != string.Empty)
-                {
-                    if (!FluxusKeySystem)
-                        CurrentBypasser.CoreWebView2.Navigate(Target);
-                    else
-                        CurrentBypasser.CoreWebView2.ExecuteScriptAsync($"window.open('{Target}')");
-                }
-            }
-            else if (CurrentUrl.ToLower().Contains("kiwi"))
-            {
-                DoKiwiBypasses(CurrentUrl);
-            }
-            else if (CurrentUrl.ToLower().Contains("flux"))
-            {
-                DoFluxusBypasses(CurrentUrl);
-            }
-            else if (CurrentUrl.ToLower().Contains("cometrbx"))
-            {
-                DoCometBypass(CurrentUrl);
-            }
-            else if (CurrentUrl.ToLower().Contains("oxygenu"))
-            {
-                DoOxygenBypass(CurrentUrl);
-            }
-        }
-
-        private async void DoOxygenBypass(string Url)
-        {
-            panel1.Visible = false;
-            Task<string> WebPage = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
-
-            while (WebPage.Status != TaskStatus.RanToCompletion)
-                await Task.Delay(5);
-
-            if (WebPage.Result.Contains("hcaptcha.com/captcha/v1/") || WebPage.Result.Contains("recaptcha") || WebPage.Result.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
-            else if (WebPage.Result.Contains("It looks like you never used Oxygen before")) { MessageBox.Show("Please get a new starter url via Oxygen client!", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            else if (WebPage.Result.Contains("Copy Key"))
-            {
-                string Keys = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("raw");
-
-                Key.Text = Keys.Replace(" ", "").Replace("\"", "");
-
-                LogData(LogType.Info, "Key has been grabbed!");
-                LogData(LogType.Info, "If you do not see the key above please retry!");
-            }
-        }
-
-        private async void DoCometBypass(string Url)
-        {
-            panel1.Visible = false;
-            Task<string> WebPage = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
-
-            while (WebPage.Status != TaskStatus.RanToCompletion)
-                await Task.Delay(5);
-
-            if (CurrentUrl.Contains("start.php")) CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByTagName('iframe')[0].parentElement.remove()");
-            if (WebPage.Result.Contains("hcaptcha.com/captcha/v1/") || WebPage.Result.Contains("recaptcha") || WebPage.Result.Contains("https://hCaptcha.com/1/api.js") && !(WebPage.Result.Contains("Click the button to copy your key!"))) panel1.Visible = true;
-
-            else if (WebPage.Result.Contains("Click the button to copy your key!"))
-            {
-                Task<string> DotIt = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("var Str = document.head.getElementsByTagName('script')[2].innerHTML; var Str2 = Str.substring(Str.indexOf('\"')); Str2.substring(0, Str2.indexOf(\";\"));");
-
-                while (DotIt.Status != TaskStatus.RanToCompletion)
-                    await Task.Delay(5);
-
-                Key.Text = DotIt.Result.Replace("\"", "").Replace("\\", "").Replace("/", "");
-                LogData(LogType.Info, "Key has been grabbed!");
-                LogData(LogType.Info, "If you do not see the key above please retry!");
-                panel1.Visible = false;
-            }
-        }
-
-        private async void DoFluxusBypasses(string Url)
-        {
-            panel1.Visible = true;
-
-            string WebPage = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
-
-            if (CurrentUrl.Contains("Start.php")) CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByTagName('iframe')[0].remove();");
-            if (WebPage.Contains("hcaptcha.com/captcha/v1/") || WebPage.Contains("recaptcha") || WebPage.Contains("https://hCaptcha.com/1/api.js")) panel1.Visible = true;
-            if (WebPage.ToLower().Contains("let content = (") )
-            {
-                string P1 = WebPage.Substring(WebPage.IndexOf("content =") + 11);
-                string P2 = P1.Substring(1, P1.IndexOf(")") -1);
-
-                Key.Text = P2.Replace("\"", "").Replace("\\", "");
-
-                LogData(LogType.Info, "Key has been grabbed!");
-                LogData(LogType.Info, "If you do not see the key above please retry!");
-            }
-            else if (WebPage.Contains("copyToClipboard()"))
-            {
-                string P1 = WebPage.Substring(WebPage.IndexOf("var e") + 10);
-                string P2 = P1.Substring(0, P1.IndexOf(";") - 2);
-                Key.Text = P2.Replace("\"", "").Replace("\\", "");
-                LogData(LogType.Info, "Key has been grabbed!");
-                LogData(LogType.Info, "If you do not see the key above please retry!");
-            }
-        }
-
-        private async void DoKiwiBypasses(string Url)
-        {
-            panel1.Visible = false;
-            string WebPage = await CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML;");
-
-
-            if (WebPage.Contains("ad blocker"))
-            {
-                CurrentBypasser.CoreWebView2.ExecuteScriptAsync("$(\":contains('ad blocker')\").last().click()");
-            }
-
-            if (CurrentUrl.Contains("keystart"))
-            {
-                await Task.Delay(4000);
-                CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
-
-            }
-            else if (CurrentUrl.ToLower().Contains("kiwiexploits.com/key") && !CurrentUrl.Contains("KeySystems"))
-            {
-                await Task.Delay(2000);
-                CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
-                await Task.Delay(500);
-                CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
-            }
-            else if (CurrentUrl.Contains("https://kiwiexploits.com/KeySystems/index.php"))
-            {
-
-                if (WebPage.Contains("recaptcha"))
-                {
-                    await Task.Delay(100);
-
-                    CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('card-body fixed-bottom text-center bg-secondary fs-5 text-white')[0].remove()");
-
-                    panel1.Visible = true;
-                }
-                else if (WebPage.Contains("Your Key"))
-                {
-                    await Task.Delay(100);
-                    Task<string> Yeet = CurrentBypasser.CoreWebView2.ExecuteScriptAsync("document.getElementById('key').innerText");
-
-                    while (Yeet.Status != TaskStatus.RanToCompletion)
-                        await Task.Delay(5);
-
-                    Key.Text = Yeet.Result.Replace("\"", "");
-                    LogData(LogType.Info, "Key has been grabbed!");
-                    LogData(LogType.Info, "If you do not see the key above please retry!");
-                }
-            }
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            panel1.Visible = false;
             LogBox.Clear();
             LogData(LogType.System, "Running, please wait... (May take up to 30 seconds for some exploits)");
 
-            switch(SelectedExploit.Text)
+            try
             {
-                case "Kiwi X":
-                    CurrentBypasser.CoreWebView2.Navigate("https://kiwiexploits.com/KeySystems/index.php?");
-                    break;
-                case "Fluxus":
-                    CurrentBypasser.CoreWebView2.Navigate(StarterUrl.Text);
-                    break;
-                case "Oxygen U":
-                    CurrentBypasser.CoreWebView2.Navigate(StarterUrl.Text);
-                    break;
-                case "Comet":
-                    CurrentBypasser.CoreWebView2.Navigate(StarterUrl.Text);
-                    break;
-                case "":
-                    return;
+                switch (SelectedExploit.Text)
+                {
+                    case "Kiwi X":
+                        Driver.Url = "https://kiwiexploits.com/KeySystems/index.php?";
+                        break;
+                    case "Fluxus":
+                    case "Oxygen U":
+                    case "Comet":
+                    case "":
+                        Driver.Url = StarterUrl.Text;
+                        return;
+                }
+            } catch (WebDriverException ex)
+            {
+                if (ex.ToString().Contains("Reached error"))
+                {
+                    MessageBox.Show("Page URL Invalid", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
         }
 
-        private void WeAreDevsKeygen_Load(object sender, EventArgs e)
+        private async void WeAreDevsKeygen_Load(object sender, EventArgs e)
         {
+            foreach (Process proc in Process.GetProcesses())
+            {
+                if (proc.ProcessName == "geckodriver")
+                    proc.Kill();
+                else if (proc.ProcessName == "chromedriver")
+                    proc.Kill();
+                else if (proc.ProcessName == "msedgedriver")
+                    proc.Kill();
+            }
+
             new Task(() =>
             {
                 APIChecker Checker = new APIChecker();
@@ -388,6 +135,106 @@ namespace IrisRobloxMultiTool.Forms
                 Checker.Dispose();
 
             }).Start();
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"))
+            {
+                string ProgId = key.GetValue("ProgID").ToString();
+
+                if (string.IsNullOrEmpty(ProgId))
+                {
+                    MessageBox.Show("Browser detection failed, defaulting to Microsoft Edge", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DetectedBrowser = BrowserType.Edge;
+                }
+                else if (ProgId.Contains("Firefox"))
+                {
+                    DetectedBrowser = BrowserType.Firefox;
+                }
+                else if (ProgId.Contains("ChromeHtml"))
+                {
+                    DetectedBrowser = BrowserType.Chrome;
+                }
+                else if (ProgId.Contains("MSEdge"))
+                {
+                    DetectedBrowser = BrowserType.Edge;
+                }
+            }
+
+            bool Downloaded = false;
+
+            DialogResult dialogResult = MessageBox.Show($"{DetectedBrowser} detected, download web driver (REQUIRED)?", "Iris Roblox MultiTool", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                string DownloadUrl = DriverDownloads[DetectedBrowser];
+                string FileName = DownloadUrl.Substring(DownloadUrl.LastIndexOf("/")+1);
+
+                if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}"))
+                {
+                    MessageBox.Show("Downloaded completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Downloaded = true;
+                }
+                else
+                {
+                    using (WebClient Client = new WebClient())
+                    {
+                        Client.DownloadFileCompleted += (_, __) =>
+                        {
+                            MessageBox.Show("Downloaded completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Downloaded = true;
+                        };
+                        Client.DownloadFileAsync(new Uri(DownloadUrl), $"{Program.Directory}\\bin\\drivers\\{FileName}");
+                    }
+                }
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                MessageBox.Show("Unable to continue with keygen, please reload.", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            do
+            {
+                await Task.Delay(50);
+            } while (!Downloaded);
+
+            try
+            {
+                switch (DetectedBrowser)
+                {
+                    case BrowserType.Chrome:
+                        ChromeOptions chromeOptions = new ChromeOptions();
+                        chromeOptions.AddArgument("--no-sandbox");
+                        chromeOptions.AddArgument("--disable-dev-shm-usage");
+                        chromeOptions.AddArgument("--enable-logging");
+                        ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
+                        chromeDriverService.HideCommandPromptWindow = true;
+                        Driver = new ChromeDriver(chromeDriverService, chromeOptions);
+                        break;
+                    case BrowserType.Firefox:
+                        FirefoxOptions firefoxOptions = new FirefoxOptions();
+                        firefoxOptions.AddArgument("--no-sandbox");
+                        firefoxOptions.AddArgument("--disable-dev-shm-usage");
+                        firefoxOptions.AddArgument("--enable-logging");
+                        FirefoxDriverService firefoxDriverService = FirefoxDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
+                        firefoxDriverService.HideCommandPromptWindow = true;
+                        Driver = new FirefoxDriver(firefoxDriverService, firefoxOptions);
+                        break;
+                    case BrowserType.Edge:
+                        EdgeOptions edgeOptions = new EdgeOptions();
+                        edgeOptions.AddArgument("--no-sandbox");
+                        edgeOptions.AddArgument("--disable-dev-shm-usage");
+                        edgeOptions.AddArgument("--enable-logging");
+                        EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
+                        edgeDriverService.HideCommandPromptWindow = true;
+                        Driver = new EdgeDriver(edgeDriverService, edgeOptions);
+                        break;
+                }
+            }
+            catch (WebDriverException ex)
+            {
+                if (ex.ToString().Contains("cannot find"))
+                {
+                    MessageBox.Show($"{DetectedBrowser} binary cannot be found! ", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
@@ -404,7 +251,7 @@ namespace IrisRobloxMultiTool.Forms
 
                 case "Fluxus":
                     #if DEBUG
-                        StarterUrl.Text = "https://fluxteam.xyz/ks/checkpoint/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
+                        StarterUrl.Text = "https://flux.li/windows/start.php?HWID=fbba28a7604a11eda702806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
                     #endif
 
                     MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
