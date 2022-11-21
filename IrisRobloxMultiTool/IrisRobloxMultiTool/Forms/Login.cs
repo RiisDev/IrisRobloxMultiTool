@@ -22,11 +22,12 @@ namespace IrisRobloxMultiTool.Forms
 
         private void Login_Load(object sender, EventArgs e)
         {
-            LoginPage.EnsureCoreWebView2Async();
+            LoginPage.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\WebViewCache", null).Result);
         }
 
         private  void LoginPage_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
+            LoginPage.Source = new Uri("https://roblox.com/Login", UriKind.Absolute);
             LoginPage.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36";
             LoginPage.CoreWebView2.AddWebResourceRequestedFilter("https://roblox.com/*", CoreWebView2WebResourceContext.All);
             LoginPage.CoreWebView2.AddWebResourceRequestedFilter("http://roblox.com/*", CoreWebView2WebResourceContext.All);

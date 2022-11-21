@@ -79,7 +79,7 @@ namespace IrisRobloxMultiTool.Forms
 
         private void ToolsDownloader_Load(object sender, EventArgs e)
         {
-            JToken Data = JToken.Parse(new WebClient().DownloadString("https://irmt.irisapp.ca/API/VerifiedPrograms.php"));
+            JToken Data = JToken.Parse(new WebClient().DownloadString("https://irisapp.ca/IRMT/API/VerifiedPrograms.php"));
 
             for (int i = 0; i < Data.Children().Count(); i++)
             {

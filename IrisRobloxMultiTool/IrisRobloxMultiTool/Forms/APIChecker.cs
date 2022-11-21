@@ -29,7 +29,7 @@ namespace IrisRobloxMultiTool.Forms
 
                     if (Response.Contains("<Content name=\"ShirtTemplate\">"))
                         Data = Tuple.Create("Online", Color.Green);
-                    else if (Response.Length > 300) ;
+                    else if (Response.Length > 300)
                         Data = Tuple.Create("Online", Color.Green);
                 }
             }
@@ -272,7 +272,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    string Response = Client.DownloadString("https://irmt.irisapp.ca/API/VerifiedPrograms.php");
+                    string Response = Client.DownloadString("https://irisapp.ca/IRMT/API/VerifiedPrograms.php");
                     if (Response.Contains("[{\""))
                         Data = Tuple.Create("Online", Color.Green);
                 }

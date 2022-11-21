@@ -72,7 +72,6 @@
             this.LoginPage.Location = new System.Drawing.Point(0, 25);
             this.LoginPage.Name = "LoginPage";
             this.LoginPage.Size = new System.Drawing.Size(357, 458);
-            this.LoginPage.Source = new System.Uri("https://roblox.com/Login", System.UriKind.Absolute);
             this.LoginPage.TabIndex = 1;
             this.LoginPage.ZoomFactor = 1D;
             this.LoginPage.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.LoginPage_CoreWebView2InitializationCompleted);

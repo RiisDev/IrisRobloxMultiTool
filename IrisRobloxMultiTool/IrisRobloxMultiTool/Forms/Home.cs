@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Web.WebView2.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,7 +19,7 @@ namespace IrisRobloxMultiTool.Forms
         }
         private void Home_Load(object sender, EventArgs e)
         {
-            HomePage.EnsureCoreWebView2Async();
+            HomePage.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\WebViewCache", null).Result);
 
         }
 

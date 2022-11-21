@@ -19,29 +19,20 @@ namespace IrisRobloxMultiTool
 {
     public partial class Main : Form
     {
-        public AssetDownloader assetDownloader = new AssetDownloader();
-        public Home home = new Home();
-        public GroupScanner scanner = new GroupScanner();
-        public ToolsDownloader toolsDownloader = new ToolsDownloader();
-        public WeAreDevsKeygen KeyGen = new WeAreDevsKeygen();
-        public APIChecker istuff = new APIChecker();
-        public AssetFavouriteBot FavBot = new AssetFavouriteBot();
-        public ProxyChecker ProxyStuff = new ProxyChecker();
+        public AssetDownloader assetDownloader;
+        public Home home;
+        public GroupScanner scanner;
+        public ToolsDownloader toolsDownloader;
+        public WeAreDevsKeygen KeyGen;
+        public APIChecker istuff;
+        public AssetFavouriteBot FavBot;
+        public ProxyChecker ProxyStuff;
 
         private bool WebViewInstalled()
         {
-            string regKey = @"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients";
-            using (RegistryKey edgeKey = Registry.LocalMachine.OpenSubKey(regKey))
-            {
+            using (RegistryKey edgeKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients"))
                 if (edgeKey != null)
-                {
-                    string[] productKeys = edgeKey.GetSubKeyNames();
-                    if (productKeys.Any())
-                    {
-                        return true;
-                    }
-                }
-            }
+                    return edgeKey.GetSubKeyNames().Any();
 
             return false;
         }
@@ -71,17 +62,16 @@ namespace IrisRobloxMultiTool
                 }
             }
 
-            // Do Webview stuff
-        }
+            CoreWebView2Environment.SetLoaderDllFolderPath($"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\dlls");
 
-        private void FirstSetup()
-        {
-            if (!Directory.Exists($"{Program.Directory}\\bin"))
-            {
-                Directory.CreateDirectory($"{Program.Directory}\\bin");
-                Directory.CreateDirectory($"{Program.Directory}\\bin\\temp");
-                Directory.CreateDirectory($"{Program.Directory}\\bin\\cache");
-            }
+            assetDownloader = new AssetDownloader();
+            home = new Home();
+            scanner = new GroupScanner();
+            toolsDownloader = new ToolsDownloader();
+            KeyGen = new WeAreDevsKeygen();
+            istuff = new APIChecker();
+            FavBot = new AssetFavouriteBot();
+            ProxyStuff = new ProxyChecker();
         }
 
         private void CheckForUpdates()
@@ -128,7 +118,6 @@ namespace IrisRobloxMultiTool
             ButtonHolder.HorizontalScroll.Enabled = false;
             ButtonHolder.AutoScroll = true;
 
-            FirstSetup();
             CheckWebView();
 
             Login LoginForm = new Login();

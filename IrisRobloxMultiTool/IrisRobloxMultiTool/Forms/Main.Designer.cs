@@ -92,17 +92,13 @@
             // MinimizeButton
             // 
             this.MinimizeButton.Animated = true;
-            this.MinimizeButton.CheckedState.Parent = this.MinimizeButton;
-            this.MinimizeButton.CustomImages.Parent = this.MinimizeButton;
             this.MinimizeButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.MinimizeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.MinimizeButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeButton.ForeColor = System.Drawing.Color.White;
-            this.MinimizeButton.HoverState.Parent = this.MinimizeButton;
-            this.MinimizeButton.Location = new System.Drawing.Point(793, 0);
+            this.MinimizeButton.Location = new System.Drawing.Point(788, 0);
             this.MinimizeButton.Name = "MinimizeButton";
-            this.MinimizeButton.ShadowDecoration.Parent = this.MinimizeButton;
-            this.MinimizeButton.Size = new System.Drawing.Size(26, 26);
+            this.MinimizeButton.Size = new System.Drawing.Size(28, 26);
             this.MinimizeButton.TabIndex = 2;
             this.MinimizeButton.Text = "─";
             this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
@@ -110,17 +106,13 @@
             // CloseButton
             // 
             this.CloseButton.Animated = true;
-            this.CloseButton.CheckedState.Parent = this.CloseButton;
-            this.CloseButton.CustomImages.Parent = this.CloseButton;
             this.CloseButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.CloseButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.CloseButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CloseButton.ForeColor = System.Drawing.Color.White;
-            this.CloseButton.HoverState.Parent = this.CloseButton;
-            this.CloseButton.Location = new System.Drawing.Point(819, 0);
+            this.CloseButton.Location = new System.Drawing.Point(816, 0);
             this.CloseButton.Name = "CloseButton";
-            this.CloseButton.ShadowDecoration.Parent = this.CloseButton;
-            this.CloseButton.Size = new System.Drawing.Size(26, 26);
+            this.CloseButton.Size = new System.Drawing.Size(29, 26);
             this.CloseButton.TabIndex = 1;
             this.CloseButton.Text = "✕";
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
@@ -167,20 +159,16 @@
             // HomeButton
             // 
             this.HomeButton.Animated = true;
-            this.HomeButton.CheckedState.Parent = this.HomeButton;
-            this.HomeButton.CustomImages.Parent = this.HomeButton;
             this.HomeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.HomeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.HomeButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HomeButton.ForeColor = System.Drawing.Color.White;
-            this.HomeButton.HoverState.Parent = this.HomeButton;
             this.HomeButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Home;
             this.HomeButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.HomeButton.ImageSize = new System.Drawing.Size(33, 33);
             this.HomeButton.Location = new System.Drawing.Point(3, 3);
             this.HomeButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.HomeButton.Name = "HomeButton";
-            this.HomeButton.ShadowDecoration.Parent = this.HomeButton;
             this.HomeButton.Size = new System.Drawing.Size(170, 45);
             this.HomeButton.TabIndex = 1;
             this.HomeButton.Text = "Home Page";
@@ -190,20 +178,16 @@
             // IrisStuff
             // 
             this.IrisStuff.Animated = true;
-            this.IrisStuff.CheckedState.Parent = this.IrisStuff;
-            this.IrisStuff.CustomImages.Parent = this.IrisStuff;
             this.IrisStuff.Dock = System.Windows.Forms.DockStyle.Top;
             this.IrisStuff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.IrisStuff.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IrisStuff.ForeColor = System.Drawing.Color.White;
-            this.IrisStuff.HoverState.Parent = this.IrisStuff;
             this.IrisStuff.Image = global::IrisRobloxMultiTool.Properties.Resources.API;
             this.IrisStuff.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.IrisStuff.ImageSize = new System.Drawing.Size(33, 33);
             this.IrisStuff.Location = new System.Drawing.Point(3, 54);
             this.IrisStuff.MaximumSize = new System.Drawing.Size(170, 45);
             this.IrisStuff.Name = "IrisStuff";
-            this.IrisStuff.ShadowDecoration.Parent = this.IrisStuff;
             this.IrisStuff.Size = new System.Drawing.Size(170, 45);
             this.IrisStuff.TabIndex = 9;
             this.IrisStuff.Text = "API Checker";
@@ -213,20 +197,16 @@
             // AssetDownloaderButton
             // 
             this.AssetDownloaderButton.Animated = true;
-            this.AssetDownloaderButton.CheckedState.Parent = this.AssetDownloaderButton;
-            this.AssetDownloaderButton.CustomImages.Parent = this.AssetDownloaderButton;
             this.AssetDownloaderButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.AssetDownloaderButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.AssetDownloaderButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AssetDownloaderButton.ForeColor = System.Drawing.Color.White;
-            this.AssetDownloaderButton.HoverState.Parent = this.AssetDownloaderButton;
             this.AssetDownloaderButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Download;
             this.AssetDownloaderButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.AssetDownloaderButton.ImageSize = new System.Drawing.Size(33, 33);
             this.AssetDownloaderButton.Location = new System.Drawing.Point(3, 105);
             this.AssetDownloaderButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.AssetDownloaderButton.Name = "AssetDownloaderButton";
-            this.AssetDownloaderButton.ShadowDecoration.Parent = this.AssetDownloaderButton;
             this.AssetDownloaderButton.Size = new System.Drawing.Size(170, 45);
             this.AssetDownloaderButton.TabIndex = 4;
             this.AssetDownloaderButton.Text = "Asset Downloader";
@@ -236,20 +216,16 @@
             // GroupScannerButton
             // 
             this.GroupScannerButton.Animated = true;
-            this.GroupScannerButton.CheckedState.Parent = this.GroupScannerButton;
-            this.GroupScannerButton.CustomImages.Parent = this.GroupScannerButton;
             this.GroupScannerButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.GroupScannerButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.GroupScannerButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupScannerButton.ForeColor = System.Drawing.Color.White;
-            this.GroupScannerButton.HoverState.Parent = this.GroupScannerButton;
             this.GroupScannerButton.Image = global::IrisRobloxMultiTool.Properties.Resources.People;
             this.GroupScannerButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.GroupScannerButton.ImageSize = new System.Drawing.Size(33, 33);
             this.GroupScannerButton.Location = new System.Drawing.Point(3, 156);
             this.GroupScannerButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.GroupScannerButton.Name = "GroupScannerButton";
-            this.GroupScannerButton.ShadowDecoration.Parent = this.GroupScannerButton;
             this.GroupScannerButton.Size = new System.Drawing.Size(170, 45);
             this.GroupScannerButton.TabIndex = 6;
             this.GroupScannerButton.Text = "Group Scanner";
@@ -259,20 +235,16 @@
             // WeAreDevsKeygenButton
             // 
             this.WeAreDevsKeygenButton.Animated = true;
-            this.WeAreDevsKeygenButton.CheckedState.Parent = this.WeAreDevsKeygenButton;
-            this.WeAreDevsKeygenButton.CustomImages.Parent = this.WeAreDevsKeygenButton;
             this.WeAreDevsKeygenButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.WeAreDevsKeygenButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.WeAreDevsKeygenButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WeAreDevsKeygenButton.ForeColor = System.Drawing.Color.White;
-            this.WeAreDevsKeygenButton.HoverState.Parent = this.WeAreDevsKeygenButton;
             this.WeAreDevsKeygenButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Key;
             this.WeAreDevsKeygenButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.WeAreDevsKeygenButton.ImageSize = new System.Drawing.Size(33, 33);
             this.WeAreDevsKeygenButton.Location = new System.Drawing.Point(3, 207);
             this.WeAreDevsKeygenButton.MaximumSize = new System.Drawing.Size(170, 45);
             this.WeAreDevsKeygenButton.Name = "WeAreDevsKeygenButton";
-            this.WeAreDevsKeygenButton.ShadowDecoration.Parent = this.WeAreDevsKeygenButton;
             this.WeAreDevsKeygenButton.Size = new System.Drawing.Size(170, 45);
             this.WeAreDevsKeygenButton.TabIndex = 7;
             this.WeAreDevsKeygenButton.Text = "WRD Keygen";
@@ -282,20 +254,16 @@
             // ToolDownloader
             // 
             this.ToolDownloader.Animated = true;
-            this.ToolDownloader.CheckedState.Parent = this.ToolDownloader;
-            this.ToolDownloader.CustomImages.Parent = this.ToolDownloader;
             this.ToolDownloader.Dock = System.Windows.Forms.DockStyle.Top;
             this.ToolDownloader.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.ToolDownloader.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolDownloader.ForeColor = System.Drawing.Color.White;
-            this.ToolDownloader.HoverState.Parent = this.ToolDownloader;
             this.ToolDownloader.Image = global::IrisRobloxMultiTool.Properties.Resources.Tools;
             this.ToolDownloader.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ToolDownloader.ImageSize = new System.Drawing.Size(33, 33);
             this.ToolDownloader.Location = new System.Drawing.Point(3, 258);
             this.ToolDownloader.MaximumSize = new System.Drawing.Size(170, 45);
             this.ToolDownloader.Name = "ToolDownloader";
-            this.ToolDownloader.ShadowDecoration.Parent = this.ToolDownloader;
             this.ToolDownloader.Size = new System.Drawing.Size(170, 45);
             this.ToolDownloader.TabIndex = 8;
             this.ToolDownloader.Text = "Tool Downloads";
@@ -305,20 +273,16 @@
             // AssetFavouriteBot
             // 
             this.AssetFavouriteBot.Animated = true;
-            this.AssetFavouriteBot.CheckedState.Parent = this.AssetFavouriteBot;
-            this.AssetFavouriteBot.CustomImages.Parent = this.AssetFavouriteBot;
             this.AssetFavouriteBot.Dock = System.Windows.Forms.DockStyle.Top;
             this.AssetFavouriteBot.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.AssetFavouriteBot.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AssetFavouriteBot.ForeColor = System.Drawing.Color.White;
-            this.AssetFavouriteBot.HoverState.Parent = this.AssetFavouriteBot;
             this.AssetFavouriteBot.Image = global::IrisRobloxMultiTool.Properties.Resources.People;
             this.AssetFavouriteBot.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.AssetFavouriteBot.ImageSize = new System.Drawing.Size(33, 33);
             this.AssetFavouriteBot.Location = new System.Drawing.Point(3, 309);
             this.AssetFavouriteBot.MaximumSize = new System.Drawing.Size(170, 45);
             this.AssetFavouriteBot.Name = "AssetFavouriteBot";
-            this.AssetFavouriteBot.ShadowDecoration.Parent = this.AssetFavouriteBot;
             this.AssetFavouriteBot.Size = new System.Drawing.Size(170, 45);
             this.AssetFavouriteBot.TabIndex = 10;
             this.AssetFavouriteBot.Text = "Bot Asset Fav";
@@ -329,20 +293,16 @@
             // ProxyChecker
             // 
             this.ProxyChecker.Animated = true;
-            this.ProxyChecker.CheckedState.Parent = this.ProxyChecker;
-            this.ProxyChecker.CustomImages.Parent = this.ProxyChecker;
             this.ProxyChecker.Dock = System.Windows.Forms.DockStyle.Top;
             this.ProxyChecker.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.ProxyChecker.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProxyChecker.ForeColor = System.Drawing.Color.White;
-            this.ProxyChecker.HoverState.Parent = this.ProxyChecker;
             this.ProxyChecker.Image = global::IrisRobloxMultiTool.Properties.Resources.Key;
             this.ProxyChecker.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ProxyChecker.ImageSize = new System.Drawing.Size(33, 33);
             this.ProxyChecker.Location = new System.Drawing.Point(3, 360);
             this.ProxyChecker.MaximumSize = new System.Drawing.Size(170, 45);
             this.ProxyChecker.Name = "ProxyChecker";
-            this.ProxyChecker.ShadowDecoration.Parent = this.ProxyChecker;
             this.ProxyChecker.Size = new System.Drawing.Size(170, 45);
             this.ProxyChecker.TabIndex = 11;
             this.ProxyChecker.Text = "Proxy Checker";
@@ -353,19 +313,15 @@
             // SupportMeButton
             // 
             this.SupportMeButton.Animated = true;
-            this.SupportMeButton.CheckedState.Parent = this.SupportMeButton;
-            this.SupportMeButton.CustomImages.Parent = this.SupportMeButton;
             this.SupportMeButton.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.SupportMeButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.SupportMeButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SupportMeButton.ForeColor = System.Drawing.Color.White;
-            this.SupportMeButton.HoverState.Parent = this.SupportMeButton;
             this.SupportMeButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Smile;
             this.SupportMeButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.SupportMeButton.ImageSize = new System.Drawing.Size(33, 33);
             this.SupportMeButton.Location = new System.Drawing.Point(0, 275);
             this.SupportMeButton.Name = "SupportMeButton";
-            this.SupportMeButton.ShadowDecoration.Parent = this.SupportMeButton;
             this.SupportMeButton.Size = new System.Drawing.Size(190, 45);
             this.SupportMeButton.TabIndex = 5;
             this.SupportMeButton.Text = "Support Me!";
@@ -375,19 +331,15 @@
             // LogOutButton
             // 
             this.LogOutButton.Animated = true;
-            this.LogOutButton.CheckedState.Parent = this.LogOutButton;
-            this.LogOutButton.CustomImages.Parent = this.LogOutButton;
             this.LogOutButton.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.LogOutButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.LogOutButton.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LogOutButton.ForeColor = System.Drawing.Color.White;
-            this.LogOutButton.HoverState.Parent = this.LogOutButton;
             this.LogOutButton.Image = global::IrisRobloxMultiTool.Properties.Resources.Logout;
             this.LogOutButton.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.LogOutButton.ImageSize = new System.Drawing.Size(33, 33);
             this.LogOutButton.Location = new System.Drawing.Point(0, 320);
             this.LogOutButton.Name = "LogOutButton";
-            this.LogOutButton.ShadowDecoration.Parent = this.LogOutButton;
             this.LogOutButton.Size = new System.Drawing.Size(190, 45);
             this.LogOutButton.TabIndex = 3;
             this.LogOutButton.Text = "Log Out";
@@ -425,9 +377,9 @@
             // 
             this.Robux.FillColor = System.Drawing.Color.Lime;
             this.Robux.Image = global::IrisRobloxMultiTool.Properties.Resources.Robux1;
+            this.Robux.ImageRotate = 0F;
             this.Robux.Location = new System.Drawing.Point(82, 24);
             this.Robux.Name = "Robux";
-            this.Robux.ShadowDecoration.Parent = this.Robux;
             this.Robux.Size = new System.Drawing.Size(21, 21);
             this.Robux.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Robux.TabIndex = 5;
@@ -436,9 +388,9 @@
             // Verified
             // 
             this.Verified.Image = ((System.Drawing.Image)(resources.GetObject("Verified.Image")));
+            this.Verified.ImageRotate = 0F;
             this.Verified.Location = new System.Drawing.Point(55, 24);
             this.Verified.Name = "Verified";
-            this.Verified.ShadowDecoration.Parent = this.Verified;
             this.Verified.Size = new System.Drawing.Size(21, 21);
             this.Verified.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Verified.TabIndex = 3;
@@ -458,10 +410,10 @@
             // UserPFP
             // 
             this.UserPFP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.UserPFP.ImageRotate = 0F;
             this.UserPFP.Location = new System.Drawing.Point(3, 3);
             this.UserPFP.Name = "UserPFP";
             this.UserPFP.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.UserPFP.ShadowDecoration.Parent = this.UserPFP;
             this.UserPFP.Size = new System.Drawing.Size(48, 48);
             this.UserPFP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.UserPFP.TabIndex = 0;
@@ -469,6 +421,7 @@
             // 
             // DragControl
             // 
+            this.DragControl.DockIndicatorTransparencyValue = 0.6D;
             this.DragControl.TargetControl = this.TopBar;
             this.DragControl.UseTransparentDrag = true;
             // 

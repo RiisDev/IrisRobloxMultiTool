@@ -59,7 +59,7 @@ namespace IrisRobloxMultiTool.Forms
         public WeAreDevsKeygen()
         {
             InitializeComponent();
-            LinkVertiseBrowser.EnsureCoreWebView2Async();
+            LinkVertiseBrowser.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{Program.Directory}\\bin\\WebViewCache", null).Result);
         }
 
         public string btoa(string toEncode)
@@ -109,7 +109,7 @@ namespace IrisRobloxMultiTool.Forms
 
             WebView2 web2 = new WebView2();
             web2.Dock = DockStyle.Fill;
-            web2.EnsureCoreWebView2Async();
+            web2.EnsureCoreWebView2Async(CoreWebView2Environment.CreateAsync(null, $"{AppDomain.CurrentDomain.BaseDirectory}\\bin\\WebViewCache", null).Result);
             panel1.Controls.Add(web2);
 
             web2.CoreWebView2InitializationCompleted += (fuck, me) =>
