@@ -18,8 +18,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +31,12 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         private static readonly HttpClient Client = new HttpClient();
+        int DriverProcId = 0;
+        IntPtr DriverHandle = IntPtr.Zero;
 
         Dictionary<BrowserType, string> DriverDownloads = new Dictionary<BrowserType, string>()
         {
@@ -85,25 +92,51 @@ namespace IrisRobloxMultiTool.Forms
             InitializeComponent();
         }
 
+        private List<Process> GetProcessSubProcesses()
+        {
+            List<Process> children = new List<Process>();
+            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", Process.GetCurrentProcess().Id));
+
+            foreach (ManagementObject mo in mos.Get())
+            {
+                children.Add(Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])));
+            }
+
+            return children;
+        }
+
+        private void DoVertiseRedirect()
+        {
+            ExecuteJavaScript($@"
+let Button = document.createElement(""button""); 
+Button.Id = ""SPOOFBUTTON""; 
+Button.onclick = function() {{ window.open(""{GetLinkvertiseRedirect(Driver.Url)}"", '_blank').focus(); }}; 
+document.body.prepend(Button); 
+Button.click();
+");
+        }
+
         private async void FluxusBypass()
         {
-            string OldUrl = Driver.Url;
             string Title = NavigateForTitle(StarterUrl.Text).Result;
 
             if (Title == "Fluxus | Start")
             {
-                OldUrl = Driver.Url;
-                ExecuteJavaScript("document.body.prepend(document.querySelector('#captcha'))");
-                ExecuteJavaScript("document.body.children[1].remove();");
+                ExecuteJavaScript("document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
 
-                while (Driver.Url == OldUrl) await Task.Delay(50);
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
 
-                string NewUrl = ExecuteJavaScript("return document.URL");
+                DoVertiseRedirect();
 
-                if (NewUrl.Contains("linkvertise"))
-                {
-                    Console.WriteLine(GetLinkvertiseRedirect(NewUrl));
-                }
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+                DoVertiseRedirect();
+
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+                DoVertiseRedirect();
             }
         }
 
@@ -235,6 +268,7 @@ namespace IrisRobloxMultiTool.Forms
                         chromeOptions.AddArgument("--enable-logging");
                         ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
                         chromeDriverService.HideCommandPromptWindow = true;
+                        DriverProcId = chromeDriverService.ProcessId;
                         Driver = new ChromeDriver(chromeDriverService, chromeOptions);
                         break;
                     case BrowserType.Firefox:
@@ -244,6 +278,7 @@ namespace IrisRobloxMultiTool.Forms
                         firefoxOptions.AddArgument("--enable-logging");
                         FirefoxDriverService firefoxDriverService = FirefoxDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
                         firefoxDriverService.HideCommandPromptWindow = true;
+                        DriverProcId = firefoxDriverService.ProcessId;
                         Driver = new FirefoxDriver(firefoxDriverService, firefoxOptions);
                         break;
                     case BrowserType.Edge:
@@ -253,6 +288,7 @@ namespace IrisRobloxMultiTool.Forms
                         edgeOptions.AddArgument("--enable-logging");
                         EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
                         edgeDriverService.HideCommandPromptWindow = true;
+                        DriverProcId = edgeDriverService.ProcessId;
                         Driver = new EdgeDriver(edgeDriverService, edgeOptions);
                         break;
                 }
@@ -264,6 +300,12 @@ namespace IrisRobloxMultiTool.Forms
                     MessageBox.Show($"{DetectedBrowser} binary cannot be found! ", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            foreach (Process proc in Process.GetProcesses())
+                if (proc.Id == DriverProcId)
+                    DriverHandle = proc.Handle;
+
+            ShowWindow(DriverHandle, 0);
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
@@ -271,7 +313,7 @@ namespace IrisRobloxMultiTool.Forms
             LogBox.SelectionStart = LogBox.Text.Length;
             LogBox.ScrollToCaret();
         }
-
+        //https://flux.li/windows/start.php?HWID=7fd482cc432f11edacd5806e6f6e696381d7985a07a290487eb3ea50f8dae3b7
         private void SelectedExploit_SelectedIndexChanged(object sender, EventArgs e)
         {
             FluxusKeySystem = false;
@@ -281,9 +323,10 @@ namespace IrisRobloxMultiTool.Forms
                 case "Fluxus":
                     #if DEBUG
                         StarterUrl.Text = "https://flux.li/windows/start.php?HWID=fbba28a7604a11eda702806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
+                    #else
+                        MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     #endif
 
-                    MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     FluxusKeySystem = true;
                     break;
                 case "Oxygen U":
@@ -342,13 +385,31 @@ namespace IrisRobloxMultiTool.Forms
 
         private string ExecuteJavaScript(string script)
         {
-            return (string)(Driver as IJavaScriptExecutor).ExecuteScript(script);
+            try
+            {
+                return (string)(Driver as IJavaScriptExecutor).ExecuteScript(script);
+            }
+            catch (Exception ex)
+            {
+                if (ex.ToString().Contains("document.body is null"))
+                    ExecuteJavaScript(script);
+                return "";
+            }
         }
 
+        private string GetUrl()
+        {
+            return Driver.SwitchTo().Window(Driver.WindowHandles.Last()).Url;
+        }
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(Key.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(GetUrl());
         }
     }
 }
