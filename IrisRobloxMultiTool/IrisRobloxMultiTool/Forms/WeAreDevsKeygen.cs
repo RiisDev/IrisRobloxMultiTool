@@ -1,14 +1,17 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools.V105.WebAuthn;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -16,7 +19,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,6 +29,8 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
+        private static readonly HttpClient Client = new HttpClient();
+
         Dictionary<BrowserType, string> DriverDownloads = new Dictionary<BrowserType, string>()
         {
             {BrowserType.Firefox, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070779513491506/geckodriver.exe" },
@@ -78,6 +85,28 @@ namespace IrisRobloxMultiTool.Forms
             InitializeComponent();
         }
 
+        private async void FluxusBypass()
+        {
+            string OldUrl = Driver.Url;
+            string Title = NavigateForTitle(StarterUrl.Text).Result;
+
+            if (Title == "Fluxus | Start")
+            {
+                OldUrl = Driver.Url;
+                ExecuteJavaScript("document.body.prepend(document.querySelector('#captcha'))");
+                ExecuteJavaScript("document.body.children[1].remove();");
+
+                while (Driver.Url == OldUrl) await Task.Delay(50);
+
+                string NewUrl = ExecuteJavaScript("return document.URL");
+
+                if (NewUrl.Contains("linkvertise"))
+                {
+                    Console.WriteLine(GetLinkvertiseRedirect(NewUrl));
+                }
+            }
+        }
+
         private void guna2Button2_Click(object sender, EventArgs e)
         {
             LogBox.Clear();
@@ -94,7 +123,7 @@ namespace IrisRobloxMultiTool.Forms
                     case "Oxygen U":
                     case "Comet":
                     case "":
-                        Driver.Url = StarterUrl.Text;
+                        FluxusBypass();
                         return;
                 }
             } catch (WebDriverException ex)
@@ -270,6 +299,52 @@ namespace IrisRobloxMultiTool.Forms
                     break;
             }
         }
+
+        private string GetLinkvertiseRedirect(string url)
+        {
+            Dictionary<string, string> Vals = new Dictionary<string, string>
+            {
+                {"url", url},
+            }; 
+            JToken JsonData = JToken.Parse(Client.PostAsync("https://api.bypass.vip/", new FormUrlEncodedContent(Vals)).Result.Content.ReadAsStringAsync().Result);
+            
+            if (JsonData["success"].ToString() == "false" || JsonData["destination"] == null || string.IsNullOrEmpty(JsonData["destination"].ToString()))
+            {
+                MessageBox.Show($"Failed to bypass please submit an issue request on github!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return string.Empty;
+            }
+            else
+            {
+                return JsonData["destination"].ToString();
+            }
+        }
+
+        private Task<string> NavigateForTitle(string url)
+        {
+            Driver.Navigate().GoToUrl(url);
+            new WebDriverWait(Driver, TimeSpan.FromMinutes(1.0)).Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+            return Task.FromResult(Driver.Title);
+        }
+
+        private Task<string> NavigateForSource(string url)
+        {
+            Driver.Navigate().GoToUrl(url);
+            new WebDriverWait(Driver, TimeSpan.FromMinutes(1.0)).Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+            return Task.FromResult(Driver.PageSource);
+        }
+
+        private Task<string> NavigateForUrl(string url)
+        {
+            Driver.Navigate().GoToUrl(url);
+            new WebDriverWait(Driver, TimeSpan.FromMinutes(1.0)).Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+            return Task.FromResult(Driver.Url);
+        }
+
+        private string ExecuteJavaScript(string script)
+        {
+            return (string)(Driver as IJavaScriptExecutor).ExecuteScript(script);
+        }
+
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {

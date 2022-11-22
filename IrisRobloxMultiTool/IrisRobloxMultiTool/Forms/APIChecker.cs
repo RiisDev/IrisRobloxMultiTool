@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,7 +17,8 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class APIChecker : Form
     {
-       
+
+        private static readonly HttpClient Client = new HttpClient();
         #region AssetDownloader
         public Tuple<string, Color> GetAssetDelivery()
         {
@@ -290,11 +294,19 @@ namespace IrisRobloxMultiTool.Forms
 
             try
             {
-                using (WebClient Client = new WebClient())
+                Dictionary<string, string> Vals = new Dictionary<string, string>
                 {
-                    string Response = Client.DownloadString("https://publisher.linkvertise.com/api/v1/redirect/link/static/427067/irisapp");
-                    if (Response.Contains("\"success\":true,\"error\":false"))
-                        Data = Tuple.Create("Online", Color.Green);
+                    {"url", "https://linkvertise.com/119085/ItemPhysics/1"},
+                };
+                JToken JsonData = JToken.Parse(Client.PostAsync("https://api.bypass.vip/", new FormUrlEncodedContent(Vals)).Result.Content.ReadAsStringAsync().Result);
+
+                if (JsonData["success"].ToString() == "false" || JsonData["destination"] == null || string.IsNullOrEmpty(JsonData["destination"].ToString()))
+                {
+                    return Data;
+                }
+                else
+                {
+                    Data = Tuple.Create("Online", Color.Green);
                 }
             }
             catch (WebException)
