@@ -35,16 +35,18 @@ namespace IrisRobloxMultiTool.Forms
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         private static readonly HttpClient Client = new HttpClient();
-        int DriverProcId = 0;
-        IntPtr DriverHandle = IntPtr.Zero;
+
 
         Dictionary<BrowserType, string> DriverDownloads = new Dictionary<BrowserType, string>()
         {
-            {BrowserType.Firefox, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070779513491506/geckodriver.exe" },
             {BrowserType.Edge, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070770558636132/msedgedriver.exe" },
-            {BrowserType.Chrome, "https://cdn.discordapp.com/attachments/1044070738233151488/1044070797565767740/chromedriver.exe" },
         };
-        private bool FluxusKeySystem = false;
+
+        Dictionary<BrowserType, string> DriverAdBlocks = new Dictionary<BrowserType, string>()
+        {
+            {BrowserType.Edge, "https://cdn.discordapp.com/attachments/1044070738233151488/1044815404582842429/extension_1_45_2_0.crx" },
+        };
+
         BrowserType DetectedBrowser;
         IWebDriver Driver;
 
@@ -82,27 +84,12 @@ namespace IrisRobloxMultiTool.Forms
 
         public enum BrowserType
         {
-            Chrome,
-            Firefox,
             Edge
         }
 
         public WeAreDevsKeygen()
         {
             InitializeComponent();
-        }
-
-        private List<Process> GetProcessSubProcesses()
-        {
-            List<Process> children = new List<Process>();
-            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", Process.GetCurrentProcess().Id));
-
-            foreach (ManagementObject mo in mos.Get())
-            {
-                children.Add(Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])));
-            }
-
-            return children;
         }
 
         private void DoVertiseRedirect()
@@ -116,15 +103,33 @@ Button.click();
 ");
         }
 
-        private async void FluxusBypass()
+        private async void DoFluxusKeySystem()
         {
             string Title = NavigateForTitle(StarterUrl.Text).Result;
 
             if (Title == "Fluxus | Start")
             {
+                LogData(LogType.System, "Fluxus chosen, please solve the captcha!");
+
                 ExecuteJavaScript("document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
 
+                Driver.Manage().Window.Size = new(500, 300);
+                Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+
                 while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+                Driver.Manage().Window.Position = new(-2000, -2000);
+
+                LogData(LogType.System, "Captcha solved, running bypasses....");
+                LogData(LogType.System, "Linkvertise 1/3 Started...");
+
+                DoVertiseRedirect();
+
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+                LogData(LogType.System, "Linkvertise 1/3 Passed...");
+                LogData(LogType.System, "Linkvertise 2/3 Started...");
 
                 DoVertiseRedirect();
 
@@ -133,15 +138,126 @@ Button.click();
 
                 DoVertiseRedirect();
 
-                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
-                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+                LogData(LogType.System, "Linkvertise 2/3 Passed...");
+                LogData(LogType.System, "Linkvertise 3/3 Started...");
 
-                DoVertiseRedirect();
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+
+                LogData(LogType.System, "Linkvertise 3/3 Passed...");
+
+                await Task.Delay(250);
+                Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"code\")[0].innerText");
+                LogData(LogType.System, "Outputting key!");
+
             }
+            else if (Title == "Oxygen u Key")
+            {
+                LogData(LogType.System, "Oxygen U chosen, please solve the captcha!");
+
+                ExecuteJavaScript("document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"container\")[0].remove()");
+
+                Driver.Manage().Window.Size = new(500, 300);
+                Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+                Driver.Manage().Window.Position = new(-2000, -2000);
+
+                LogData(LogType.System, "Captcha solved, running bypasses....");
+                LogData(LogType.System, "Linkvertise 1/2 Started...");
+
+                await Task.Delay(7000);
+                DoVertiseRedirect();
+
+                LogData(LogType.System, "Linkvertise 1/2 Passed...");
+
+                while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+                LogData(LogType.System, "Linkvertise 2/2 Started...");
+
+                await Task.Delay(7000);
+                DoVertiseRedirect();
+                LogData(LogType.System, "Linkvertise 2/2 Passed...");
+
+                while (!GetUrl().Contains("https://oxygenu.xyz/KeySystem/Main.php")) await Task.Delay(50);
+
+                Key.Text = ExecuteJavaScript("return raw");
+                LogData(LogType.System, "Outputting key!");
+            }
+            else if (Title == "Oxygen U" && GetUrl() == "https://oxygenu.xyz/KeySystem/Main.php")
+            {
+                Key.Text = ExecuteJavaScript("return raw");
+                LogData(LogType.System, "Outputting key!");
+            }
+
+
+            Driver.Quit();
+
+            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private async void DoKiwiBypass()
+        {
+            string WebPage = NavigateForSource("https://kiwiexploits.com/KeySystems/index.php?").Result;
+
+            if (WebPage.Contains("ad blocker"))
+                ExecuteJavaScript("document.querySelector(\":contains('ad blocker')\").last().click()");
+
+
+            LogData(LogType.System, "Captcha 1/3 Started...");
+            while (!GetUrl().Contains("https://kiwiexploits.com/keystart")) await Task.Delay(50);
+
+            await Task.Delay(4000);
+            ExecuteJavaScript("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
+
+            LogData(LogType.System, "Captcha 1/3 Passed...");
+            LogData(LogType.System, "Captcha 2/3 Started...");
+            while (!GetUrl().Contains("https://kiwiexploits.com/Key1")) await Task.Delay(50);
+
+            await Task.Delay(4000);
+            ExecuteJavaScript("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
+
+            LogData(LogType.System, "Captcha 2/3 Passed...");
+            LogData(LogType.System, "Linkvertise 1/2 Started...");
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+            await Task.Delay(7000);
+            DoVertiseRedirect();
+
+            LogData(LogType.System, "Linkvertise 1/2 Passed...");
+
+            LogData(LogType.System, "Captcha 3/3 Started...");
+            while (!GetUrl().Contains("https://kiwiexploits.com/Key2")) await Task.Delay(50);
+
+            await Task.Delay(4000);
+            ExecuteJavaScript("document.getElementById('txtInput').value = document.getElementById('mainCaptcha').value;document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();document.getElementById('Button1').click();");
+
+            LogData(LogType.System, "Captcha 3/3 Passed...");
+            LogData(LogType.System, "Linkvertise 2/2 Started...");
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+            await Task.Delay(7000);
+            DoVertiseRedirect();
+
+            LogData(LogType.System, "Linkvertise 2/2 Passed...");
+            while (!GetUrl().Contains("https://kiwiexploits.com/KeySystems/index.php")) await Task.Delay(50);
+
+            LogData(LogType.System, "Please solve captcha to continue!");
+            Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+            while (!GetUrl().Contains("https://kiwiexploits.com/KeySystems/index.php?")) await Task.Delay(50);
+
+            Driver.Manage().Window.Position = new(-2000, -2000);
+
+            Key.Text = ExecuteJavaScript("return document.getElementById(\"key\").innerText");
+
+
+            Driver.Quit();
+
+            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
+            GenerateKey.Enabled = false;
             LogBox.Clear();
             LogData(LogType.System, "Running, please wait... (May take up to 30 seconds for some exploits)");
 
@@ -150,14 +266,13 @@ Button.click();
                 switch (SelectedExploit.Text)
                 {
                     case "Kiwi X":
-                        Driver.Url = "https://kiwiexploits.com/KeySystems/index.php?";
+                        DoKiwiBypass();
                         break;
                     case "Fluxus":
                     case "Oxygen U":
-                    case "Comet":
                     case "":
-                        FluxusBypass();
-                        return;
+                        DoFluxusKeySystem();
+                        break;
                 }
             } catch (WebDriverException ex)
             {
@@ -165,8 +280,12 @@ Button.click();
                 {
                     MessageBox.Show("Page URL Invalid", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else
+                {
+                    MessageBox.Show("Unknown error occured while bypassing, please restart the application!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Driver.Quit();
+                }
             }
-
         }
 
         private async void WeAreDevsKeygen_Load(object sender, EventArgs e)
@@ -209,29 +328,37 @@ Button.click();
                 }
                 else if (ProgId.Contains("Firefox"))
                 {
-                    DetectedBrowser = BrowserType.Firefox;
+                    DetectedBrowser = BrowserType.Edge;
                 }
                 else if (ProgId.Contains("ChromeHtml"))
                 {
-                    DetectedBrowser = BrowserType.Chrome;
+                    DetectedBrowser = BrowserType.Edge;
                 }
                 else if (ProgId.Contains("MSEdge"))
                 {
                     DetectedBrowser = BrowserType.Edge;
                 }
+                else
+                {
+                    DetectedBrowser = BrowserType.Edge;
+                }
             }
 
-            bool Downloaded = false;
+            DetectedBrowser = BrowserType.Edge;
 
+            bool Downloaded = false;
+            bool Downloaded2 = false;
             DialogResult dialogResult = MessageBox.Show($"{DetectedBrowser} detected, download web driver (REQUIRED)?", "Iris Roblox MultiTool", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 string DownloadUrl = DriverDownloads[DetectedBrowser];
                 string FileName = DownloadUrl.Substring(DownloadUrl.LastIndexOf("/")+1);
 
+                string AdblockDownUrl = DriverAdBlocks[DetectedBrowser];
+                string AdBlockFileName = AdblockDownUrl.Substring(AdblockDownUrl.LastIndexOf("/")+1);   
+
                 if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}"))
                 {
-                    MessageBox.Show("Downloaded completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Downloaded = true;
                 }
                 else
@@ -240,10 +367,25 @@ Button.click();
                     {
                         Client.DownloadFileCompleted += (_, __) =>
                         {
-                            MessageBox.Show("Downloaded completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Downloaded = true;
                         };
                         Client.DownloadFileAsync(new Uri(DownloadUrl), $"{Program.Directory}\\bin\\drivers\\{FileName}");
+                    }
+                }
+
+                if (File.Exists($"{Program.Directory}\\bin\\drivers\\{AdBlockFileName}"))
+                {
+                    Downloaded2 = true;
+                }
+                else
+                {
+                    using (WebClient Client = new WebClient())
+                    {
+                        Client.DownloadFileCompleted += (_, __) =>
+                        {
+                            Downloaded2 = true;
+                        };
+                        Client.DownloadFileAsync(new Uri(AdblockDownUrl), $"{Program.Directory}\\bin\\drivers\\{AdBlockFileName}");
                     }
                 }
             }
@@ -255,43 +397,23 @@ Button.click();
             do
             {
                 await Task.Delay(50);
-            } while (!Downloaded);
+            } while (!(Downloaded && Downloaded2));
+
+            MessageBox.Show("Download completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             try
             {
-                switch (DetectedBrowser)
-                {
-                    case BrowserType.Chrome:
-                        ChromeOptions chromeOptions = new ChromeOptions();
-                        chromeOptions.AddArgument("--no-sandbox");
-                        chromeOptions.AddArgument("--disable-dev-shm-usage");
-                        chromeOptions.AddArgument("--enable-logging");
-                        ChromeDriverService chromeDriverService = ChromeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
-                        chromeDriverService.HideCommandPromptWindow = true;
-                        DriverProcId = chromeDriverService.ProcessId;
-                        Driver = new ChromeDriver(chromeDriverService, chromeOptions);
-                        break;
-                    case BrowserType.Firefox:
-                        FirefoxOptions firefoxOptions = new FirefoxOptions();
-                        firefoxOptions.AddArgument("--no-sandbox");
-                        firefoxOptions.AddArgument("--disable-dev-shm-usage");
-                        firefoxOptions.AddArgument("--enable-logging");
-                        FirefoxDriverService firefoxDriverService = FirefoxDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
-                        firefoxDriverService.HideCommandPromptWindow = true;
-                        DriverProcId = firefoxDriverService.ProcessId;
-                        Driver = new FirefoxDriver(firefoxDriverService, firefoxOptions);
-                        break;
-                    case BrowserType.Edge:
-                        EdgeOptions edgeOptions = new EdgeOptions();
-                        edgeOptions.AddArgument("--no-sandbox");
-                        edgeOptions.AddArgument("--disable-dev-shm-usage");
-                        edgeOptions.AddArgument("--enable-logging");
-                        EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
-                        edgeDriverService.HideCommandPromptWindow = true;
-                        DriverProcId = edgeDriverService.ProcessId;
-                        Driver = new EdgeDriver(edgeDriverService, edgeOptions);
-                        break;
-                }
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.AddArgument("--no-sandbox");
+                edgeOptions.AddArgument("--disable-dev-shm-usage");
+                edgeOptions.AddArgument("--enable-logging");
+                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
+
+                EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
+                edgeDriverService.HideCommandPromptWindow = true;
+                Driver = new EdgeDriver(edgeDriverService, edgeOptions);
+
+                Driver.Manage().Window.Position = new(-2000, -2000);
             }
             catch (WebDriverException ex)
             {
@@ -301,11 +423,7 @@ Button.click();
                 }
             }
 
-            foreach (Process proc in Process.GetProcesses())
-                if (proc.Id == DriverProcId)
-                    DriverHandle = proc.Handle;
-
-            ShowWindow(DriverHandle, 0);
+            Driver.Manage().Window.Position = new(-2000, -2000);
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
@@ -313,32 +431,25 @@ Button.click();
             LogBox.SelectionStart = LogBox.Text.Length;
             LogBox.ScrollToCaret();
         }
-        //https://flux.li/windows/start.php?HWID=7fd482cc432f11edacd5806e6f6e696381d7985a07a290487eb3ea50f8dae3b7
+
         private void SelectedExploit_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FluxusKeySystem = false;
             switch (SelectedExploit.Text)
             {
 
                 case "Fluxus":
-                    #if DEBUG
+#if DEBUG
                         StarterUrl.Text = "https://flux.li/windows/start.php?HWID=fbba28a7604a11eda702806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
-                    #else
+#else
                         MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    #endif
+#endif
 
-                    FluxusKeySystem = true;
                     break;
                 case "Oxygen U":
-                    #if DEBUG
+#if DEBUG
                         StarterUrl.Text = "https://oxygenu.xyz/KeySystem/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963";
-                    #endif
+#endif
                     MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    FluxusKeySystem = true;
-                    break;
-                case "Comet":
-                    MessageBox.Show("Please get a starter url via Comet client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    FluxusKeySystem = true;
                     break;
             }
         }
@@ -354,6 +465,7 @@ Button.click();
             if (JsonData["success"].ToString() == "false" || JsonData["destination"] == null || string.IsNullOrEmpty(JsonData["destination"].ToString()))
             {
                 MessageBox.Show($"Failed to bypass please submit an issue request on github!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Driver.Quit();
                 return string.Empty;
             }
             else
@@ -393,23 +505,32 @@ Button.click();
             {
                 if (ex.ToString().Contains("document.body is null"))
                     ExecuteJavaScript(script);
+                else
+                {
+                    Console.WriteLine(ex.ToString());
+                    MessageBox.Show("Unknown error occured while bypassing, please restart the application!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Driver.Quit();
+                }
+
                 return "";
             }
         }
 
         private string GetUrl()
         {
-            return Driver.SwitchTo().Window(Driver.WindowHandles.Last()).Url;
+            try
+            {
+                return Driver.SwitchTo().Window(Driver.WindowHandles.Last()).Url;
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(Key.Text);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine(GetUrl());
         }
     }
 }
