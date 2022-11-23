@@ -15,6 +15,10 @@ Offers a selection of tools to help within your roblox experience.
 - WeAreDevs(.)net KeyGen
 - Verified Tools Download
 
+- Krnl Keygen
+- Fluxus Keygen
+- Kiwi X Keygen
+- Oxygen U Keygen
 
 ## License
 
