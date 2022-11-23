@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -69,10 +70,15 @@ namespace IrisRobloxMultiTool.Forms
                     {
                         Out = Client.DownloadString(RequestUrl);
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         Console.Write("Failed: ");
                         Console.WriteLine(RequestUrl);
+                        if (ex.ToString().Contains("429"))
+                        {
+                            Thread.Sleep(30000);
+                            return DoNet(Type, RequestUrl, PostParams);
+                        }
                     }
                 }
                 else if (Type == "POST")
@@ -81,10 +87,15 @@ namespace IrisRobloxMultiTool.Forms
                     {
                         Out = Client.UploadString(RequestUrl, PostParams);
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         Console.Write("Failed: ");
                         Console.WriteLine(RequestUrl);
+                        if (ex.ToString().Contains("429"))
+                        {
+                            Thread.Sleep(30000);
+                            return DoNet(Type, RequestUrl, PostParams);
+                        }
                     }
                 }
             }

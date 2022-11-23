@@ -255,11 +255,102 @@ Button.click();
             MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
+        private async void DoKrnlBypass()
+        {
+            Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
+
+            LogData(LogType.System, "Krnl chosen, please solve the captcha! 1/4");
+
+            while (!Driver.PageSource.Contains("Please Complete The Captcha")) await Task.Delay(50);
+
+            ExecuteJavaScript("document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+
+            Driver.Manage().Window.Size = new(500, 300);
+            Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+
+            LogData(LogType.System, "Captcha 1/4 Passed...");
+            LogData(LogType.System, "Linkvertise 1/4 Started (Please wait 20 seconds per linkvertise)...");
+            Driver.Manage().Window.Position = new(-2000, -2000);
+
+            await Task.Delay(20000);
+            DoVertiseRedirect();
+
+
+            while (!GetUrl().Contains("krnl.place")) await Task.Delay(50);
+
+
+            LogData(LogType.System, "Linkvertise 1/4 Passed...");
+            LogData(LogType.System, "Captcha 2/4 Started...");
+            ExecuteJavaScript("document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+
+            Driver.Manage().Window.Size = new(500, 300);
+            Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+            LogData(LogType.System, "Linkvertise 2/4 Started (Please wait 20 seconds per linkvertise)...");
+
+            Driver.Manage().Window.Position = new(-2000, -2000);
+
+            await Task.Delay(20000);
+            DoVertiseRedirect();
+
+            while (!GetUrl().Contains("krnl.place")) await Task.Delay(50);
+
+            LogData(LogType.System, "Linkvertise 2/4 Passed...");
+            LogData(LogType.System, "Captcha 3/4 Started...");
+
+            ExecuteJavaScript("document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+
+            Driver.Manage().Window.Size = new(500, 300);
+            Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+            LogData(LogType.System, "Linkvertise 3/4 Started (Please wait 20 seconds per linkvertise)...");
+
+            Driver.Manage().Window.Position = new(-2000, -2000);
+
+            await Task.Delay(20000);
+            DoVertiseRedirect();
+
+            while (!GetUrl().Contains("krnl.place")) await Task.Delay(50);
+
+            LogData(LogType.System, "Linkvertise 3/4 Passed...");
+            LogData(LogType.System, "Captcha 4/4 Started...");
+
+            ExecuteJavaScript("document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+
+            Driver.Manage().Window.Size = new(500, 300);
+            Driver.Manage().Window.Position = new(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
+
+
+            while (!GetUrl().Contains("linkvertise")) await Task.Delay(50);
+            LogData(LogType.System, "Linkvertise 4/4 Started (Please wait 20 seconds per linkvertise)...");
+
+            Driver.Manage().Window.Position = new(-2000, -2000);
+
+            await Task.Delay(20000);
+            DoVertiseRedirect();
+
+            LogData(LogType.System, "Linkvertise 4/4 Passed...");
+            while (!GetUrl().Contains("krnl.place")) await Task.Delay(50);
+
+            Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"input\")[0].value");
+
+            LogData(LogType.System, "Krnl key has been generated...");
+
+            Driver.Quit();
+        }
+
         private void guna2Button2_Click(object sender, EventArgs e)
         {
             GenerateKey.Enabled = false;
             LogBox.Clear();
-            LogData(LogType.System, "Running, please wait... (May take up to 30 seconds for some exploits)");
+            LogData(LogType.System, "Running, please wait... (May take up to a minute for some exploits)");
 
             try
             {
@@ -267,6 +358,9 @@ Button.click();
                 {
                     case "Kiwi X":
                         DoKiwiBypass();
+                        break;
+                    case "Krnl":
+                        DoKrnlBypass();
                         break;
                     case "Fluxus":
                     case "Oxygen U":

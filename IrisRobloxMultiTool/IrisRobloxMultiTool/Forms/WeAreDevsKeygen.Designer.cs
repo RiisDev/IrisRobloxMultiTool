@@ -89,7 +89,8 @@
             this.SelectedExploit.Items.AddRange(new object[] {
             "Kiwi X",
             "Oxygen U",
-            "Fluxus"});
+            "Fluxus",
+            "Krnl"});
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);
             this.SelectedExploit.Name = "SelectedExploit";
             this.SelectedExploit.Size = new System.Drawing.Size(174, 36);
