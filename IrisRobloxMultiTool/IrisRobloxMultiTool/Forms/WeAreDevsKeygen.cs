@@ -107,7 +107,7 @@ Button.click();
         {
             string Title = NavigateForTitle(StarterUrl.Text).Result;
 
-            if (Title == "Fluxus | Start")
+            if (Title == "Fluxus")
             {
                 LogData(LogType.System, "Fluxus chosen, please solve the captcha!");
 
@@ -146,7 +146,7 @@ Button.click();
                 LogData(LogType.System, "Linkvertise 3/3 Passed...");
 
                 await Task.Delay(250);
-                Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"code\")[0].innerText");
+                Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
                 LogData(LogType.System, "Outputting key!");
 
             }
