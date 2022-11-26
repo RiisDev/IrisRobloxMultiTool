@@ -74,6 +74,7 @@ namespace IrisRobloxMultiTool.Forms
                     {
                         Console.Write("Failed: ");
                         Console.WriteLine(RequestUrl);
+                        Console.WriteLine(ex.ToString());
                         if (ex.ToString().Contains("429"))
                         {
                             Thread.Sleep(30000);
@@ -91,6 +92,7 @@ namespace IrisRobloxMultiTool.Forms
                     {
                         Console.Write("Failed: ");
                         Console.WriteLine(RequestUrl);
+                        Console.WriteLine(ex.ToString());
                         if (ex.ToString().Contains("429"))
                         {
                             Thread.Sleep(30000);

@@ -90,7 +90,8 @@
             "Kiwi X",
             "Oxygen U",
             "Fluxus",
-            "Krnl"});
+            "Krnl",
+            "Novaline"});
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);
             this.SelectedExploit.Name = "SelectedExploit";
             this.SelectedExploit.Size = new System.Drawing.Size(174, 36);
