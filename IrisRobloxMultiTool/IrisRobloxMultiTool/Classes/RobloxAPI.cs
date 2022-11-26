@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace IrisRobloxMultiTool
 {
-    public class RobloxAPI
+    public class RobloxAccountAPI
     {
-        public class Account {
+        public class Account
+        {
             public string Cookie { get; set; }
             public string Name { get; set; }
             public string ID { get; set; }
@@ -33,7 +34,7 @@ namespace IrisRobloxMultiTool
             using (HttpClientHandler Handler = new HttpClientHandler())
             {
                 CookieContainer Cookies = new CookieContainer();
-                Cookies.Add(new Cookie(".ROBLOSECURITY", RealCookie) { Domain = "auth.roblox.com"});
+                Cookies.Add(new Cookie(".ROBLOSECURITY", RealCookie) { Domain = "auth.roblox.com" });
                 Handler.UseCookies = true;
                 Handler.CookieContainer = Cookies;
 
@@ -41,7 +42,7 @@ namespace IrisRobloxMultiTool
                 {
                     HttpResponseMessage Data = httpClient.PostAsync("https://auth.roblox.com/v2/logout", null).Result;
                     Return = Data.Headers.GetValues("x-csrf-token").FirstOrDefault();
-                    Program.RbxApi.AccountData.XSRFToken = Return;
+                    Program.RobloxAccountAPI.AccountData.XSRFToken = Return;
                 }
             }
 
@@ -76,5 +77,52 @@ namespace IrisRobloxMultiTool
                 GetXSRFToken(AccountData.Cookie);
             }
         }
+    }
+
+    public class RobloxAPI
+    {
+        public WebClient Client = new WebClient();
+
+        public enum ClothingType
+        {
+            Accessories,
+            Audio,
+            ClassicPants,
+            ClassicShirts
+        }
+
+        public string GetNextPageCursor(string CatalogURL)
+        {
+            string Cursor = string.Empty;
+
+            string JsonData = Client.DownloadString(CatalogURL);
+
+            JToken Data = JToken.Parse(JsonData);
+
+            Cursor = Data["nextPageCursor"].ToString();
+
+            return Cursor;
+        }
+
+        public string GetAssetName(string ID)
+        {
+            string Final = ID;
+
+            try
+            {
+                string Json = Client.DownloadString($"https://api.roblox.com/marketplace/productinfo?assetId={ID}");
+
+                JToken Data = JToken.Parse(Json);
+
+                Final = Data["Name"].ToString();
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine(er.ToString());
+            }
+
+            return Final;
+        }
+
     }
 }

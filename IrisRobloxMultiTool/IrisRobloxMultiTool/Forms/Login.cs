@@ -43,8 +43,8 @@ namespace IrisRobloxMultiTool.Forms
                         {
                             if (Cookie.Contains(".ROBLOSECURITY"))
                             {
-                                Program.RbxApi.AccountData.Cookie = Cookie;
-                                Program.RbxApi.SetupAccount();
+                                Program.RobloxAccountAPI.AccountData.Cookie = Cookie;
+                                Program.RobloxAccountAPI.SetupAccount();
                                 Close();
                                 break;
                             }

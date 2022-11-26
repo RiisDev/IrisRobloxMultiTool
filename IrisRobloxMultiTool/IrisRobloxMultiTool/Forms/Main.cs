@@ -129,11 +129,14 @@ namespace IrisRobloxMultiTool
 
             HomeButton.PerformClick();
 
-            Username.Text = Program.RbxApi.AccountData.Name;
-            Username.LinkClicked += (s, er) => { Process.Start(Program.RbxApi.AccountData.ProfileUrl); };
-            RobuxText.Text = Program.RbxApi.AccountData.RobuxCount;
-            UserPFP.LoadAsync(Program.RbxApi.AccountData.ProfilePicture);
-            if (!Program.RbxApi.AccountData.IsVerified)
+            Program.RobloxAPI.Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
+            Program.RobloxAPI.Client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36");
+
+            Username.Text = Program.RobloxAccountAPI.AccountData.Name;
+            Username.LinkClicked += (s, er) => { Process.Start(Program.RobloxAccountAPI.AccountData.ProfileUrl); };
+            RobuxText.Text = Program.RobloxAccountAPI.AccountData.RobuxCount;
+            UserPFP.LoadAsync(Program.RobloxAccountAPI.AccountData.ProfilePicture);
+            if (!Program.RobloxAccountAPI.AccountData.IsVerified)
             {
                 Verified.Visible = false;
             }
@@ -151,7 +154,7 @@ namespace IrisRobloxMultiTool
         {
             home.Dispose();
             await Task.Delay(25);
-            Directory.Delete($"{Program.Directory}\\IrisRobloxMultiTool.exe.WebView2", true);
+            Directory.Delete($"{Program.Directory}\\bin\\WebViewCache\\EBWebView", true);
             Program.Global.SafeShutdown();
         }
 

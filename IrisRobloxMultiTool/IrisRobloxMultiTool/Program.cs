@@ -10,9 +10,11 @@ namespace IrisRobloxMultiTool
     internal static class Program
     { 
         public static string Directory = AppDomain.CurrentDomain.BaseDirectory;
-        public static GlobalCalls Global = new GlobalCalls();
-        public static DataHandler DataHandler = new DataHandler();
-        public static RobloxAPI RbxApi = new RobloxAPI();
+        public static GlobalCalls Global = new();
+        public static DataHandler DataHandler = new();
+        public static RobloxAPI RobloxAPI = new();
+        public static LogInterface LogInterface = new();
+        public static RobloxAccountAPI RobloxAccountAPI = new();
 
         /// <summary>
         /// The main entry point for the application.

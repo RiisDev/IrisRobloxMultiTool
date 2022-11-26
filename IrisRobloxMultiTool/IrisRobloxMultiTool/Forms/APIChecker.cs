@@ -28,7 +28,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://assetdelivery.roblox.com/v1/asset?id=607785314");
 
                     if (Response.Contains("<Content name=\"ShirtTemplate\">"))
@@ -52,7 +52,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://catalog.roblox.com/v1/search/items?Keyword=&category=3&limit=100&subcategory=ClassicShirts");
 
                     if (Response.Contains("\"data\":[{"))
@@ -74,7 +74,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://api.roblox.com/marketplace/productinfo?assetId=607785314");
                     if (Response.Contains("\"Name\":\"Roblox\""))
                         Data = Tuple.Create("Online", Color.Green);
@@ -95,7 +95,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://search.roblox.com/catalog/contents?CatalogContext=2&Subcategory=16&Keyword=ree&SortAggregation=5&PageNumber=1&LegendExpanded=true&Category=9");
                     if (Response.Contains(">Creator Marketplace</h2>"))
                         Data = Tuple.Create("Online", Color.Green);
@@ -142,7 +142,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://groups.roblox.com/v1/groups/search?keyword=Yeet&prioritizeExactMatch=true&limit=100");
                     if (Response.Contains("\"data\":[{"))
                         Data = Tuple.Create("Online", Color.Green);
@@ -163,7 +163,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://groups.roblox.com/v1/groups/3580494");
                     if (Response.Contains("{\"id\":3580494,\"name\":\"meme"))
                         Data = Tuple.Create("Online", Color.Green);
@@ -184,7 +184,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://groups.roblox.com/v1/groups/3580494/membership");
                     if (Response.Contains("{\"groupId\":3580494,"))
                         Data = Tuple.Create("Online", Color.Green);
@@ -204,8 +204,8 @@ namespace IrisRobloxMultiTool.Forms
             try
             {
                 using (WebClient Client = new WebClient())
-                {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                {   
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://economy.roblox.com/v1/groups/3580494/currency");
                     if (Response.Contains("{\"robux\""))
                         Data = Tuple.Create("Online", Color.Green);
@@ -226,7 +226,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 using (WebClient Client = new WebClient())
                 {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                     string Response = Client.DownloadString("https://thumbnails.roblox.com/v1/groups/icons?groupIds=3580494&size=150x150&format=Png&isCircular=false");
                     if (Response.Contains("{\"data\":[{\"targetId\":3580494,\"state\":\"Completed\",\"imageUrl\""))
                         Data = Tuple.Create("Online", Color.Green);

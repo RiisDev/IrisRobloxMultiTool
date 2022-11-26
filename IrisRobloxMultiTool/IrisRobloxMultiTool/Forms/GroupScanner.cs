@@ -20,7 +20,9 @@ namespace IrisRobloxMultiTool.Forms
 
     public partial class GroupScanner : Form
     {
-  
+        private bool StopRequests = false;
+        private string StopReason = string.Empty;
+        private WebClient Client = new WebClient();
         private List<long> Groups = new List<long>();
 
         public GroupScanner()
@@ -53,56 +55,56 @@ namespace IrisRobloxMultiTool.Forms
                 Checker.Dispose();
 
             }).Start();
+
+
+            Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
+            Client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36");
         }
 
         private string DoNet(string Type, string RequestUrl, string PostParams = "")
         {
-            string Out = string.Empty;
-
-            using (WebClient Client = new WebClient())
+            try
             {
-                Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
-                Client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36");
-
                 if (Type == "GET")
                 {
-                    try
-                    {
-                        Out = Client.DownloadString(RequestUrl);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Write("Failed: ");
-                        Console.WriteLine(RequestUrl);
-                        Console.WriteLine(ex.ToString());
-                        if (ex.ToString().Contains("429"))
-                        {
-                            Thread.Sleep(30000);
-                            return DoNet(Type, RequestUrl, PostParams);
-                        }
-                    }
+                    return Client.DownloadString(RequestUrl);
                 }
                 else if (Type == "POST")
                 {
-                    try
+                    return Client.UploadString(RequestUrl, PostParams);
+                }
+            }
+            catch (WebException WebExec)
+            {
+                if (WebExec.Status == WebExceptionStatus.ProtocolError)
+                {
+                    HttpStatusCode Code = (WebExec.Response as HttpWebResponse).StatusCode;
+
+                    switch (Code)
                     {
-                        Out = Client.UploadString(RequestUrl, PostParams);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Write("Failed: ");
-                        Console.WriteLine(RequestUrl);
-                        Console.WriteLine(ex.ToString());
-                        if (ex.ToString().Contains("429"))
-                        {
-                            Thread.Sleep(30000);
-                            return DoNet(Type, RequestUrl, PostParams);
-                        }
+                        case HttpStatusCode.Unauthorized:
+                            StopRequests = true;
+                            StopReason = $"{Code} | UnAuthorized, API changed or CSRF is incorrect.";
+                            break;
+                        case (HttpStatusCode)429:
+                            StopRequests = true;
+                            StopReason = $"{Code} | You're being rate limitted.";
+                            break;
+                        case HttpStatusCode.BadRequest:
+                            break;
+                        case HttpStatusCode.Forbidden:
+                            StopRequests = true;
+                            StopReason = $"{Code} | UnAuthorized, API changed or CSRF is incorrect.";
+                            break;
+                        case HttpStatusCode.ServiceUnavailable:
+                            StopRequests = true;
+                            StopReason = $"{Code} | Roblox reports offline.";
+                            break;
                     }
                 }
             }
 
-            return Out;
+            return string.Empty;
         }
 
         private void GetGroups()
@@ -122,10 +124,15 @@ namespace IrisRobloxMultiTool.Forms
 
                 if (JData["data"].Children().Count() > 0)
                 {
-                    Console.WriteLine(JData["data"].Children().Count());
                     for (int i = 0; i < JData["data"].Children().Count(); i++)
                     {
-                        Groups.Add(long.Parse(JData["data"][i]["id"].ToString()));
+                        if (!StopRequests)
+                            Groups.Add(long.Parse(JData["data"][i]["id"].ToString()));
+                        else
+                        {
+                            MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        }
                     }
                 }
             }
@@ -209,6 +216,12 @@ namespace IrisRobloxMultiTool.Forms
                 await Task.Delay(25);
                 string Data = DoNet("GET", $"https://groups.roblox.com/v1/groups/{GroupID}");
 
+                if (StopRequests)
+                {
+                    MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+
                 if (Data.Contains("errors."))
                     Console.WriteLine("");
                 else if (Data.Contains("{\"data\":[]}"))
@@ -242,6 +255,12 @@ namespace IrisRobloxMultiTool.Forms
                 await Task.Delay(25);
                 string Data = DoNet("GET", $"https://groups.roblox.com/v1/groups/{GroupID}");
 
+                if (StopRequests)
+                {
+                    MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+
                 if (Data.Contains("errors."))
                     Console.WriteLine("");
                 else if (Data.Contains("{\"data\":[]}"))
@@ -274,6 +293,12 @@ namespace IrisRobloxMultiTool.Forms
                 await Task.Delay(25);
                 string Data = DoNet("GET", $"https://groups.roblox.com/v1/groups/{GroupID}/membership");
 
+                if (StopRequests)
+                {
+                    MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+
                 if (Data.Contains("errors."))
                     Console.WriteLine("");
                 else if (Data.Contains("{\"data\":[]}"))
@@ -289,6 +314,12 @@ namespace IrisRobloxMultiTool.Forms
                     else
                     {
                         Data = DoNet("GET", $"https://economy.roblox.com/v1/groups/{GroupID}/currency");
+
+                        if (StopRequests)
+                        {
+                            MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        }
 
                         JData = JToken.Parse(Data);
 
@@ -334,7 +365,14 @@ namespace IrisRobloxMultiTool.Forms
                 await Task.Delay(25);
 
                 string ImageData = DoNet("GET", $"https://thumbnails.roblox.com/v1/groups/icons?groupIds={GroupID}&size=150x150&format=Png&isCircular=false");
-                string GroupName = DoNet("GET", $"https://groups.roblox.com/v1/groups/{GroupID}");
+                string GroupName = DoNet("GET", $"https://groups.roblox.com/v1/groups/{GroupID}"); 
+                
+                if (StopRequests)
+                {
+                    MessageBox.Show(StopReason, "Iris Group Scanner", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+
                 JToken JData = JToken.Parse(ImageData);
 
                 if (ImageData.Contains("errors."))

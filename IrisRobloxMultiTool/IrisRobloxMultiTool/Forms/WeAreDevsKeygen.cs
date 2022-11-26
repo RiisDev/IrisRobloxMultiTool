@@ -1,29 +1,17 @@
-﻿using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.WinForms;
-using Microsoft.Win32;
-using Newtonsoft.Json;
+﻿using IrisRobloxMultiTool.Classes;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V105.WebAuthn;
 using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -31,9 +19,8 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
+        private LogInterface Log = Program.LogInterface;
         private bool DebugBrowser = false;
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         private static readonly HttpClient Client = new HttpClient();
 
@@ -46,38 +33,6 @@ namespace IrisRobloxMultiTool.Forms
 
         IWebDriver Driver;
 
-        public void LogData(LogType logType, string Message = "")
-        {
-            LogBox.Invoke(new Action(() =>
-            {
-                switch (logType)
-                {
-                    case LogType.System:
-                        LogBox.BindText(Color.DimGray, "[SYSTEM] ");
-                        LogBox.BindText(Color.White, $"{Message}\n");
-                        break;
-                    case LogType.Info:
-                        LogBox.BindText(Color.DimGray, "[LOG] ");
-                        LogBox.BindText(Color.FromArgb(85, 136, 238), $"{Message}\n");
-                        break;
-                    case LogType.Error:
-                        LogBox.BindText(Color.DimGray, "[ERROR] ");
-                        LogBox.BindText(Color.Red, $"{Message}\n");
-                        break;
-                    default:
-                        break;
-                }
-            }));
-            Console.WriteLine($"{logType} {Message}");
-        }
-
-        public enum LogType
-        {
-            System,
-            Error,
-            Info,
-        }
-
         public WeAreDevsKeygen()
         {
             InitializeComponent();
@@ -85,7 +40,7 @@ namespace IrisRobloxMultiTool.Forms
 
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
         {
-            LogData(LogType.System, $"Linkvertise {What}/{OutaWhat} Started {AdditionalInfo}...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What}/{OutaWhat} Started {AdditionalInfo}...");
             while (!GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
 
             if (!DebugBrowser)
@@ -103,14 +58,14 @@ Button.click();
 
             while (GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
 
-            LogData(LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
         }
 
         private void DoCaptcha(int What, int OutaWhat, string CaptchaUrl, string NextUrl, string ScriptToExecute, bool ShowWindow = true)
         {
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
 
-            LogData(LogType.System, $"Captcha {What}/{OutaWhat} Started...");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
 
             ExecuteJavaScript(ScriptToExecute);
             if (ShowWindow) { 
@@ -119,7 +74,7 @@ Button.click();
             }
             while (!GetUrl().Contains(NextUrl)) Task.Delay(25).Wait();
 
-            LogData(LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
 
             if (!DebugBrowser)
                 Driver.Manage().Window.Position = new(-2000, -2000);
@@ -132,7 +87,7 @@ Button.click();
 
             if (GetUrl().Contains("start.php?HWID=") && GetUrl().Contains("flux"))
             {
-                LogData(LogType.System, "Fluxus chosen, please solve the captcha!");
+               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, please solve the captcha!");
 
                 DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
 
@@ -148,12 +103,12 @@ Button.click();
 
                 await Task.Delay(250);
                 Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
-                LogData(LogType.System, "Outputting key!");
+               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
 
             }
             else if (Title == "Oxygen u Key")
             {
-                LogData(LogType.System, "Oxygen U chosen, please solve the captcha!");
+               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Oxygen U chosen, please solve the captcha!");
 
                 DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "oxygenu.xyz", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"container\")[0].remove()");
 
@@ -161,12 +116,12 @@ Button.click();
                 DoVertiseRedirect(What: 2, OutaWhat: 2, 7000);
 
                 Key.Text = ExecuteJavaScript("return raw");
-                LogData(LogType.System, "Outputting key!");
+               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
             }
             else if (Title == "Oxygen U" && GetUrl() == "https://oxygenu.xyz/KeySystem/Main.php")
             {
                 Key.Text = ExecuteJavaScript("return raw");
-                LogData(LogType.System, "Outputting key!");
+               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
             }
 
 
@@ -200,7 +155,7 @@ Button.click();
             Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
 
 
-            LogData(LogType.System, "Krnl chosen, please solve the captcha! 1/4");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
 
             DoCaptcha(What: 1, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place/getkey", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
             DoVertiseRedirect(What: 1, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
@@ -216,7 +171,7 @@ Button.click();
 
             Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"input\")[0].value");
 
-            LogData(LogType.System, "Krnl key has been generated...");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
 
             Driver.Quit();
         }
@@ -225,7 +180,7 @@ Button.click();
         {
             Driver.Navigate().GoToUrl("https://key.novaline.club/getkey/some-random-shit");
 
-            LogData(LogType.System, "Novaline chosen, please solve the captcha! 1/2");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline chosen, please solve the captcha! 1/2");
 
             DoCaptcha(What: 1, OutaWhat: 2, CaptchaUrl: "https://key.novaline.club/getkey", NextUrl: "linkvertise", ScriptToExecute: "return true");
             DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000);
@@ -234,7 +189,7 @@ Button.click();
 
             Key.Text = ExecuteJavaScript("return document.getElementById(\"createdKey\").value");
 
-            LogData(LogType.System, "Novaline key has been generated...");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline key has been generated...");
 
             Driver.Quit();
         }
@@ -245,7 +200,7 @@ Button.click();
 
             GenerateKey.Enabled = false;
             LogBox.Clear();
-            LogData(LogType.System, "Running, please wait... (May take up to a minute for some exploits)");
+           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Running, please wait... (May take up to a minute for some exploits)");
 
             try
             {

@@ -247,6 +247,7 @@
   <ItemGroup>
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\GlobalCalls.cs" />
+    <Compile Include="Classes\LogInterface.cs" />
     <Compile Include="Forms\AssetDownloader.cs">
       <SubType>Form</SubType>
     </Compile>

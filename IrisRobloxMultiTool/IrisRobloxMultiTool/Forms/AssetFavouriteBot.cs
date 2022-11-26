@@ -34,7 +34,7 @@ namespace IrisRobloxMultiTool.Forms
                         {
                             
                             webClient.Headers.Add(HttpRequestHeader.Cookie, Cookie);
-                            webClient.Headers.Add("x-csrf-token", Program.RbxApi.GetXSRFToken(Cookie));
+                            webClient.Headers.Add("x-csrf-token", Program.RobloxAccountAPI.GetXSRFToken(Cookie));
 
                             NameValueCollection Data = new NameValueCollection();
                             Data.Add("itemTargetId", KeywordBox.Text);
@@ -74,7 +74,7 @@ namespace IrisRobloxMultiTool.Forms
 
         private void AssetFavouriteBot_Load(object sender, EventArgs e)
         {
-            Console.WriteLine(Program.RbxApi.AccountData.Cookie);
+            Console.WriteLine(Program.RobloxAccountAPI.AccountData.Cookie);
         }
     }
 }

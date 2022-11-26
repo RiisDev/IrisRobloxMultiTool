@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using IrisRobloxMultiTool.Classes;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,50 +14,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static IrisRobloxMultiTool.RobloxAPI;
 
 namespace IrisRobloxMultiTool.Forms
 {
     public partial class AssetDownloader : Form
     {
-        public void LogData(LogType logType, string Message = "")
-        {
-            LogBox.Invoke(new Action(() =>
-            {
-                switch (logType)
-                {
-                    case LogType.System:
-                        LogBox.BindText(Color.DimGray, "[SYSTEM] ");
-                        LogBox.BindText(Color.White, $"{Message}\n");
-                        break;
-                    case LogType.Info:
-                        LogBox.BindText(Color.DimGray, "[LOG] ");
-                        LogBox.BindText(Color.FromArgb(85, 136, 238), $"{Message}\n");
-                        break;
-                    case LogType.Error:
-                        LogBox.BindText(Color.DimGray, "[ERROR] ");
-                        LogBox.BindText(Color.Red, $"{Message}\n");
-                        break;
-                    default:
-                        break;
-                }
-            }));
-            Console.WriteLine($"{logType} {Message}");
-        }
-
-        public enum LogType
-        {
-            System,
-            Error,
-            Info,
-        }
-
-        public enum ClothingType
-        {
-            Accessories,
-            Audio,
-            ClassicPants,
-            ClassicShirts
-        }
+        private LogInterface Log = Program.LogInterface;
 
         private string ShirtsDir      = $"{Program.Directory}\\AssetDownloader\\ClassicShirts";
         private string PantsDir       = $"{Program.Directory}\\AssetDownloader\\ClassicPants";
@@ -99,22 +63,6 @@ namespace IrisRobloxMultiTool.Forms
             }));
         }
 
-        private string GetNextPageCursor(string CatalogURL)
-        {
-            string Cursor = string.Empty;
-
-            using (WebClient client = new WebClient())
-            {
-                string JsonData = client.DownloadString(CatalogURL);
-
-                JToken Data = JToken.Parse(JsonData);
-
-                Cursor = Data["nextPageCursor"].ToString();
-            }
-
-            return Cursor;
-        }
-
         private void GatherIDs(string CatalogURL)
         {
             using (WebClient client = new WebClient())
@@ -130,31 +78,6 @@ namespace IrisRobloxMultiTool.Forms
                     ItemIDs.Add(Data["id"].ToString());
                 }
             }
-        }
-
-        private string GetAssetName(string ID)
-        {
-            string Final = ID;
-
-            try
-            {
-                using (WebClient Client = new WebClient())
-                {
-                    Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
-                    Client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36");
-
-                    string Json = Client.DownloadString($"https://api.roblox.com/marketplace/productinfo?assetId={ID}");
-
-                    JToken Data = JToken.Parse(Json);
-
-                    Final = Data["Name"].ToString();
-                }
-            }
-            catch (Exception er) {
-                Console.WriteLine(er.ToString());
-            }
-
-            return Final;
         }
 
         private void ScrapeAudioIds(string LibraryUrl)
@@ -222,8 +145,8 @@ namespace IrisRobloxMultiTool.Forms
                 CatalogUrl = $"https://catalog.roblox.com/v1/search/items?Keyword={KeywordBox.Text}&category=11&limit=100&subcategory={type}";
             }
 
-            LogData(LogType.Info, $"Detected type as: {type}");
-            LogData(LogType.Info, "Cathering Item IDs...");
+            Log.DoLog(LogBox, LogInterface.LogType.Info, $"Detected type as: {type}");
+            Log.DoLog(LogBox, LogInterface.LogType.Info, "Cathering Item IDs...");
 
             for (int i = 1; i <= (int.Parse(ItemCount.Text) / 100); i++)
             {
@@ -233,10 +156,10 @@ namespace IrisRobloxMultiTool.Forms
                 }
                 else
                 {
-                    PageCur = GetNextPageCursor(CatalogUrl);
-                    LogData(LogType.Info, $"Going to next page: {PageCur}");
+                    PageCur = Program.RobloxAPI.GetNextPageCursor(CatalogUrl);
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"Going to next page: {PageCur}");
                     CatalogUrl = BaseUrl + $"&cursor={PageCur}";
-                    LogData(LogType.Info, $"New catalog URL: {CatalogUrl}");
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"New catalog URL: {CatalogUrl}");
                     GatherIDs(CatalogUrl);
                 }
             }
@@ -417,7 +340,7 @@ namespace IrisRobloxMultiTool.Forms
             {
                 string AssetId = Asset.Substring(Asset.LastIndexOf('\\') + 1).Replace(".png", "").Replace(".rbxm", "");
                 string Extension = ".png";
-                string AssetName = GetAssetName(AssetId);
+                string AssetName = Program.RobloxAPI.GetAssetName(AssetId);
 
                 if (ItemTypeCombo.Text == "Accessories")
                 {
@@ -451,11 +374,11 @@ namespace IrisRobloxMultiTool.Forms
             {
                 case "ClassicShirts":
                     GetIDs(ClothingType.ClassicShirts);
-                    LogData(LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
                     break;
                 case "ClassicPants":
                     GetIDs(ClothingType.ClassicPants);
-                    LogData(LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
                     break;
                 case "Audio":
 
@@ -463,18 +386,18 @@ namespace IrisRobloxMultiTool.Forms
                     {
                         using (WebClient Client = new WebClient())
                         {
-                            Client.Headers.Add(HttpRequestHeader.Cookie, Program.RbxApi.AccountData.Cookie);
+                            Client.Headers.Add(HttpRequestHeader.Cookie, Program.RobloxAccountAPI.AccountData.Cookie);
                             Client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36");
                             string LibraryData = Client.DownloadString($"https://search.roblox.com/catalog/contents?CatalogContext=2&Subcategory=16&Keyword={KeywordBox.Text}&SortAggregation=5&PageNumber={i}&LegendExpanded=true&Category=9");
 
                             ScrapeAudioIds(LibraryData);
                         }
                     }
-                    LogData(LogType.Info, $"Gathered a total of: {SongData.Count} IDs");
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"Gathered a total of: {SongData.Count} IDs");
                     break;
                 case "Accessories":
                     GetIDs(ClothingType.Accessories);
-                    LogData(LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
+                    Log.DoLog(LogBox, LogInterface.LogType.Info, $"Gathered a total of: {ItemIDs.Count} IDs");
                     break;
             }
         }
@@ -622,42 +545,42 @@ namespace IrisRobloxMultiTool.Forms
             Directory.Delete(TempDir, true);
             Directory.CreateDirectory(TempDir);
 
-            LogData(LogType.Info, "Logging started!");
+            Log.DoLog(LogBox, LogInterface.LogType.Info, "Logging started!");
 
             if (!ManualIDCheck.Checked)
             {
                 if (ItemTypeCombo.Text == "Audio")
-                    LogData(LogType.System, $"Fetching {PageCountForAudio.Text} pages of audio!");
+                    Log.DoLog(LogBox, LogInterface.LogType.System, $"Fetching {PageCountForAudio.Text} pages of audio!");
                 else
-                    LogData(LogType.System, $"Fetching {ItemCount.Text} IDs for assets: {ItemTypeCombo.Text}");
+                    Log.DoLog(LogBox, LogInterface.LogType.System, $"Fetching {ItemCount.Text} IDs for assets: {ItemTypeCombo.Text}");
 
                 FetchIDs();
             }
 
-            LogData(LogType.System, "Gather specific IDs...");
+            Log.DoLog(LogBox, LogInterface.LogType.System, "Gather specific IDs...");
             ManualIDs();
-            LogData(LogType.System, $"Done fetching asset IDs!");
+            Log.DoLog(LogBox, LogInterface.LogType.System, $"Done fetching asset IDs!");
             ItemIDs = ItemIDs.Distinct().ToList();
             SetBarMax(ItemIDs.Count());
-            LogData(LogType.System, $"Continuing to download in ~1 seconds!");
+            Log.DoLog(LogBox, LogInterface.LogType.System, $"Continuing to download in ~1 seconds!");
             await Task.Delay(2000);
 
             if (ItemTypeCombo.Text == "Audio")
             {
-                LogData(LogType.Info, $"Starting phase 1/1...");
+                Log.DoLog(LogBox, LogInterface.LogType.Info, $"Starting phase 1/1...");
                 SetBarMax(SongData.Count());
                 DownloadTempAssets();
             }
             else
             {
-                LogData(LogType.Info, $"Starting phase 1/3...");
+                Log.DoLog(LogBox, LogInterface.LogType.Info, $"Starting phase 1/3...");
                 ResetProgBar();
                 DownloadTempAssets();
 
                 while (DownloadTemps != true)
                     await Task.Delay(25);
 
-                LogData(LogType.Info, $"Starting phase 2/3...");
+                Log.DoLog(LogBox, LogInterface.LogType.Info, $"Starting phase 2/3...");
                 ResetProgBar();
                 await Task.Delay(5);
                 SecondSaveStep();
@@ -665,7 +588,7 @@ namespace IrisRobloxMultiTool.Forms
                 while (DownloadFull != true)
                     await Task.Delay(25);
 
-                LogData(LogType.Info, $"Starting phase 3/3...");
+                Log.DoLog(LogBox, LogInterface.LogType.Info, $"Starting phase 3/3...");
                 ResetProgBar();
                 await Task.Delay(5);
                 if (RealAssetName.Checked)
@@ -674,7 +597,7 @@ namespace IrisRobloxMultiTool.Forms
                 }
                 else
                 {
-                    LogData(LogType.System, $"Asset names will not be set!");
+                    Log.DoLog(LogBox, LogInterface.LogType.System, $"Asset names will not be set!");
                     Renamed = true;
                 }
             }
@@ -685,7 +608,7 @@ namespace IrisRobloxMultiTool.Forms
                     await Task.Delay(25);
                     if (DownloadTemps && DownloadFull && Renamed)
                     {
-                        LogData(LogType.System, "Detected all items finished, opening directoy!");
+                        Log.DoLog(LogBox, LogInterface.LogType.System, "Detected all items finished, opening directoy!");
                         Process.Start($"{Program.Directory}\\AssetDownloader");
                         try
                         {
