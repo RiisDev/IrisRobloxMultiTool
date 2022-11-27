@@ -37,6 +37,11 @@ namespace IrisRobloxMultiTool.Forms
             InitializeComponent();
         }
 
+        private string GetToken()
+        {
+            return new WebClient().DownloadString("https://raw.githubusercontent.com/IrisV3rm/IrisRobloxMultiTool/main/hcaptcha_token.json") ?? "";
+        }
+
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
         {
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What}/{OutaWhat} Started {AdditionalInfo}...");
@@ -64,7 +69,7 @@ Button.click();
         {
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
 
             ExecuteJavaScript(ScriptToExecute);
             if (ShowWindow) { 
@@ -73,12 +78,74 @@ Button.click();
             }
             while (!GetUrl().Contains(NextUrl)) Task.Delay(25).Wait();
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
 
             if (!DebugBrowser)
                 Driver.Manage().Window.Position = new(-2000, -2000);
         }
+        
+        private bool DoHCaptchaBypass(int What, int OutaWhat, string CaptchaUrl, string NextUrl)
+        {
+            while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
+            
+            Driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie("hc_accessibility", GetToken()));
 
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
+
+            if (ExecuteJavaScript("return document.getElementById(\"status-retrieve\").innerText") == "Accessibility cookie is not set. Retrieve accessibility cookie.")
+            {
+                return false;
+            }
+            else
+            {
+                ExecuteJavaScript("document.getElementById(\"checkbox\").click();");
+                Task.Delay(1000).Wait();
+                if (ExecuteJavaScript("return document.getElementsByClassName(\"check\")[0].style.display") == "none")
+                {
+                    return false;
+                }
+            }
+
+            while (!GetUrl().Contains(NextUrl)) Task.Delay(25).Wait();
+
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
+
+            if (!DebugBrowser)
+                Driver.Manage().Window.Position = new(-2000, -2000);
+
+            return true;
+        }
+
+        private async void BetaDoFluxusKeySystem()
+        {
+            string Title = NavigateForTitle(StarterUrl.Text).Result;
+
+            if (GetUrl().Contains("start.php?HWID=") && GetUrl().Contains("flux"))
+            {
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, attemtping to auto solve the captcha!");
+
+                DoHCaptchaBypass(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise");
+
+                DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
+
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+
+                DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
+
+                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+
+                DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
+
+                await Task.Delay(250);
+                Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
+
+            }
+
+            Driver.Quit();
+
+            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
 
         private async void DoFluxusKeySystem()
         {
@@ -217,7 +284,11 @@ Button.click();
                     case "Fluxus":
                     case "Oxygen U":
                     case "":
-                        DoFluxusKeySystem();
+                        #if DEBUG
+                            BetaDoFluxusKeySystem();
+                        #else
+                            DoFluxusKeySystem();
+                        #endif
                         break;
                 }
             } catch (WebDriverException ex)
@@ -332,25 +403,25 @@ Button.click();
             {
 
                 case "Fluxus":
-                    #if DEBUG
+#if DEBUG
                         StarterUrl.Text = "https://flux.li/windows/start.php?HWID=fbba28a7604a11eda702806e6f6e6963a4872ad2dd325cabc47545d3159dea67";
-                    #else
+#else
                         MessageBox.Show("Please get a starter url via Fluxus client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    #endif
+#endif
                     break;
                 case "Oxygen U":
-                    #if DEBUG
+#if DEBUG
                         StarterUrl.Text = "https://oxygenu.xyz/KeySystem/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963";
-                    #else
+#else
                         MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    #endif
+#endif
                     break;
                 case "Novaline":
-                    #if DEBUG
+#if DEBUG
                         StarterUrl.Text = "https://oxygenu.xyz/KeySystem/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963";
-                    #else
+#else
                         MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    #endif
+#endif
                     break;
             }
         }
