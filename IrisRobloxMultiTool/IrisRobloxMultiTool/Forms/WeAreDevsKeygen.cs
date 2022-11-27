@@ -1,9 +1,13 @@
 ﻿using IrisRobloxMultiTool.Classes;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V107.IndexedDB;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,7 +24,7 @@ namespace IrisRobloxMultiTool.Forms
     public partial class WeAreDevsKeygen : Form
     {
         private LogInterface Log = Program.LogInterface;
-        private bool DebugBrowser = false;
+        private bool DebugBrowser = true;
 
         private static readonly HttpClient Client = new HttpClient();
 
@@ -37,9 +42,12 @@ namespace IrisRobloxMultiTool.Forms
             InitializeComponent();
         }
 
-        private string GetToken()
+        private void SetToken()
         {
-            return new WebClient().DownloadString("https://raw.githubusercontent.com/IrisV3rm/IrisRobloxMultiTool/main/hcaptcha_token.json") ?? "";
+            foreach (var Data in JObject.Parse(new WebClient().DownloadString("https://raw.githubusercontent.com/IrisV3rm/IrisRobloxMultiTool/main/hcaptcha_token.json")))
+            {
+                Driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(Data.Key, Data.Value.ToString()));
+            }
         }
 
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
@@ -87,12 +95,15 @@ Button.click();
         private bool DoHCaptchaBypass(int What, int OutaWhat, string CaptchaUrl, string NextUrl)
         {
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
-            
-            Driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie("hc_accessibility", GetToken()));
+
+            SetToken();
+
+            ExecuteJavaScript("document.getElementsByTagName(\"iframe\")[1].focus()");
+            new WebDriverWait(Driver, TimeSpan.FromMinutes(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("//iframe[@title='Widget containing checkbox for hCaptcha security challenge']"))).Click();
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
 
-            if (ExecuteJavaScript("return document.getElementById(\"status-retrieve\").innerText") == "Accessibility cookie is not set. Retrieve accessibility cookie.")
+            if (ExecuteJavaScript("return document.getElementById(\"status-help\").innerText") == "Accessibility cookie is not set. Retrieve accessibility cookie.")
             {
                 return false;
             }
@@ -122,9 +133,13 @@ Button.click();
 
             if (GetUrl().Contains("start.php?HWID=") && GetUrl().Contains("flux"))
             {
-                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, attemtping to auto solve the captcha!");
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, attempting to auto solve the captcha!");
 
-                DoHCaptchaBypass(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise");
+                if (!DoHCaptchaBypass(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise"))
+                {
+                    Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Auto captcha failed, please solve captcha...");
+                    DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
+                }
 
                 DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
 
