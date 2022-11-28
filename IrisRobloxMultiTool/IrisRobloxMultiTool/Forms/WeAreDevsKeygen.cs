@@ -23,13 +23,13 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        private bool DebugBrowser = false;
+        private bool DebugBrowser = true;
 
         private static readonly HttpClient Client = new HttpClient();
 
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
         {
-            {"https://cdn.discordapp.com/attachments/1044070738233151488/1044070770558636132/msedgedriver.exe", false},
+            {"https://cdn.discordapp.com/attachments/1044070738233151488/1046819875676495973/msedgedriver.exe", false},
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1044815404582842429/extension_1_45_2_0.crx", false },
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1045613743175892992/buster.crx", false}
         };
@@ -58,14 +58,17 @@ Button.onclick = function() {{ window.open(""{GetLinkvertiseRedirect(Driver.Url)
 document.body.prepend(Button); 
 Button.click();
 ");
-
             while (GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
+            ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+            ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
         }
 
         private void DoCaptcha(int What, int OutaWhat, string CaptchaUrl, string NextUrl, string ScriptToExecute, bool ShowWindow = true)
         {
+            ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+            ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
@@ -85,24 +88,28 @@ Button.click();
 
         private async void DoFluxusKeySystem()
         {
-            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?updated_browser=false&HWID="));
+            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?updated_browser=true&HWID="));
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, automatically solving the captcha!");
 
             //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
 
-            DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 15000);
+            DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
 
             while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
 
-            DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 15000);
+            DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
 
             while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
 
-            DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 15000);
+            DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
+
+            // Todo: Set document focus to the main body
 
             await Task.Delay(250);
-            Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
+            ExecuteJavaScript(" Object.getOwnPropertyNames(this).forEach(function(property) { if(typeof this[property] === 'function') { if (property.toString().toLowerCase().includes(\"oclipb\")) { this[property]() } } });");
+            await Task.Delay(750);
+            Key.Text = Clipboard.GetText();
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
 
 
@@ -327,12 +334,26 @@ Button.click();
                 edgeOptions.AddArgument("--no-sandbox");
                 edgeOptions.AddArgument("--disable-dev-shm-usage");
                 edgeOptions.AddArgument("--enable-logging");
+                edgeOptions.AddArgument("--incognito");
                 edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
                 edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
+
+                edgeOptions.AddAdditionalOption("useAutomationExtension", false);
+                edgeOptions.AddExcludedArgument("enable-automation");
+                edgeOptions.AddExcludedArguments(new List<string>() { "enable-automation" });
+
+                edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+                edgeOptions.AddArgument("--disable-blink-features");
+                edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
 
                 EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
                 edgeDriverService.HideCommandPromptWindow = true;
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
+
+                (Driver as EdgeDriver).ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
+                ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+                ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
+
 
                 if (!DebugBrowser)
                     Driver.Manage().Window.Position = new(-2000, -2000);
