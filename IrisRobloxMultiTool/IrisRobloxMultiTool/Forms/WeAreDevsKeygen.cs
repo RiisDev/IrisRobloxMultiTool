@@ -23,8 +23,7 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        private LogInterface Log = Program.LogInterface;
-        private bool DebugBrowser = true;
+        private bool DebugBrowser = false;
 
         private static readonly HttpClient Client = new HttpClient();
 
@@ -40,14 +39,6 @@ namespace IrisRobloxMultiTool.Forms
         public WeAreDevsKeygen()
         {
             InitializeComponent();
-        }
-
-        private void SetToken()
-        {
-            foreach (var Data in JObject.Parse(new WebClient().DownloadString("https://raw.githubusercontent.com/IrisV3rm/IrisRobloxMultiTool/main/hcaptcha_token.json")))
-            {
-                Driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(Data.Key, Data.Value.ToString()));
-            }
         }
 
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
@@ -91,124 +82,33 @@ Button.click();
             if (!DebugBrowser)
                 Driver.Manage().Window.Position = new(-2000, -2000);
         }
-        
-        private bool DoHCaptchaBypass(int What, int OutaWhat, string CaptchaUrl, string NextUrl)
-        {
-            while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
-
-            SetToken();
-
-            ExecuteJavaScript("document.getElementsByTagName(\"iframe\")[1].focus()");
-            new WebDriverWait(Driver, TimeSpan.FromMinutes(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("//iframe[@title='Widget containing checkbox for hCaptcha security challenge']"))).Click();
-
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
-
-            if (ExecuteJavaScript("return document.getElementById(\"status-help\").innerText") == "Accessibility cookie is not set. Retrieve accessibility cookie.")
-            {
-                return false;
-            }
-            else
-            {
-                ExecuteJavaScript("document.getElementById(\"checkbox\").click();");
-                Task.Delay(1000).Wait();
-                if (ExecuteJavaScript("return document.getElementsByClassName(\"check\")[0].style.display") == "none")
-                {
-                    return false;
-                }
-            }
-
-            while (!GetUrl().Contains(NextUrl)) Task.Delay(25).Wait();
-
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Passed...");
-
-            if (!DebugBrowser)
-                Driver.Manage().Window.Position = new(-2000, -2000);
-
-            return true;
-        }
-
-        private async void BetaDoFluxusKeySystem()
-        {
-            string Title = NavigateForTitle(StarterUrl.Text).Result;
-
-            if (GetUrl().Contains("start.php?HWID=") && GetUrl().Contains("flux"))
-            {
-                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, attempting to auto solve the captcha!");
-
-                if (!DoHCaptchaBypass(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise"))
-                {
-                    Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Auto captcha failed, please solve captcha...");
-                    DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
-                }
-
-                DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
-
-                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
-
-                DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
-
-                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
-
-                DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
-
-                await Task.Delay(250);
-                Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
-                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
-
-            }
-
-            Driver.Quit();
-
-            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
 
         private async void DoFluxusKeySystem()
         {
-            string Title = NavigateForTitle(StarterUrl.Text).Result;
+            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?updated_browser=false&HWID="));
 
-            if (GetUrl().Contains("start.php?HWID=") && GetUrl().Contains("flux"))
-            {
-               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, please solve the captcha!");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, automatically solving the captcha!");
 
-                DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
+            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
 
-                DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
+            DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 15000);
 
-                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
 
-                DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
+            DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 15000);
 
-                while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
 
-                DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
+            DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 15000);
 
-                await Task.Delay(250);
-                Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
-               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
-
-            }
-            else if (Title == "Oxygen u Key")
-            {
-               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Oxygen U chosen, please solve the captcha!");
-
-                DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "oxygenu.xyz", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"container\")[0].remove()");
-
-                DoVertiseRedirect(What: 1, OutaWhat: 2, 7000);
-                DoVertiseRedirect(What: 2, OutaWhat: 2, 7000);
-
-                Key.Text = ExecuteJavaScript("return raw");
-               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
-            }
-            else if (Title == "Oxygen U" && GetUrl() == "https://oxygenu.xyz/KeySystem/Main.php")
-            {
-                Key.Text = ExecuteJavaScript("return raw");
-               Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
-            }
+            await Task.Delay(250);
+            Key.Text = ExecuteJavaScript("for (let item of document.getElementsByTagName(\"code\")) {     if (item.innerText.length > 10) {         return item.innerText;     } }");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
 
 
-            Driver.Quit();
+            // Driver.Quit();
 
-            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void DoKiwiBypass()
@@ -236,7 +136,7 @@ Button.click();
             Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
 
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
 
             DoCaptcha(What: 1, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place/getkey", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
             DoVertiseRedirect(What: 1, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
@@ -252,16 +152,16 @@ Button.click();
 
             Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"input\")[0].value");
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
 
             Driver.Quit();
         }
 
         private void DoNovalineBypass()
         {
-            Driver.Navigate().GoToUrl("https://key.novaline.club/getkey/some-random-shit");
+            Driver.Navigate().GoToUrl(StarterUrl.Text);
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline chosen, please solve the captcha! 1/2");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline chosen, please solve the captcha! 1/2");
 
             DoCaptcha(What: 1, OutaWhat: 2, CaptchaUrl: "https://key.novaline.club/getkey", NextUrl: "linkvertise", ScriptToExecute: "return true");
             DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000);
@@ -270,9 +170,52 @@ Button.click();
 
             Key.Text = ExecuteJavaScript("return document.getElementById(\"createdKey\").value");
 
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline key has been generated...");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline key has been generated...");
 
             Driver.Quit();
+        }
+
+        private void DoCometBypass()
+        {
+            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?comp_one=true&HWID"));
+
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet chosen, automatically solving the captcha!");
+
+            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "https://cometrbx.xyz/ks/start.php?", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();document.getElementById(\"text\").remove();");
+            
+            DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000); 
+            DoVertiseRedirect(What: 2, OutaWhat: 2, WaitTime: 6000);
+
+            ExecuteJavaScript("setTimeout(() => { copy_key() }, 1000);");
+            Key.Text = Clipboard.GetText();
+
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet key has been generated...");
+
+            Driver.Quit();
+        }
+
+        private void DoOxygenBypass()
+        {
+            string Title = NavigateForTitle(StarterUrl.Text).Result;
+
+            if (Title == "Oxygen u Key")
+            {
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Oxygen U chosen, please solve the captcha!");
+
+                DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "oxygenu.xyz", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"container\")[0].remove()");
+
+                DoVertiseRedirect(What: 1, OutaWhat: 2, 7000);
+                DoVertiseRedirect(What: 2, OutaWhat: 2, 7000);
+
+                Key.Text = ExecuteJavaScript("return raw");
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
+            }
+            else if (Title == "Oxygen U" && GetUrl() == "https://oxygenu.xyz/KeySystem/Main.php")
+            {
+                Key.Text = ExecuteJavaScript("return raw");
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
+            }
+
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
@@ -296,14 +239,14 @@ Button.click();
                     case "Novaline":
                         DoNovalineBypass();
                         break;
+                    case "Comet":
+                        DoCometBypass();
+                        break;
                     case "Fluxus":
+                        DoFluxusKeySystem();
+                        break;
                     case "Oxygen U":
-                    case "":
-                        #if DEBUG
-                            BetaDoFluxusKeySystem();
-                        #else
-                            DoFluxusKeySystem();
-                        #endif
+                        DoOxygenBypass();
                         break;
                 }
             } catch (WebDriverException ex)
@@ -435,7 +378,14 @@ Button.click();
 #if DEBUG
                         StarterUrl.Text = "https://oxygenu.xyz/KeySystem/Start.php?HWID=bd69a7d29bc011ec913f806e6f6e6963";
 #else
-                        MessageBox.Show("Please get a starter url via Oxygen client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Please get a starter url via Novaline client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
+#endif
+                    break;
+                case "Comet":
+#if DEBUG
+                    StarterUrl.Text = "https://cometrbx.xyz/ks/start.php?HWID=fbba28a7604a11eda702806e6f6e69635bf140327325d99e39f0f98d95549282";
+#else
+                        MessageBox.Show("Please get a starter url via Comet client! (Click GetKey)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Information);
 #endif
                     break;
             }
