@@ -34,7 +34,7 @@ namespace IrisRobloxMultiTool.Forms
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1045613743175892992/buster.crx", false}
         };
 
-        IWebDriver Driver;
+        EdgeDriver Driver;
 
         public WeAreDevsKeygen()
         {
@@ -47,7 +47,7 @@ namespace IrisRobloxMultiTool.Forms
             while (!GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
 
             if (!DebugBrowser)
-            //    Driver.Manage().Window.Position = new(-2000, -2000);
+                Driver.Manage().Window.Position = new(-2000, -2000);
 
             Task.Delay(WaitTime).Wait();
 
@@ -88,33 +88,7 @@ Button.click();
 
         private async void DoFluxusKeySystem()
         {
-            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?updated_browser=true&HWID="));
 
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, automatically solving the captcha!");
-
-            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
-
-            DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
-
-            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
-
-            DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
-
-            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
-
-            DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
-
-            // Todo: Set document focus to the main body
-
-            await Task.Delay(250);
-            Key.Text = Clipboard.GetText();
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
-
-            Console.WriteLine(ExecuteJavaScript("return document.body.innerHTML"));
-
-            // Driver.Quit();
-
-            //MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void DoKiwiBypass()
@@ -183,21 +157,7 @@ Button.click();
 
         private void DoCometBypass()
         {
-            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?comp_one=true&HWID"));
 
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet chosen, automatically solving the captcha!");
-
-            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "https://cometrbx.xyz/ks/start.php?", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();document.getElementById(\"text\").remove();");
-            
-            DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000); 
-            DoVertiseRedirect(What: 2, OutaWhat: 2, WaitTime: 6000);
-
-            ExecuteJavaScript("setTimeout(() => { copy_key() }, 1000);");
-            Key.Text = Clipboard.GetText();
-
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet key has been generated...");
-
-            Driver.Quit();
         }
 
         private void DoOxygenBypass()
@@ -329,34 +289,32 @@ Button.click();
 
             try
             {
-                EdgeOptions edgeOptions = new EdgeOptions();
-                //edgeOptions.AddArgument("--no-sandbox");
-                //edgeOptions.AddArgument("--disable-dev-shm-usage");
-                //edgeOptions.AddArgument("--enable-logging");
-               // edgeOptions.AddArgument("--incognito");
-                edgeOptions.AddArgument("--headless");
-               // edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
-                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
-
-                //edgeOptions.AddAdditionalOption("useAutomationExtension", false);
-                //edgeOptions.AddExcludedArgument("enable-automation");
-                //edgeOptions.AddExcludedArguments(new List<string>() { "enable-automation" });
-
-                //edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
-                //edgeOptions.AddArgument("--disable-blink-features");
-                edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
-
                 EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
-                //edgeDriverService.HideCommandPromptWindow = true;
+                EdgeOptions edgeOptions = new EdgeOptions();
+
+                edgeOptions.AddArgument("--window-size=1920x1080");
+                edgeOptions.AddArgument("--no-sandbox");
+                edgeOptions.AddArgument("--disable-dev-shm-usage");
+                edgeOptions.AddArgument("--enable-logging");
+                edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+                edgeOptions.AddArgument("--disable-blink-features");
+                edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
+                
+                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
+                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
+
+                edgeOptions.AddAdditionalOption("useAutomationExtension", false);
+                edgeOptions.AddAdditionalOption("disable-infobars", false);
+
+                edgeDriverService.HideCommandPromptWindow = true;
+
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
 
-                (Driver as EdgeDriver).ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
-                //ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-                //ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
+                ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+                Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
 
-
-               // if (!DebugBrowser)
-                   // Driver.Manage().Window.Position = new(-2000, -2000);
+                if (!DebugBrowser)
+                    Driver.Manage().Window.Position = new(-2000, -2000);
             }
             catch (WebDriverException ex)
             {
@@ -366,8 +324,9 @@ Button.click();
                 }
             }
 
-            //if (!DebugBrowser)
-                //Driver.Manage().Window.Position = new(-2000, -2000);
+            if (!DebugBrowser)
+                Driver.Manage().Window.Position = new(-2000, -2000);
+
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
@@ -418,12 +377,16 @@ Button.click();
             {
                 JToken JsonData = JToken.Parse(Client.PostAsync("https://api.bypass.vip/", new FormUrlEncodedContent(new Dictionary<string, string>() { { "url", url } })).Result.Content.ReadAsStringAsync().Result);
 
-                if (JsonData["success"].ToString() == "false" || JsonData["destination"] == null || string.IsNullOrEmpty(JsonData["destination"].ToString()))
+
+
+                if (JsonData["sucess"] == null || JsonData["destination"] == null || JsonData["success"].ToString() == "false" || string.IsNullOrEmpty(JsonData["destination"].ToString()))
                 {
                     MessageBox.Show($"Failed to bypass please submit an issue request on github!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Driver.Quit();
                     return string.Empty;
                 }
+                else
+                    Console.WriteLine(JsonData.ToString());
 
                 return JsonData["destination"].ToString();
             }
