@@ -47,7 +47,7 @@ namespace IrisRobloxMultiTool.Forms
             while (!GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
 
             if (!DebugBrowser)
-                Driver.Manage().Window.Position = new(-2000, -2000);
+            //    Driver.Manage().Window.Position = new(-2000, -2000);
 
             Task.Delay(WaitTime).Wait();
 
@@ -107,11 +107,10 @@ Button.click();
             // Todo: Set document focus to the main body
 
             await Task.Delay(250);
-            ExecuteJavaScript(" Object.getOwnPropertyNames(this).forEach(function(property) { if(typeof this[property] === 'function') { if (property.toString().toLowerCase().includes(\"oclipb\")) { this[property]() } } });");
-            await Task.Delay(750);
             Key.Text = Clipboard.GetText();
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
 
+            Console.WriteLine(ExecuteJavaScript("return document.body.innerHTML"));
 
             // Driver.Quit();
 
@@ -331,32 +330,33 @@ Button.click();
             try
             {
                 EdgeOptions edgeOptions = new EdgeOptions();
-                edgeOptions.AddArgument("--no-sandbox");
-                edgeOptions.AddArgument("--disable-dev-shm-usage");
-                edgeOptions.AddArgument("--enable-logging");
-                edgeOptions.AddArgument("--incognito");
-                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
-                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
+                //edgeOptions.AddArgument("--no-sandbox");
+                //edgeOptions.AddArgument("--disable-dev-shm-usage");
+                //edgeOptions.AddArgument("--enable-logging");
+               // edgeOptions.AddArgument("--incognito");
+                edgeOptions.AddArgument("--headless");
+               // edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
+                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
 
-                edgeOptions.AddAdditionalOption("useAutomationExtension", false);
-                edgeOptions.AddExcludedArgument("enable-automation");
-                edgeOptions.AddExcludedArguments(new List<string>() { "enable-automation" });
+                //edgeOptions.AddAdditionalOption("useAutomationExtension", false);
+                //edgeOptions.AddExcludedArgument("enable-automation");
+                //edgeOptions.AddExcludedArguments(new List<string>() { "enable-automation" });
 
-                edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
-                edgeOptions.AddArgument("--disable-blink-features");
+                //edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+                //edgeOptions.AddArgument("--disable-blink-features");
                 edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
 
                 EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
-                edgeDriverService.HideCommandPromptWindow = true;
+                //edgeDriverService.HideCommandPromptWindow = true;
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
 
                 (Driver as EdgeDriver).ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
-                ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-                ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
+                //ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+                //ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
 
 
-                if (!DebugBrowser)
-                    Driver.Manage().Window.Position = new(-2000, -2000);
+               // if (!DebugBrowser)
+                   // Driver.Manage().Window.Position = new(-2000, -2000);
             }
             catch (WebDriverException ex)
             {
@@ -366,8 +366,8 @@ Button.click();
                 }
             }
 
-            if (!DebugBrowser)
-                Driver.Manage().Window.Position = new(-2000, -2000);
+            //if (!DebugBrowser)
+                //Driver.Manage().Window.Position = new(-2000, -2000);
         }
 
         private void LogBox_TextChanged(object sender, EventArgs e)
