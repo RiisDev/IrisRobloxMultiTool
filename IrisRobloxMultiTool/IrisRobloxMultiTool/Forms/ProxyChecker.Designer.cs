@@ -39,6 +39,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ProxyChecker";
             this.Text = "ProxyChecker";
+            this.Load += new System.EventHandler(this.ProxyChecker_Load);
             this.ResumeLayout(false);
 
         }

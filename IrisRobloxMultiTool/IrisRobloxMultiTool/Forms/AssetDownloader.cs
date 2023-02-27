@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -79,30 +80,17 @@ namespace IrisRobloxMultiTool.Forms
 
         private void ScrapeAudioIds(string LibraryUrl)
         {
-            bool DoneOne = false;
-            string[] Audios = LibraryUrl.Split(new string[] { "item-image-wrapper" }, StringSplitOptions.None);
+            var regex = new Regex(@"img title=""(?<title>[^""]+)""-url=(?<url>[^""]+)""");
 
-            foreach (string Audio in Audios)
+            foreach (Match match in regex.Matches(LibraryUrl))
             {
-                if (!DoneOne)
+                string SongTitle = match.Groups["title"].Value;
+                string SongUrl = match.Groups["url"].Value;
+                if (SongData.ContainsKey(SongTitle))
                 {
-                    DoneOne = true;
+                    SongTitle = SongTitle + RandomInt().ToString();
                 }
-                else if (!Audio.Contains("MediaPlayerControls"))
-                { }
-                else
-                {
-                    string NewBlock = Audio.Substring(Audio.IndexOf("img title"), Audio.IndexOf("textDisplay"));
-                    string SongTitleP1 = NewBlock.Substring(NewBlock.IndexOf("\"") + 1);
-                    string SongTitle = SongTitleP1.Substring(0, SongTitleP1.IndexOf("\""));
-
-                    string SongUrlP1 = NewBlock.Substring(NewBlock.IndexOf("-url=") + 6);
-                    string SongUrl = SongUrlP1.Substring(0, SongUrlP1.IndexOf("\""));
-
-                    if (SongData.ContainsKey(SongTitle))
-                        SongTitle = SongTitle + RandomInt().ToString();
-                    SongData.Add(SongTitle, SongUrl);
-                }
+                SongData.Add(SongTitle, SongUrl);
             }
         }
 

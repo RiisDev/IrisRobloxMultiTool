@@ -282,6 +282,7 @@ namespace IrisRobloxMultiTool.Forms
 
             return Data;
         }
+
         public Tuple<string, Color> GetLinkvertiseStatus()
         {
             Tuple<string, Color> Data = Tuple.Create("Blocked or Offline", Color.Red);
@@ -353,60 +354,52 @@ namespace IrisRobloxMultiTool.Forms
             IRMTStatus.ForeColor = Color.FromArgb(66, 154, 249);
 
 
-            new Task(() => {
-                Tuple<string, Color> AssetDel = GetAssetDelivery();
-                UpdateLabel(AssetDeliveryStatus, AssetDel.Item1, AssetDel.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> CatalogSearch = GetCatalogSearch();
-                UpdateLabel(CatalogSearchStatus, CatalogSearch.Item1, CatalogSearch.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> MarketPlace = GetMarketplace();
-                UpdateLabel(MarketplaceStatus, MarketPlace.Item1, MarketPlace.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> Audio = GetAudioSearch();
-                UpdateLabel(AudioSearchStatus, Audio.Item1, Audio.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> GroupSearch = GetGroupSearch();
-                UpdateLabel(GroupSearchStatus, GroupSearch.Item1, GroupSearch.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> GroupMain = GetGroupMain();
-                UpdateLabel(GroupStatus, GroupMain.Item1, GroupMain.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> GroupMembership = GetGroupMembership();
-                UpdateLabel(GroupMemberStatus, GroupMembership.Item1, GroupMembership.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> GroupCurrency = GetGroupCurrency();
-                UpdateLabel(GroupCurrencyStatus, GroupCurrency.Item1, GroupCurrency.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> GroupThumbnail = GetGroupThumbnail();
-                UpdateLabel(ThumbnailStatus, GroupThumbnail.Item1, GroupThumbnail.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> Linkvertise = GetLinkvertiseStatus();
-                UpdateLabel(LinkvertiseStatus, Linkvertise.Item1, Linkvertise.Item2);
-            }).Start();
-
-            new Task(() => {
-                Tuple<string, Color> IRMT = GetIRMTStatus();
-                UpdateLabel(IRMTStatus, IRMT.Item1, IRMT.Item2);
-            }).Start();
+            Task.WhenAll(
+                new Task(() => {
+                    Tuple<string, Color> AssetDel = GetAssetDelivery();
+                    UpdateLabel(AssetDeliveryStatus, AssetDel.Item1, AssetDel.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> CatalogSearch = GetCatalogSearch();
+                    UpdateLabel(CatalogSearchStatus, CatalogSearch.Item1, CatalogSearch.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> MarketPlace = GetMarketplace();
+                    UpdateLabel(MarketplaceStatus, MarketPlace.Item1, MarketPlace.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> Audio = GetAudioSearch();
+                    UpdateLabel(AudioSearchStatus, Audio.Item1, Audio.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> GroupSearch = GetGroupSearch();
+                    UpdateLabel(GroupSearchStatus, GroupSearch.Item1, GroupSearch.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> GroupMain = GetGroupMain();
+                    UpdateLabel(GroupStatus, GroupMain.Item1, GroupMain.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> GroupMembership = GetGroupMembership();
+                    UpdateLabel(GroupMemberStatus, GroupMembership.Item1, GroupMembership.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> GroupCurrency = GetGroupCurrency();
+                    UpdateLabel(GroupCurrencyStatus, GroupCurrency.Item1, GroupCurrency.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> GroupThumbnail = GetGroupThumbnail();
+                    UpdateLabel(ThumbnailStatus, GroupThumbnail.Item1, GroupThumbnail.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> Linkvertise = GetLinkvertiseStatus();
+                    UpdateLabel(LinkvertiseStatus, Linkvertise.Item1, Linkvertise.Item2);
+                }),
+                new Task(() => {
+                    Tuple<string, Color> IRMT = GetIRMTStatus();
+                    UpdateLabel(IRMTStatus, IRMT.Item1, IRMT.Item2);
+                })
+            );
         }
 
         private void StartDownload_Click(object sender, EventArgs e)

@@ -23,7 +23,7 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        private bool DebugBrowser = true;
+        private bool DebugBrowser = false;
 
         private static readonly HttpClient Client = new HttpClient();
 
@@ -88,7 +88,31 @@ Button.click();
 
         private async void DoFluxusKeySystem()
         {
+            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?updated_browser=true&HWID="));
 
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Fluxus chosen, automatically solving the captcha!");
+
+            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "flux.li", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();");
+
+            DoVertiseRedirect(What: 1, OutaWhat: 3, WaitTime: 0);
+
+            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+
+            DoVertiseRedirect(What: 2, OutaWhat: 3, WaitTime: 0);
+
+            while (!GetUrl().Contains("flux.li")) await Task.Delay(50);
+
+            DoVertiseRedirect(What: 3, OutaWhat: 3, WaitTime: 0);
+
+            await Task.Delay(250);
+            Key.Text = Clipboard.GetText();
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
+
+            Console.WriteLine(ExecuteJavaScript("for(let i=0;i<document.getElementsByTagName(\"script\").length;i++){var InnerHtml=document.getElementsByTagName(\"script\")[i].innerHTML;if(InnerHtml.includes(\"Copy\")||InnerHtml.includes(\"execCommand('Copy')\")||InnerHtml.includes(\"copied the key\")||InnerHtml.includes(\"createElement('input')\")){for(let lineNumber=0;lineNumber<InnerHtml.split(\"\\n\").length;lineNumber++){var Lines=InnerHtml.split(\"\\n\");if((Lines[lineNumber].includes(\"let\")||Lines[lineNumber].includes(\"var\"))&&Lines[lineNumber].includes(\" = (\\\"\")){var KeyLine=Lines[lineNumber];var Key=KeyLine.substring(KeyLine.indexOf(\"(\")+2,KeyLine.indexOf(\")\")-1);if(Key.length>=32){return Key;}}}break;}}"));
+
+            Driver.Quit();
+
+            MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void DoKiwiBypass()
@@ -157,7 +181,21 @@ Button.click();
 
         private void DoCometBypass()
         {
+            Driver.Navigate().GoToUrl(StarterUrl.Text.Replace("start.php?HWID=", "start.php?comp_one=true&HWID"));
 
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet chosen, automatically solving the captcha!");
+
+            //DoCaptcha(What: 1, OutaWhat: 1, CaptchaUrl: "https://cometrbx.xyz/ks/start.php?", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.querySelector('#captcha'));document.body.children[1].remove();document.getElementById(\"text\").remove();");
+            
+            DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000); 
+            DoVertiseRedirect(What: 2, OutaWhat: 2, WaitTime: 6000);
+
+            ExecuteJavaScript("setTimeout(() => { copy_key() }, 1000);");
+            Key.Text = Clipboard.GetText();
+
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet key has been generated...");
+
+            Driver.Quit();
         }
 
         private void DoOxygenBypass()
