@@ -1,4 +1,5 @@
 ﻿using IrisRobloxMultiTool.Classes;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V107.IndexedDB;
@@ -46,6 +47,16 @@ namespace IrisRobloxMultiTool.Forms
             };
         }
 
+        private string GetExploitReturnMethod()
+        {
+            string toReturn = string.Empty;
+
+            JToken returnData = JToken.Parse(Client.GetStringAsync("https://raw.githubusercontent.com/IrisV3rm/IrisRobloxMultiTool/main/exploit_returns.json").Result);
+
+            toReturn = returnData[SelectedExploit.Text].ToString();
+
+            return toReturn;
+        }
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
         {
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What}/{OutaWhat} Started {AdditionalInfo}...");
@@ -113,7 +124,7 @@ Button.click();
             Key.Text = Clipboard.GetText();
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
 
-            Console.WriteLine(ExecuteJavaScript("for(let i=0;i<document.getElementsByTagName(\"script\").length;i++){var InnerHtml=document.getElementsByTagName(\"script\")[i].innerHTML;if(InnerHtml.includes(\"Copy\")||InnerHtml.includes(\"execCommand('Copy')\")||InnerHtml.includes(\"copied the key\")||InnerHtml.includes(\"createElement('input')\")){for(let lineNumber=0;lineNumber<InnerHtml.split(\"\\n\").length;lineNumber++){var Lines=InnerHtml.split(\"\\n\");if((Lines[lineNumber].includes(\"let\")||Lines[lineNumber].includes(\"var\"))&&Lines[lineNumber].includes(\" = (\\\"\")){var KeyLine=Lines[lineNumber];var Key=KeyLine.substring(KeyLine.indexOf(\"(\")+2,KeyLine.indexOf(\")\")-1);if(Key.length>=32){return Key;}}}break;}}"));
+            Console.WriteLine(ExecuteJavaScript(GetExploitReturnMethod()));
 
             Driver.Quit();
 
@@ -135,7 +146,7 @@ Button.click();
             
             DoCaptcha(What: 4, OutaWhat: 4, CaptchaUrl: "https://kiwiexploits.com/KeySystems/index.php", NextUrl: "https://kiwiexploits.com/KeySystems/index.php?", ScriptToExecute: "return true", ShowWindow: false);
 
-            Key.Text = ExecuteJavaScript("return document.getElementById(\"key\").innerText");
+            Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
             Driver.Quit();
             MessageBox.Show("You may now close all opened browser windows if still open!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
@@ -144,6 +155,17 @@ Button.click();
         {
             Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
 
+            while (Driver.PageSource.Contains("doing a security")) Task.Delay(100);
+
+            Task.Delay(1000);
+
+            if (Driver.PageSource.Contains("using this key you"))
+            {
+                Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated..."); 
+                Driver.Quit();
+                return;
+            }
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
 
@@ -159,7 +181,7 @@ Button.click();
             DoCaptcha(What: 4, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
             DoVertiseRedirect(What: 4, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
 
-            Key.Text = ExecuteJavaScript("return document.getElementsByClassName(\"form-control\")[0].value");
+            Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
 
@@ -177,7 +199,7 @@ Button.click();
             DoCaptcha(What: 2, OutaWhat: 2, CaptchaUrl: "novaline.club", NextUrl: "linkvertise", ScriptToExecute: "return true");
             DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000);
 
-            Key.Text = ExecuteJavaScript("return document.getElementById(\"createdKey\").value");
+            Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Novaline key has been generated...");
 
@@ -195,7 +217,7 @@ Button.click();
             DoVertiseRedirect(What: 1, OutaWhat: 2, WaitTime: 6000); 
             DoVertiseRedirect(What: 2, OutaWhat: 2, WaitTime: 6000);
 
-            ExecuteJavaScript("setTimeout(() => { copy_key() }, 1000);");
+            ExecuteJavaScript(GetExploitReturnMethod());
             Key.Text = Clipboard.GetText();
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Comet key has been generated...");
@@ -216,12 +238,12 @@ Button.click();
                 DoVertiseRedirect(What: 1, OutaWhat: 2, 7000);
                 DoVertiseRedirect(What: 2, OutaWhat: 2, 7000);
 
-                Key.Text = ExecuteJavaScript("return raw");
+                Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
                 Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
             }
             else if (Title == "Oxygen U" && GetUrl() == "https://oxygenu.xyz/KeySystem/Main.php")
             {
-                Key.Text = ExecuteJavaScript("return raw");
+                Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
                 Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Outputting key!");
             }
 
