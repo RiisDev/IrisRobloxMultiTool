@@ -110,7 +110,7 @@ namespace IrisRobloxMultiTool
 
             try
             {
-                string Json = Client.DownloadString($"https://api.roblox.com/marketplace/productinfo?assetId={ID}");
+                string Json = Client.DownloadString($"https://economy.roblox.com/v2/assets/{ID}/details");
 
                 JToken Data = JToken.Parse(Json);
 

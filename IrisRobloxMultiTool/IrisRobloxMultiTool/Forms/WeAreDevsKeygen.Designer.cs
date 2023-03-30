@@ -87,9 +87,10 @@
             this.SelectedExploit.ForeColor = System.Drawing.Color.White;
             this.SelectedExploit.ItemHeight = 30;
             this.SelectedExploit.Items.AddRange(new object[] {
+            "Krnl",
+            "Fluxus",
             "Kiwi X",
             "Oxygen U",
-            "Fluxus",
             "Novaline",
             "Comet"});
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);

@@ -23,13 +23,13 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        private bool DebugBrowser = false;
+        private bool DebugBrowser = true;
 
         private static readonly HttpClient Client = new HttpClient();
 
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
         {
-            {"https://cdn.discordapp.com/attachments/1044070738233151488/1046819875676495973/msedgedriver.exe", false},
+            {"https://cdn.discordapp.com/attachments/1044070738233151488/1091043335902343209/msedgedriver.exe", false},
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1044815404582842429/extension_1_45_2_0.crx", false },
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1045613743175892992/buster.crx", false}
         };
@@ -39,6 +39,11 @@ namespace IrisRobloxMultiTool.Forms
         public WeAreDevsKeygen()
         {
             InitializeComponent();
+
+            FormClosing += (e, r) =>
+            {
+                Driver.Close();
+            };
         }
 
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
@@ -59,22 +64,22 @@ document.body.prepend(Button);
 Button.click();
 ");
             while (GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
-            ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-            ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
+           // ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+           // ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
         }
 
         private void DoCaptcha(int What, int OutaWhat, string CaptchaUrl, string NextUrl, string ScriptToExecute, bool ShowWindow = true)
         {
-            ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-            ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
+          //  ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+           // ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
 
             ExecuteJavaScript(ScriptToExecute);
-            if (ShowWindow) { 
+            if (ShowWindow && !DebugBrowser) { 
                 Driver.Manage().Window.Size = new(500, 300);
                 Driver.Manage().Window.Position = new((Screen.PrimaryScreen.WorkingArea.Width / 2) - (Width / 2), (Screen.PrimaryScreen.WorkingArea.Height / 2) - (Height / 2));
             }
@@ -154,7 +159,7 @@ Button.click();
             DoCaptcha(What: 4, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
             DoVertiseRedirect(What: 4, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
 
-            Key.Text = ExecuteJavaScript("return document.getElementsByTagName(\"input\")[0].value");
+            Key.Text = ExecuteJavaScript("return document.getElementsByClassName(\"form-control\")[0].value");
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
 
@@ -295,7 +300,7 @@ Button.click();
                 {
                     string FileName = DownUrl.Substring(DownUrl.LastIndexOf("/") + 1);
 
-                    if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}"))
+                    if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}") && FileName != "msedgedriver.exe")
                     {
                         Downloads[DownUrl] = true;
                     }
@@ -348,7 +353,7 @@ Button.click();
 
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
 
-                ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+                //ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
                 Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
 
                 if (!DebugBrowser)
@@ -413,11 +418,11 @@ Button.click();
         {
             try
             {
-                JToken JsonData = JToken.Parse(Client.PostAsync("https://api.bypass.vip/", new FormUrlEncodedContent(new Dictionary<string, string>() { { "url", url } })).Result.Content.ReadAsStringAsync().Result);
+                JToken JsonData = JToken.Parse(Client.GetStringAsync($"https://bypass.pm/bypass2?url={url}").Result);
 
 
 
-                if (JsonData["sucess"] == null || JsonData["destination"] == null || JsonData["success"].ToString() == "false" || string.IsNullOrEmpty(JsonData["destination"].ToString()))
+                if (JsonData["success"] == null || JsonData["destination"] == null || JsonData["success"].ToString() == "false" || string.IsNullOrEmpty(JsonData["destination"].ToString()))
                 {
                     MessageBox.Show($"Failed to bypass please submit an issue request on github!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Driver.Quit();
@@ -447,6 +452,7 @@ Button.click();
         {
             try
             {
+                Console.WriteLine(script);
                 object Data = (Driver as IJavaScriptExecutor).ExecuteScript(script);
 
                 if (Data != null) return Data.ToString();
@@ -455,6 +461,8 @@ Button.click();
             catch (Exception ex)
             {
                 if (ex.ToString().Contains("document.body is null"))
+                    ExecuteJavaScript(script);
+                else if (ex.ToString().Contains("Cannot set properties of undefined (setting 'style')") && SelectedExploit.SelectedText == "Krnl")
                     ExecuteJavaScript(script);
                 else
                 {
