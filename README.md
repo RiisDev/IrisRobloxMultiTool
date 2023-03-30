@@ -4,10 +4,7 @@
 
 Offers a selection of tools to help within your roblox experience.
 
-![](https://img.shields.io/badge/License-GNU%20AGPL%20v3-yellow.svg)
-![](https://img.shields.io/github/downloads/IrisV3rm/IrisRobloxMultiTool/total) 
-![](https://img.shields.io/twitch/status/irisdev?style=social)
-![](https://img.shields.io/youtube/channel/subscribers/UC7eKTp0XmY1WwrLBndraSHA?style=social)
+![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) [![Support Server](https://img.shields.io/discord/477201632204161025.svg?label=Discord&logo=Discord&colorB=7289da&style=for-the-badge)](https://discord.gg/7mJaZC5) ![GitHub](https://img.shields.io/github/license/IrisV3rm/iOverlay?style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/IrisV3rm/IrisRobloxMultiTool/total?style=for-the-badge)
 ## Features
 
 - Asset Downloader
