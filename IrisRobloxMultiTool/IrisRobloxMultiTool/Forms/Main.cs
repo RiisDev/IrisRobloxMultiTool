@@ -39,6 +39,16 @@ namespace IrisRobloxMultiTool
 
         private void CheckWebView()
         {
+            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            if (currentDirectory.Contains(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\OneDrive")) {
+                MessageBox.Show("IRMT Cannot run within a OneDrive directory.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+            if (!File.Exists($"{currentDirectory}\\bin\\dlls\\WebView2Loader.dll"))
+            {
+                MessageBox.Show("IRMT is missing required redistributable: 'WebView2Loader.dll'\nPlease verify it's located in \\bin\\dlls or reinstall.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
             if (!WebViewInstalled())
             {
                 DialogResult Diag = MessageBox.Show("WebView2 is not installed, would you like to install it?", "IRMT", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);

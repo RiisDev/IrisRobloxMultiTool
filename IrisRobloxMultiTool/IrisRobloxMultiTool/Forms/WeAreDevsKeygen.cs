@@ -10,6 +10,7 @@ using SeleniumExtras.WaitHelpers;
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -43,7 +44,7 @@ namespace IrisRobloxMultiTool.Forms
 
             FormClosing += (e, r) =>
             {
-                Driver.Close();
+                Driver.Quit();
             };
         }
 
@@ -75,16 +76,12 @@ document.body.prepend(Button);
 Button.click();
 ");
             while (GetUrl().Contains("linkvertise")) Task.Delay(5).Wait();
-           // ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-           // ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What++}/{OutaWhat} Passed...");
         }
 
         private void DoCaptcha(int What, int OutaWhat, string CaptchaUrl, string NextUrl, string ScriptToExecute, bool ShowWindow = true)
         {
-          //  ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-           // ExecuteJavaScript("Object.defineProperty(navigator, 'deviceMemory', {get: () => 8 });");
             while (!GetUrl().Contains(CaptchaUrl)) Task.Delay(25).Wait();
 
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Captcha {What}/{OutaWhat} Started...");
@@ -153,39 +150,47 @@ Button.click();
 
         private void DoKrnlBypass()
         {
-            Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
-
-            while (Driver.PageSource.Contains("doing a security")) Task.Delay(100);
-
-            Task.Delay(1000);
-
-            if (Driver.PageSource.Contains("using this key you"))
+            try
             {
+                Driver.Navigate().GoToUrl("https://cdn.krnl.place/getkey.php");
+
+                while (Driver.PageSource.Contains("doing a security")) Task.Delay(100);
+
+                Task.Delay(1000);
+
+                if (Driver.PageSource.Contains("using this key you"))
+                {
+                    Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
+                    Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
+                    Driver.Quit();
+                    return;
+                }
+
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
+
+                DoCaptcha(What: 1, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place/getkey", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+                DoVertiseRedirect(What: 1, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
+
+                DoCaptcha(What: 2, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+                DoVertiseRedirect(What: 2, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
+
+                DoCaptcha(What: 3, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+                DoVertiseRedirect(What: 3, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
+
+                DoCaptcha(What: 4, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
+                DoVertiseRedirect(What: 4, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
+
                 Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
-                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated..."); 
+
+                Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
+
                 Driver.Quit();
-                return;
             }
-
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl chosen, please solve the captcha! 1/4");
-
-            DoCaptcha(What: 1, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place/getkey", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
-            DoVertiseRedirect(What: 1, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
-
-            DoCaptcha(What: 2, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
-            DoVertiseRedirect(What: 2, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
-
-            DoCaptcha(What: 3, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
-            DoVertiseRedirect(What: 3, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
-
-            DoCaptcha(What: 4, OutaWhat: 4, CaptchaUrl: "cdn.krnl.place", NextUrl: "linkvertise", ScriptToExecute: "document.body.prepend(document.getElementsByTagName(\"form\")[0]);document.getElementsByClassName(\"form-group\")[0].style = \"\"");
-            DoVertiseRedirect(What: 4, OutaWhat: 4, WaitTime: 20000, AdditionalInfo: "(Please wait 20 seconds per linkvertise)");
-
-            Key.Text = ExecuteJavaScript(GetExploitReturnMethod());
-
-            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Krnl key has been generated...");
-
-            Driver.Quit();
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Please do not close edge while the bypasser is running...", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            }
         }
 
         private void DoNovalineBypass()
@@ -255,7 +260,7 @@ Button.click();
 
             GenerateKey.Enabled = false;
             LogBox.Clear();
-           Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Running, please wait... (May take up to a minute for some exploits)");
+            Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, "Running, please wait... (May take up to a minute for some exploits)");
 
             try
             {
@@ -294,34 +299,82 @@ Button.click();
             }
         }
 
-        private async void WeAreDevsKeygen_Load(object sender, EventArgs e)
+        private void WeAreDevsKeygen_Load(object sender, EventArgs e)
         {
-            Process.GetProcessesByName("msedgedriver").ToList().ForEach(Proc => Proc.Kill());
-
             new Task(() =>
             {
-                APIChecker Checker = new APIChecker();
-
-                Tuple<string, Color> Data = Checker.GetLinkvertiseStatus();
-
-                Status.Invoke(new Action(() =>
+                using (APIChecker checker = new APIChecker())
                 {
-                    Status.Text = Data.Item1;
-                    Status.ForeColor = Data.Item2;
-                }));
+                    Tuple<string, Color> data = checker.GetLinkvertiseStatus();
 
-
-                Checker.Dispose();
-
+                    Status.Invoke(() =>
+                    {
+                        Status.Text = data.Item1;
+                        Status.ForeColor = data.Item2;
+                    });
+                }
             }).Start();
+
+            KillEdgeProcessesAsync();
+            CheckEdgeInstallationAsync();
 
             DialogResult dialogResult = MessageBox.Show($"Edge detected, download required binaries??", "Iris Roblox MultiTool", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
-                foreach (string DownUrl in Downloads.Keys.ToList())
-                {
-                    string FileName = DownUrl.Substring(DownUrl.LastIndexOf("/") + 1);
+                DownloadRequiredFilesAsync();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                MessageBox.Show("Unable to continue with keygen, please reload.", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            do
+            {
+                Task.Delay(50);
+            } while (!Downloads.Values.Any(c => c == true));
+
+            MessageBox.Show("Download completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            RunEdgeDriver();
+        }
+
+        private void KillEdgeProcessesAsync()
+        {
+            Process.GetProcessesByName("msedgedriver").ToList().ForEach(Proc => Proc.Kill());
+
+            DialogResult closeResult = MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+            if (closeResult == DialogResult.Cancel) return;
+
+            Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
+        }
+
+        private void CheckEdgeInstallationAsync()
+        {
+            try
+            {
+                if (!File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\\Microsoft\\Edge\\Application\\msedge.exe"))
+                {
+                    MessageBox.Show("IRMT Cannot run without 'Microsoft Edge' installed.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(0);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("IRMT Cannot run without 'Microsoft Edge' installed. (Error Code 0x5)", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+        }
+
+        private void DownloadRequiredFilesAsync()
+        {
+            foreach (string DownUrl in Downloads.Keys.ToList())
+            {
+                string FileName = DownUrl.Substring(DownUrl.LastIndexOf("/") + 1);
+
+                try
+                {
                     if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}") && FileName != "msedgedriver.exe")
                     {
                         Downloads[DownUrl] = true;
@@ -338,20 +391,15 @@ Button.click();
                         }
                     }
                 }
+                catch
+                {
+                    MessageBox.Show("An error occurred while trying to download required files. Please reinstall/restart computer!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else if (dialogResult == DialogResult.No)
-            {
-                MessageBox.Show("Unable to continue with keygen, please reload.", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+        }
 
-            do
-            {
-                await Task.Delay(50);
-            } while (!Downloads.Values.Any(c=> c == true));
-
-            MessageBox.Show("Download completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+        private void RunEdgeDriver()
+        {
             try
             {
                 EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
@@ -364,9 +412,9 @@ Button.click();
                 edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
                 edgeOptions.AddArgument("--disable-blink-features");
                 edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
-                
-                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
-                edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
+
+                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
+                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
 
                 edgeOptions.AddAdditionalOption("useAutomationExtension", false);
                 edgeOptions.AddAdditionalOption("disable-infobars", false);
@@ -376,7 +424,7 @@ Button.click();
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
 
                 //ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-                Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>(){ { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
+                Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>() { { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
 
                 if (!DebugBrowser)
                     Driver.Manage().Window.Position = new(-2000, -2000);
@@ -388,11 +436,16 @@ Button.click();
                     MessageBox.Show($"Edge cannot be found, is it installed?", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            catch (Win32Exception)
+            {
+                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            }
 
             if (!DebugBrowser)
                 Driver.Manage().Window.Position = new(-2000, -2000);
-
         }
+
 
         private void LogBox_TextChanged(object sender, EventArgs e)
         {
