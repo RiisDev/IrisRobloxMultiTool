@@ -32,8 +32,6 @@ namespace IrisRobloxMultiTool.Forms
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
         {
             {"https://cdn.discordapp.com/attachments/1044070738233151488/1091043335902343209/msedgedriver.exe", false},
-            {"https://cdn.discordapp.com/attachments/1044070738233151488/1044815404582842429/extension_1_45_2_0.crx", false },
-            {"https://cdn.discordapp.com/attachments/1044070738233151488/1045613743175892992/buster.crx", false}
         };
 
         EdgeDriver Driver;
@@ -339,13 +337,14 @@ Button.click();
             RunEdgeDriver();
         }
 
-        private void KillEdgeProcessesAsync()
+        private void KillEdgeProcessesAsync(bool ask = true)
         {
             Process.GetProcessesByName("msedgedriver").ToList().ForEach(Proc => Proc.Kill());
 
             DialogResult closeResult = MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
 
-            if (closeResult == DialogResult.Cancel) return;
+            if(ask)
+                if (closeResult == DialogResult.Cancel) return;
 
             Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
         }
@@ -411,11 +410,7 @@ Button.click();
                 edgeOptions.AddArgument("--enable-logging");
                 edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
                 edgeOptions.AddArgument("--disable-blink-features");
-                edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"); // Here we try to set Firefox user agent...
-
-                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\extension_1_45_2_0.crx");
-                //edgeOptions.AddExtension($"{Program.Directory}\\bin\\drivers\\buster.crx");
-
+                edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
                 edgeOptions.AddAdditionalOption("useAutomationExtension", false);
                 edgeOptions.AddAdditionalOption("disable-infobars", false);
 
@@ -423,7 +418,6 @@ Button.click();
 
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
 
-                //ExecuteJavaScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
                 Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>() { { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
 
                 if (!DebugBrowser)
@@ -436,9 +430,12 @@ Button.click();
                     MessageBox.Show($"Edge cannot be found, is it installed?", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Win32Exception)
+            catch (Win32Exception ex)
             {
-                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                KillEdgeProcessesAsync(false);
+                Directory.Delete($"{Program.Directory}\\bin\\drivers", true); 
+                Clipboard.SetText(ex.ToString());
+                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus. The error has been copied to clipboard please send to Iris#0410\nError: " + ex.ToString(), "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
 
