@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.DevTools.V107.IndexedDB;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
@@ -25,13 +24,13 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
-        private bool DebugBrowser = true;
+        private bool DebugBrowser = false;
 
         private static readonly HttpClient Client = new HttpClient();
 
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
         {
-            {"https://cdn.discordapp.com/attachments/1044070738233151488/1091043335902343209/msedgedriver.exe", false},
+            {"https://irisapp.ca/IRMT/drivers/msedgedriver.exe", false},
         };
 
         EdgeDriver Driver;
@@ -319,6 +318,7 @@ Button.click();
             DialogResult dialogResult = MessageBox.Show($"Edge detected, download required binaries??", "Iris Roblox MultiTool", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
+                downloadingObjectsPanel.Visible = true;
                 DownloadRequiredFilesAsync();
             }
             else if (dialogResult == DialogResult.No)
@@ -327,10 +327,7 @@ Button.click();
                 return;
             }
 
-            do
-            {
-                Task.Delay(50);
-            } while (!Downloads.Values.Any(c => c == true));
+            downloadingObjectsPanel.Visible = false;
 
             MessageBox.Show("Download completed, you may proceed!", "Iris Roblox MultiTool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -341,10 +338,12 @@ Button.click();
         {
             Process.GetProcessesByName("msedgedriver").ToList().ForEach(Proc => Proc.Kill());
 
-            DialogResult closeResult = MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-
-            if(ask)
+            if (ask)
+            {
+                DialogResult closeResult = MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (closeResult == DialogResult.Cancel) return;
+            }
+            
 
             Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
         }
@@ -366,39 +365,45 @@ Button.click();
             }
         }
 
-        private void DownloadRequiredFilesAsync()
+        private async void DownloadRequiredFilesAsync()
         {
+            KillEdgeProcessesAsync(false);
+            Directory.Delete($"{Program.Directory}\\bin\\drivers", true);
+            Directory.CreateDirectory($"{Program.Directory}\\bin\\drivers");
             foreach (string DownUrl in Downloads.Keys.ToList())
             {
                 string FileName = DownUrl.Substring(DownUrl.LastIndexOf("/") + 1);
-
+                
                 try
                 {
-                    if (File.Exists($"{Program.Directory}\\bin\\drivers\\{FileName}") && FileName != "msedgedriver.exe")
+                    using (WebClient Client = new WebClient())
                     {
-                        Downloads[DownUrl] = true;
-                    }
-                    else
-                    {
-                        using (WebClient Client = new WebClient())
+                        Client.DownloadFileCompleted += (_, __) =>
                         {
-                            Client.DownloadFileCompleted += (_, __) =>
-                            {
-                                Downloads[DownUrl] = true;
-                            };
-                            Client.DownloadFileAsync(new Uri(DownUrl), $"{Program.Directory}\\bin\\drivers\\{FileName}");
-                        }
+                            Downloads[DownUrl] = true;
+                        };
+                        Client.DownloadProgressChanged += (_, progres) =>
+                        {
+                            downloadProgress.Value = progres.ProgressPercentage;
+                        };
+                        downloadItemName.Text = FileName;
+                        Client.DownloadFileAsync(new Uri(DownUrl), $"{Program.Directory}\\bin\\drivers\\{FileName}");
                     }
+                    do
+                    {
+                        await Task.Delay(1);
+                    } while (!Downloads[DownUrl]);
                 }
                 catch
                 {
-                    MessageBox.Show("An error occurred while trying to download required files. Please reinstall/restart computer!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("An error occurred while trying to download required files. Please reinstall and or restart computer!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void RunEdgeDriver()
         {
+            KillEdgeProcessesAsync(false);
             try
             {
                 EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
@@ -409,6 +414,7 @@ Button.click();
                 edgeOptions.AddArgument("--disable-dev-shm-usage");
                 edgeOptions.AddArgument("--enable-logging");
                 edgeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+                edgeOptions.AddArgument("--remote-allow-origins=*");
                 edgeOptions.AddArgument("--disable-blink-features");
                 edgeOptions.AddArgument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
                 edgeOptions.AddAdditionalOption("useAutomationExtension", false);
@@ -425,17 +431,21 @@ Button.click();
             }
             catch (WebDriverException ex)
             {
+                KillEdgeProcessesAsync(false);
                 if (ex.ToString().Contains("cannot find"))
                 {
                     MessageBox.Show($"Edge cannot be found, is it installed?", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (ex.ToString().Contains("not connected to"))
+                {
+                    MessageBox.Show("Please check if edge is updated:\n1) Open Edge\n2) Put this into the url 'edge://settings/help'\n3) Update");
                 }
             }
             catch (Win32Exception ex)
             {
                 KillEdgeProcessesAsync(false);
-                Directory.Delete($"{Program.Directory}\\bin\\drivers", true); 
                 Clipboard.SetText(ex.ToString());
-                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus. The error has been copied to clipboard please send to Iris#0410\nError: " + ex.ToString(), "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus. The error has been copied to clipboard please send to Iris#0410", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
 
