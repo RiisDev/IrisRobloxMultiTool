@@ -12,6 +12,8 @@ namespace IrisRobloxMultiTool.Classes
     {
         public void SafeShutdown()
         {
+            Process.GetProcessesByName("msedgedriver").ToList().ForEach(Proc => Proc.Kill());
+            Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
             Process.GetCurrentProcess().Kill();
         }
 

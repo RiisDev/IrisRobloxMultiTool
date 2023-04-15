@@ -16,7 +16,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,8 +27,8 @@ namespace IrisRobloxMultiTool.Forms
 {
     public partial class WeAreDevsKeygen : Form
     {
+        private int retryStartingBrowser = 0;
         private bool DebugBrowser = false;
-
         private static readonly HttpClient Client = new HttpClient();
 
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
@@ -43,6 +46,23 @@ namespace IrisRobloxMultiTool.Forms
             {
                 Driver.Quit();
             };
+        }
+
+        public static bool IsEdgeDriverPortTaken()
+        {
+
+            try
+            {
+                using (TcpClient tcpClient = new TcpClient())
+                {
+                    tcpClient.Connect("localhost", 9515);
+                    return true;
+                }
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
         }
 
         private string GetExploitReturnMethod()
@@ -340,12 +360,14 @@ Button.click();
 
             if (ask)
             {
-                DialogResult closeResult = MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-                if (closeResult == DialogResult.Cancel) return;
+                if (MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel) return;
+                Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
+            }
+            else
+            {
+                Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
             }
             
-
-            Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
         }
 
         private void CheckEdgeInstallationAsync()
@@ -401,12 +423,13 @@ Button.click();
             }
         }
 
-        private void RunEdgeDriver()
+        private async void RunEdgeDriver()
         {
-            KillEdgeProcessesAsync(false);
+            while (IsEdgeDriverPortTaken()) KillEdgeProcessesAsync(false);
+
             try
             {
-                EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
+                EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers", $"{Directory.GetFiles($"{Program.Directory}\\bin\\drivers").First()}");
                 EdgeOptions edgeOptions = new EdgeOptions();
 
                 edgeOptions.AddArgument("--window-size=1920x1080");
@@ -444,9 +467,19 @@ Button.click();
             catch (Win32Exception ex)
             {
                 KillEdgeProcessesAsync(false);
-                Clipboard.SetText(ex.ToString());
-                MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus. The error has been copied to clipboard please send to Iris#0410", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(-1);
+                if (retryStartingBrowser > 4)
+                {
+                    Clipboard.SetText(ex.ToString());
+                    MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+                else
+                {
+                    retryStartingBrowser++;
+                    Program.LogInterface.DoLog(LogBox, LogInterface.LogType.Error, $"Failed to start browser, retrying... {retryStartingBrowser}/5");
+                    await Task.Delay(1000);
+                    RunEdgeDriver();
+                }
             }
 
             if (!DebugBrowser)
@@ -501,8 +534,6 @@ Button.click();
             try
             {
                 JToken JsonData = JToken.Parse(Client.GetStringAsync($"https://bypass.pm/bypass2?url={url}").Result);
-
-
 
                 if (JsonData["success"] == null || JsonData["destination"] == null || JsonData["success"].ToString() == "false" || string.IsNullOrEmpty(JsonData["destination"].ToString()))
                 {
