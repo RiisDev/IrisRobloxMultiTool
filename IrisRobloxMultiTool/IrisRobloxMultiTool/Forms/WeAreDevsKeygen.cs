@@ -28,7 +28,7 @@ namespace IrisRobloxMultiTool.Forms
     public partial class WeAreDevsKeygen : Form
     {
         private int retryStartingBrowser = 0;
-        private bool DebugBrowser = false;
+        private bool DebugBrowser = true;
         private static readonly HttpClient Client = new HttpClient();
 
         Dictionary<string, bool> Downloads = new Dictionary<string, bool>()
@@ -48,21 +48,13 @@ namespace IrisRobloxMultiTool.Forms
             };
         }
 
-        public static bool IsEdgeDriverPortTaken()
+        private static int GetFreeTcpPort()
         {
-
-            try
-            {
-                using (TcpClient tcpClient = new TcpClient())
-                {
-                    tcpClient.Connect("localhost", 9515);
-                    return true;
-                }
-            }
-            catch (SocketException)
-            {
-                return false;
-            }
+            var l = new TcpListener(IPAddress.Loopback, 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            return port;
         }
 
         private string GetExploitReturnMethod()
@@ -75,6 +67,7 @@ namespace IrisRobloxMultiTool.Forms
 
             return toReturn;
         }
+
         private void DoVertiseRedirect(int What, int OutaWhat, int WaitTime, string AdditionalInfo = "")
         {
             Program.LogInterface.DoLog(LogBox, LogInterface.LogType.System, $"Linkvertise {What}/{OutaWhat} Started {AdditionalInfo}...");
@@ -203,8 +196,9 @@ Button.click();
 
                 Driver.Quit();
             }
-            catch (NullReferenceException)
+            catch (NullReferenceException ex)
             {
+                Program.Global.HandleException(ex);
                 MessageBox.Show("Please do not close edge while the bypasser is running...", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
@@ -304,10 +298,9 @@ Button.click();
                 }
             } catch (WebDriverException ex)
             {
+                Program.Global.HandleException(ex);
                 if (ex.ToString().Contains("Reached error"))
-                {
                     MessageBox.Show("Page URL Invalid", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
                 else
                 {
                     MessageBox.Show("Unknown error occured while bypassing, please restart the application!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -363,11 +356,7 @@ Button.click();
                 if (MessageBox.Show("Microsoft edge process is about to be killed, if you use it please save your data and exit safely and click OK.", "IRMT", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel) return;
                 Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
             }
-            else
-            {
-                Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
-            }
-            
+            else Process.GetProcessesByName("msedge").ToList().ForEach(Proc => Proc.Kill());
         }
 
         private void CheckEdgeInstallationAsync()
@@ -392,6 +381,7 @@ Button.click();
             KillEdgeProcessesAsync(false);
             Directory.Delete($"{Program.Directory}\\bin\\drivers", true);
             Directory.CreateDirectory($"{Program.Directory}\\bin\\drivers");
+
             foreach (string DownUrl in Downloads.Keys.ToList())
             {
                 string FileName = DownUrl.Substring(DownUrl.LastIndexOf("/") + 1);
@@ -416,8 +406,9 @@ Button.click();
                         await Task.Delay(1);
                     } while (!Downloads[DownUrl]);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Program.Global.HandleException(ex);
                     MessageBox.Show("An error occurred while trying to download required files. Please reinstall and or restart computer!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -425,12 +416,17 @@ Button.click();
 
         private async void RunEdgeDriver()
         {
-            while (IsEdgeDriverPortTaken()) KillEdgeProcessesAsync(false);
-
+            Program.Global.HandleException(new Exception("BEGIN LOG"));
+            KillEdgeProcessesAsync(false);
             try
             {
-                EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers", $"{Directory.GetFiles($"{Program.Directory}\\bin\\drivers").First()}");
+                EdgeDriverService edgeDriverService = EdgeDriverService.CreateDefaultService($"{Program.Directory}\\bin\\drivers");
                 EdgeOptions edgeOptions = new EdgeOptions();
+
+                edgeDriverService.Port = GetFreeTcpPort();
+                edgeDriverService.LogPath = $"{Program.Directory}\\bin\\cache\\Log_{Program.logId}.txt";
+                edgeDriverService.EnableAppendLog = true;
+                edgeDriverService.HideCommandPromptWindow = true;
 
                 edgeOptions.AddArgument("--window-size=1920x1080");
                 edgeOptions.AddArgument("--no-sandbox");
@@ -443,9 +439,11 @@ Button.click();
                 edgeOptions.AddAdditionalOption("useAutomationExtension", false);
                 edgeOptions.AddAdditionalOption("disable-infobars", false);
 
-                edgeDriverService.HideCommandPromptWindow = true;
+                await Task.Delay(750);
 
                 Driver = new EdgeDriver(edgeDriverService, edgeOptions);
+
+                await Task.Delay(750);
 
                 Driver.ExecuteCdpCommand("Network.setUserAgentOverride", new Dictionary<string, object>() { { "userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" } });
 
@@ -454,22 +452,21 @@ Button.click();
             }
             catch (WebDriverException ex)
             {
+                Program.Global.HandleException(ex);
                 KillEdgeProcessesAsync(false);
+
                 if (ex.ToString().Contains("cannot find"))
-                {
                     MessageBox.Show($"Edge cannot be found, is it installed?", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
                 else if (ex.ToString().Contains("not connected to"))
-                {
                     MessageBox.Show("Please check if edge is updated:\n1) Open Edge\n2) Put this into the url 'edge://settings/help'\n3) Update");
-                }
             }
             catch (Win32Exception ex)
             {
+                Program.Global.HandleException(ex);
                 KillEdgeProcessesAsync(false);
+
                 if (retryStartingBrowser > 4)
                 {
-                    Clipboard.SetText(ex.ToString());
                     MessageBox.Show("An error occured while launching the bypasser, please restart computer and disable any antivirus.", "IRMT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(-1);
                 }
@@ -477,9 +474,14 @@ Button.click();
                 {
                     retryStartingBrowser++;
                     Program.LogInterface.DoLog(LogBox, LogInterface.LogType.Error, $"Failed to start browser, retrying... {retryStartingBrowser}/5");
+                    DownloadRequiredFilesAsync(); 
                     await Task.Delay(1000);
                     RunEdgeDriver();
                 }
+            }
+            catch (Exception ex)
+            {
+                Program.Global.HandleException(ex);
             }
 
             if (!DebugBrowser)
@@ -546,8 +548,9 @@ Button.click();
 
                 return JsonData["destination"].ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                Program.Global.HandleException(ex);
                 MessageBox.Show($"Failed to bypass please submit an issue request on github!", "Iris Roblox MutliTool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Driver.Quit();
                 return string.Empty;
@@ -565,7 +568,6 @@ Button.click();
         {
             try
             {
-                Console.WriteLine(script);
                 object Data = (Driver as IJavaScriptExecutor).ExecuteScript(script);
 
                 if (Data != null) return Data.ToString();
@@ -573,6 +575,7 @@ Button.click();
             }
             catch (Exception ex)
             {
+                Program.Global.HandleException(ex);
                 if (ex.ToString().Contains("document.body is null"))
                     ExecuteJavaScript(script);
                 else if (ex.ToString().Contains("Cannot set properties of undefined (setting 'style')") && SelectedExploit.SelectedText == "Krnl")
@@ -592,13 +595,14 @@ Button.click();
         {
             try
             {
-                if (Driver.WindowHandles == null)
+                if (Driver == null || Driver.WindowHandles == null)
                     return "";
 
                 return Driver.SwitchTo().Window(Driver.WindowHandles.Last()).Url;
             }
-            catch
+            catch (Exception ex)
             {
+                Program.Global.HandleException(ex); 
                 return "";
             }
         }

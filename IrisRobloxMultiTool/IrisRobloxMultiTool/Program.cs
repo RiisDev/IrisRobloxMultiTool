@@ -9,6 +9,7 @@ namespace IrisRobloxMultiTool
 {
     internal static class Program
     { 
+        public static string logId = Guid.NewGuid().ToString();
         public static string Directory = AppDomain.CurrentDomain.BaseDirectory;
         public static GlobalCalls Global = new();
         public static DataHandler DataHandler = new();
