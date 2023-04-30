@@ -34,18 +34,20 @@
             this.Key = new Guna.UI2.WinForms.Guna2TextBox();
             this.LogBox = new VertexFramework.UIControls.VRichTextBox();
             this.Mainpanel = new System.Windows.Forms.Panel();
+            this.downloadingObjectsPanel = new System.Windows.Forms.Panel();
+            this.downloadItemName = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.downloadProgress = new Guna.UI2.WinForms.Guna2CircleProgressBar();
             this.StarterUrl = new Guna.UI2.WinForms.Guna2TextBox();
+            this.autoSolveCaptcha = new Guna.UI2.WinForms.Guna2ToggleSwitch();
+            this.label3 = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.StatusPanel = new Guna.UI2.WinForms.Guna2ShadowPanel();
             this.Status = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.downloadingObjectsPanel = new System.Windows.Forms.Panel();
-            this.downloadProgress = new Guna.UI2.WinForms.Guna2CircleProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.downloadItemName = new System.Windows.Forms.Label();
             this.Mainpanel.SuspendLayout();
-            this.StatusPanel.SuspendLayout();
             this.downloadingObjectsPanel.SuspendLayout();
+            this.StatusPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // GenerateKey
@@ -97,7 +99,8 @@
             "Kiwi X",
             "Oxygen U",
             "Novaline",
-            "Comet"});
+            "Comet",
+            "CAPTCHA_TEST"});
             this.SelectedExploit.Location = new System.Drawing.Point(101, 97);
             this.SelectedExploit.Name = "SelectedExploit";
             this.SelectedExploit.Size = new System.Drawing.Size(174, 36);
@@ -134,7 +137,7 @@
             this.LogBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LogBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.LogBox.ForeColor = System.Drawing.Color.White;
-            this.LogBox.Location = new System.Drawing.Point(25, 218);
+            this.LogBox.Location = new System.Drawing.Point(25, 229);
             this.LogBox.Name = "LogBox";
             this.LogBox.ReadOnly = true;
             this.LogBox.Size = new System.Drawing.Size(543, 91);
@@ -152,10 +155,66 @@
             this.Mainpanel.Controls.Add(this.LogBox);
             this.Mainpanel.Controls.Add(this.CopyKey);
             this.Mainpanel.Controls.Add(this.GenerateKey);
+            this.Mainpanel.Controls.Add(this.autoSolveCaptcha);
+            this.Mainpanel.Controls.Add(this.label3);
             this.Mainpanel.Location = new System.Drawing.Point(12, 12);
             this.Mainpanel.Name = "Mainpanel";
             this.Mainpanel.Size = new System.Drawing.Size(602, 341);
             this.Mainpanel.TabIndex = 16;
+            // 
+            // downloadingObjectsPanel
+            // 
+            this.downloadingObjectsPanel.Controls.Add(this.downloadItemName);
+            this.downloadingObjectsPanel.Controls.Add(this.label2);
+            this.downloadingObjectsPanel.Controls.Add(this.downloadProgress);
+            this.downloadingObjectsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.downloadingObjectsPanel.Location = new System.Drawing.Point(0, 0);
+            this.downloadingObjectsPanel.Name = "downloadingObjectsPanel";
+            this.downloadingObjectsPanel.Size = new System.Drawing.Size(600, 339);
+            this.downloadingObjectsPanel.TabIndex = 18;
+            this.downloadingObjectsPanel.Visible = false;
+            // 
+            // downloadItemName
+            // 
+            this.downloadItemName.AutoSize = true;
+            this.downloadItemName.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.downloadItemName.ForeColor = System.Drawing.Color.White;
+            this.downloadItemName.Location = new System.Drawing.Point(272, 218);
+            this.downloadItemName.Name = "downloadItemName";
+            this.downloadItemName.Size = new System.Drawing.Size(27, 26);
+            this.downloadItemName.TabIndex = 60;
+            this.downloadItemName.Text = "...";
+            this.downloadItemName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(35, 218);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(240, 26);
+            this.label2.TabIndex = 59;
+            this.label2.Text = "Currently Downloading:";
+            // 
+            // downloadProgress
+            // 
+            this.downloadProgress.Animated = true;
+            this.downloadProgress.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.downloadProgress.FillThickness = 12;
+            this.downloadProgress.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.downloadProgress.ForeColor = System.Drawing.Color.White;
+            this.downloadProgress.Location = new System.Drawing.Point(210, 32);
+            this.downloadProgress.Minimum = 0;
+            this.downloadProgress.Name = "downloadProgress";
+            this.downloadProgress.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(61)))), ((int)(((byte)(211)))));
+            this.downloadProgress.ProgressColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(3)))), ((int)(((byte)(183)))));
+            this.downloadProgress.ProgressThickness = 12;
+            this.downloadProgress.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.downloadProgress.ShowText = true;
+            this.downloadProgress.Size = new System.Drawing.Size(170, 170);
+            this.downloadProgress.TabIndex = 0;
+            this.downloadProgress.Text = "downloadProgress";
             // 
             // StarterUrl
             // 
@@ -179,6 +238,34 @@
             this.StarterUrl.Size = new System.Drawing.Size(472, 22);
             this.StarterUrl.TabIndex = 17;
             this.StarterUrl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // autoSolveCaptcha
+            // 
+            this.autoSolveCaptcha.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.autoSolveCaptcha.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.autoSolveCaptcha.CheckedState.InnerBorderColor = System.Drawing.Color.White;
+            this.autoSolveCaptcha.CheckedState.InnerColor = System.Drawing.Color.White;
+            this.autoSolveCaptcha.Enabled = false;
+            this.autoSolveCaptcha.Location = new System.Drawing.Point(352, 198);
+            this.autoSolveCaptcha.Name = "autoSolveCaptcha";
+            this.autoSolveCaptcha.Size = new System.Drawing.Size(35, 20);
+            this.autoSolveCaptcha.TabIndex = 61;
+            this.autoSolveCaptcha.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.autoSolveCaptcha.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.autoSolveCaptcha.UncheckedState.InnerBorderColor = System.Drawing.Color.White;
+            this.autoSolveCaptcha.UncheckedState.InnerColor = System.Drawing.Color.White;
+            this.autoSolveCaptcha.CheckedChanged += new System.EventHandler(this.autoSolveCaptcha_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(170, 201);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(177, 17);
+            this.label3.TabIndex = 59;
+            this.label3.Text = "Attempt Auto Solve Captcha?";
             // 
             // TitleLabel
             // 
@@ -227,60 +314,6 @@
             this.label1.Text = "Bypass API Status";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // downloadingObjectsPanel
-            // 
-            this.downloadingObjectsPanel.Controls.Add(this.downloadItemName);
-            this.downloadingObjectsPanel.Controls.Add(this.label2);
-            this.downloadingObjectsPanel.Controls.Add(this.downloadProgress);
-            this.downloadingObjectsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.downloadingObjectsPanel.Location = new System.Drawing.Point(0, 0);
-            this.downloadingObjectsPanel.Name = "downloadingObjectsPanel";
-            this.downloadingObjectsPanel.Size = new System.Drawing.Size(600, 339);
-            this.downloadingObjectsPanel.TabIndex = 18;
-            this.downloadingObjectsPanel.Visible = false;
-            // 
-            // downloadProgress
-            // 
-            this.downloadProgress.Animated = true;
-            this.downloadProgress.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.downloadProgress.FillThickness = 12;
-            this.downloadProgress.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.downloadProgress.ForeColor = System.Drawing.Color.White;
-            this.downloadProgress.Location = new System.Drawing.Point(210, 32);
-            this.downloadProgress.Minimum = 0;
-            this.downloadProgress.Name = "downloadProgress";
-            this.downloadProgress.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(61)))), ((int)(((byte)(211)))));
-            this.downloadProgress.ProgressColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(3)))), ((int)(((byte)(183)))));
-            this.downloadProgress.ProgressThickness = 12;
-            this.downloadProgress.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.downloadProgress.ShowText = true;
-            this.downloadProgress.Size = new System.Drawing.Size(170, 170);
-            this.downloadProgress.TabIndex = 0;
-            this.downloadProgress.Text = "downloadProgress";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(35, 218);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(240, 26);
-            this.label2.TabIndex = 59;
-            this.label2.Text = "Currently Downloading:";
-            // 
-            // downloadItemName
-            // 
-            this.downloadItemName.AutoSize = true;
-            this.downloadItemName.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.downloadItemName.ForeColor = System.Drawing.Color.White;
-            this.downloadItemName.Location = new System.Drawing.Point(272, 218);
-            this.downloadItemName.Name = "downloadItemName";
-            this.downloadItemName.Size = new System.Drawing.Size(27, 26);
-            this.downloadItemName.TabIndex = 60;
-            this.downloadItemName.Text = "...";
-            this.downloadItemName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // WeAreDevsKeygen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -295,9 +328,10 @@
             this.Text = "WeAreDevsKeygen";
             this.Load += new System.EventHandler(this.WeAreDevsKeygen_Load);
             this.Mainpanel.ResumeLayout(false);
-            this.StatusPanel.ResumeLayout(false);
+            this.Mainpanel.PerformLayout();
             this.downloadingObjectsPanel.ResumeLayout(false);
             this.downloadingObjectsPanel.PerformLayout();
+            this.StatusPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -320,5 +354,7 @@
         private System.Windows.Forms.Label downloadItemName;
         private System.Windows.Forms.Label label2;
         private Guna.UI2.WinForms.Guna2CircleProgressBar downloadProgress;
+        private Guna.UI2.WinForms.Guna2ToggleSwitch autoSolveCaptcha;
+        private System.Windows.Forms.Label label3;
     }
 }
