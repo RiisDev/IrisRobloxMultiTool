@@ -1,0 +1,98 @@
+﻿<ui:UiWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        x:Class="IrisRobloxMultiTool.Windows.SignIn"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        WindowCornerPreference="Round"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="Sign In" Height="600" Width="460" Loaded="OnLoaded" ResizeMode="NoResize" Background="{x:Null}" Foreground="{x:Null}" Icon="/Images/IRMTIcon.ico">
+    <Grid>
+        <ui:TitleBar
+            Grid.Row="0"
+            UseSnapLayout="True" CanMaximize="False" ShowMaximize="False" ForceShutdown="True" Icon="/Images/IRMTIcon.ico"/>
+        <Canvas Name="customSignInPanel">
+            <ui:TextBox 
+                Name="usernameTextBox"
+                Canvas.Left="107"
+                TextAlignment="Left" 
+                TextWrapping="NoWrap" 
+                Canvas.Top="276" 
+                Width="246" 
+                Height="32" 
+                VerticalAlignment="Top" 
+                PlaceholderText="Username" 
+                ClearButtonEnabled="False" 
+                ForceCursor="True" 
+                />
+            <ui:PasswordBox 
+                Name="passwordTextBox"
+                Canvas.Left="107" 
+                TextWrapping="Wrap" 
+                PlaceholderText="Password" 
+                Canvas.Top="322" 
+                Width="246" KeyDown="passwordTextBox_KeyDown"
+                />
+            <ui:Button 
+                Name="SignInButton"
+                Content="Sign In" 
+                Canvas.Left="132"
+                Canvas.Top="390" 
+                Width="196" 
+                Appearance="Secondary" 
+                VerticalAlignment="Top"
+                Background="#007ddf" 
+                MouseOverBackground="#209cff"
+                PressedBackground="#00599f"
+                ClickMode="Press" HorizontalAlignment="Center" Click="Button_Click"
+                />
+
+            <ui:Button 
+                Content="Get Help" 
+                Width="196" 
+                Appearance="Danger"
+                ClickMode="Press"
+                VerticalAlignment="Top" 
+                Canvas.Left="132" 
+                Canvas.Top="431" 
+                HorizontalAlignment="Center" Click="Button_Click_3"
+            />
+
+            <Label Content="Login With Your Roblox Account" Canvas.Left="54" Canvas.Top="207" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#87FFFFFF" FontFamily="Segoe UI Variable Small Semibold"/>
+            <Image Height="142" Canvas.Left="70" Canvas.Top="41" Width="332" Source="pack://application:,,,/Images/IRMTIcon.png"/>
+            <Label Name="errorLabel" Content="" Canvas.Left="107" Canvas.Top="362" HorizontalAlignment="Left" VerticalAlignment="Center" Width="246" HorizontalContentAlignment="Center" Foreground="#87FF0000"/>
+            <ui:Button 
+                Content="Old Sign In Method" 
+                Width="196" 
+                Appearance="Success"
+                ClickMode="Press" 
+                Canvas.Left="132" 
+                Canvas.Top="470" 
+                HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_Click_1"
+            />
+            <ui:Button 
+                Content="Skip (Disables Features)" 
+                Canvas.Left="132"
+                Canvas.Top="507" 
+                Width="196" 
+                Appearance="Secondary"
+                Background="#007ddf" 
+                MouseOverBackground="#209cff"
+                PressedBackground="#00599f"
+                ClickMode="Press"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_Click_2"
+                />
+
+        </Canvas>
+        <DockPanel Name="captcha" Margin="0,33,0,0" Visibility="Hidden">
+            <wv2:WebView2 Name="signInView"/>
+        </DockPanel>
+
+
+    </Grid>
+</ui:UiWindow>

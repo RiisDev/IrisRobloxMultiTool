@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <WebView2LoaderPreference>Static</WebView2LoaderPreference>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\IRMTIcon.ico</ApplicationIcon>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\discord.png" />
+    <None Remove="Images\IRMTIcon.ico" />
+    <None Remove="Images\IRMTIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\IRMTIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58" />
+    <PackageReference Include="WPF-UI" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\IRMTIcon.ico" />
+  </ItemGroup>
+
+</Project>
