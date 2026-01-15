@@ -100,10 +100,11 @@ namespace IrisRobloxMultiTool.Pages
 
 				await AppInvokeAsync(() =>
 				{
+					RootTextBox.Document.Blocks.Clear();
+
 					Paragraph newParagraph = new();
 					newParagraph.Inlines.Add(releaseBody);
 					RootTextBox.Document.Blocks.Add(newParagraph);
-
 				});
 
 	        }
