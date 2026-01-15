@@ -35,6 +35,7 @@ namespace IrisRobloxMultiTool.Pages
         {
 			try
 			{
+				RobloxClient.DefaultRequestHeaders.Remove("x-csrf-token");
 				RobloxClient.DefaultRequestHeaders.TryAddWithoutValidation("x-csrf-token", await Roblox.RefreshCsrfToken());
 
                 TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
@@ -134,7 +135,13 @@ namespace IrisRobloxMultiTool.Pages
 							RequestId = "94215407204609",
 							AssetId = 94215407204609L
 						}
-					})
+					}
+				),
+				new (
+					"https://auth.roblox.com/v1/client-assertion/",
+					"clientAssertion",
+					new ServerData(TAuthenticationTicketPing, AuthenticationTicketStatus)
+				)
 			];
 
             foreach (RobloxAssetCheck check in robloxApiChecks)

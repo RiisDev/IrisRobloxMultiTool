@@ -44,7 +44,8 @@
                 <ui:NavigationHeader/>
                 <ui:NavigationItem Height="40"  Content="API Checker" PageType="{x:Type pages:ApiChecker}" Icon="TopSpeed20" Tag="mods" IconFilled="True" />
                 <ui:NavigationItem Height="40"  Content="Asset Downloader" PageType="{x:Type pages:AssetDownloader}" Icon="ArrowDownload48" Tag="appearance" IconFilled="True" />
-               <ui:NavigationItem Name="AboutTab" Height="40"  Content="About" PageType="{x:Type pages:About}" Icon="QuestionCircle48" Tag="about" IconFilled="True" />
+                <ui:NavigationItem Height="40"  Content="Game Botter" PageType="{x:Type pages:RobloxGameBot}" Icon="Bot20" Tag="appearance" IconFilled="True" />
+                <ui:NavigationItem Name="AboutTab" Height="40"  Content="About" PageType="{x:Type pages:About}" Icon="QuestionCircle48" Tag="about" IconFilled="True" />
             </ui:NavigationFluent.Items>
         </ui:NavigationFluent>
         <Frame Name="RootFrame" Margin="255,48,10,10" Height="380"/>

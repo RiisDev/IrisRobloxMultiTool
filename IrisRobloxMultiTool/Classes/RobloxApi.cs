@@ -38,7 +38,7 @@ namespace IrisRobloxMultiTool.Classes
 				throw new InvalidOperationException("Failed to refresh CSRF token");
 
 			Account.CsrfToken = headers.First();
-
+			
 			return Account.CsrfToken;
 		}
 

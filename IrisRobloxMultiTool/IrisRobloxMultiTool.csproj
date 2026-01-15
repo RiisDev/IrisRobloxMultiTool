@@ -12,6 +12,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Images\IRMTIcon.ico</ApplicationIcon>
     <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

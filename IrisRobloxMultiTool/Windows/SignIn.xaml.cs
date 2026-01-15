@@ -50,7 +50,7 @@ namespace IrisRobloxMultiTool.Windows
                     if (!Roblox.Account.Cookie.IsNullOrEmpty()) return;
                     if (!cookie.Contains(".ROBLOSECURITY")) continue;
 
-                    string cookieValue = cookie.Substring(cookie.IndexOf('=') + 1).Trim();
+                    string cookieValue = cookie[(cookie.IndexOf('=') + 1)..].Trim();
 					Roblox.Account.Cookie = cookieValue;
                     await Roblox.SetupAccountData();
 

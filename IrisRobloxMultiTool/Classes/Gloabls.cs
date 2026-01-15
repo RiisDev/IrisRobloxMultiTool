@@ -35,7 +35,8 @@ public static class Config
 		Timeout = TimeSpan.FromSeconds(30),
 		DefaultRequestHeaders =
 		{
-			{"User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.91 Safari/537.36"}
+			{"User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.91 Safari/537.36"},
+			{ "Referrer", "https://www.roblox.com/" }
 		}
 	};
 

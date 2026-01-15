@@ -30,7 +30,12 @@
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,283,28,61" Opacity="0.05" />
         <Label Margin="28,283,28,61" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Unused API Slot"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Authentication Ticket API is "/>
+                    <TextBlock Foreground="Lime" Name="AuthenticationTicketStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
+                    <TextBlock Foreground="Orange" Name="TAuthenticationTicketPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                </StackPanel>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,242,28,102" Opacity="0.05" />
