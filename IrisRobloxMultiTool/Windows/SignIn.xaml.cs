@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using IrisRobloxMultiTool.Classes;
 using Microsoft.Web.WebView2.Core;
@@ -10,7 +9,7 @@ namespace IrisRobloxMultiTool.Windows
     {
         public SignIn() => InitializeComponent();
 
-        private void SignInView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e) => signInView.CoreWebView2.ExecuteScriptAsync("document.body.classList.remove('light-theme');document.body.classList.add('dark-theme');document.querySelector('body').style.overflow='hidden';document.getElementById('header').remove();document.getElementById('footer-container').remove();document.getElementsByClassName('divider-text xsmall')[0].remove();");
+        private void SignInView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e) => SignInView.CoreWebView2.ExecuteScriptAsync("document.body.classList.remove('light-theme');document.body.classList.add('dark-theme');document.querySelector('body').style.overflow='hidden';document.getElementById('header').remove();document.getElementById('footer-container').remove();document.getElementsByClassName('divider-text xsmall')[0].remove();");
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -18,26 +17,26 @@ namespace IrisRobloxMultiTool.Windows
             try
             {
                 Environment.SetEnvironmentVariable("WEBVIEW2_USER_DATA_FOLDER", $"{AppDomain.CurrentDomain.BaseDirectory}bin", EnvironmentVariableTarget.Process);
-                signInView.EnsureCoreWebView2Async();
+                SignInView.EnsureCoreWebView2Async();
             }
             catch (Exception ex) {
                 Log(ex.ToString());
-                App.CustomMessageBox.ShowDialog("Something went wrong while trying to sign in, please report on github.", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomBox.ShowDialog("Something went wrong while trying to sign in, please report on github.", null, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            signInView.CoreWebView2InitializationCompleted += SignInView_CoreWebView2InitializationCompleted;
+            SignInView.CoreWebView2InitializationCompleted += SignInView_CoreWebView2InitializationCompleted;
         }
 
         private void SignInView_CoreWebView2InitializationCompleted(object? sender, CoreWebView2InitializationCompletedEventArgs e)
         {
-            signInView.NavigationCompleted += SignInView_NavigationCompleted;
-            signInView.Source = new Uri("https://roblox.com/Login", UriKind.Absolute);
-            signInView.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36";
-            signInView.CoreWebView2.AddWebResourceRequestedFilter("https://roblox.com/*", CoreWebView2WebResourceContext.All);
-            signInView.CoreWebView2.AddWebResourceRequestedFilter("http://roblox.com/*", CoreWebView2WebResourceContext.All);
+            SignInView.NavigationCompleted += SignInView_NavigationCompleted;
+            SignInView.Source = new Uri("https://roblox.com/Login", UriKind.Absolute);
+            SignInView.CoreWebView2.Settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36";
+            SignInView.CoreWebView2.AddWebResourceRequestedFilter("https://roblox.com/*", CoreWebView2WebResourceContext.All);
+            SignInView.CoreWebView2.AddWebResourceRequestedFilter("http://roblox.com/*", CoreWebView2WebResourceContext.All);
             SignInButton.IsEnabled = true;
 
-            signInView.CoreWebView2.WebResourceResponseReceived += async (_, ef) =>
+            SignInView.CoreWebView2.WebResourceResponseReceived += async (_, ef) =>
 			{
 				if (!Roblox.Account.Cookie.IsNullOrEmpty()) return;
 				if (ef.Request.Headers == null) return;
@@ -62,69 +61,88 @@ namespace IrisRobloxMultiTool.Windows
             };
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void Login_Clicked(object sender, RoutedEventArgs e)
         {
-			signInView.CoreWebView2.FrameNavigationStarting += CoreWebView2_FrameNavigationStarting;
-            await signInView.CoreWebView2.ExecuteScriptAsync($$"""
-                                                               function set(obj, callback) {
-                                                               	callback(obj);
-
-                                                               	for (let [k, v] of Object.entries(obj)) {
-                                                               		if (k.includes('reactProps') && v.onChange) {
-                                                               			v.onChange({target: obj});
-                                                               		}
-                                                               	}
+			SignInView.CoreWebView2.FrameNavigationStarting += CoreWebView2_FrameNavigationStarting;
+            await SignInView.CoreWebView2.ExecuteScriptAsync($$"""
+                                                               function set(inputElement, value) {
+                                                                   const setter = Object.getOwnPropertyDescriptor(
+                                                                       HTMLInputElement.prototype,
+                                                                       "value"
+                                                                   ).set;
+                                                               
+                                                                   setter.call(inputElement, value);
+                                                               
+                                                                   for (const key in inputElement) {
+                                                                       if (key.includes("__reactProps")) {
+                                                                           inputElement.dispatchEvent(
+                                                                               new Event("input", { bubbles: true })
+                                                                           );
+                                                                           break;
+                                                                       }
+                                                                   }
                                                                }
-                                                               set(document.getElementById('login-username'), obj => obj.value='{{usernameTextBox.Text}}');
-                                                               set(document.getElementById('login-password'), obj => obj.value='{{passwordTextBox.Password}}');
+                                                               set(document.getElementById('login-username'), '{{UsernameTextBox.Text}}');
+                                                               set(document.getElementById('login-password'), '{{PasswordTextBox.Password}}');
                                                                document.getElementById('login-button').click();
                                                                """);
+
+            SignInButton.IsEnabled = false;
+
             while (true)
             {
                 await Task.Delay(250);
-                string loginError = await signInView.CoreWebView2.ExecuteScriptAsync("document.getElementById('login-form-error').textContent;");
+                string loginError = await SignInView.CoreWebView2.ExecuteScriptAsync("document.getElementById('login-form-error').textContent;");
                 if (loginError != "null")
                 {
-                    errorLabel.Content = loginError.Substring(1, loginError.Length - 2);
+                    ErrorLabel.Content = loginError.Substring(1, loginError.Length - 2);
                     break;
                 }
 
-                string codeNeeded = await signInView.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('modal-protection-shield-icon').length");
-                
+                string codeNeeded = await SignInView.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('modal-protection-shield-icon').length");
                 if (codeNeeded != "0")
                 {
 					Application.Current.Dispatcher.Invoke(() =>
 					{
-						captcha.Visibility = Visibility.Visible;
-					});
-				}
+						CustomSignInPanel.Visibility = Visibility.Visible;
+						Captcha.Visibility = Visibility.Hidden;
 
-                if (!signInView.CoreWebView2.Source.ToLower().Contains("login"))
-				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						captcha.Visibility = Visibility.Hidden;
+						UsernameTextBox.Visibility = Visibility.Hidden;
+						PasswordTextBox.Visibility = Visibility.Hidden;
+						SignInButton.Visibility = Visibility.Hidden;
+
+						TwoFactorBox.Visibility = Visibility.Visible;
+						SubmitTwoFactor.Visibility = Visibility.Visible;
 					});
 					break;
                 }
+
+                if (!SignInView.CoreWebView2.Source.ToLower().Contains("login"))
+				{
+					Application.Current.Dispatcher.Invoke(() =>
+					{
+						Captcha.Visibility = Visibility.Hidden;
+					});
+					break;
+				}
             }
         }
 
         private void CoreWebView2_FrameNavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {
-            if (e.Uri == null || !e.Uri.Contains("https://client-api.arkoselabs.com/fc/assets")) return;
+            if (e.Uri == null || !e.Uri.Contains("arkoselabs.roblox.com")) return;
 
-            customSignInPanel.Visibility = Visibility.Collapsed;
-            captcha.Visibility = Visibility.Visible;
+            CustomSignInPanel.Visibility = Visibility.Collapsed;
+            Captcha.Visibility = Visibility.Visible;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void OpenWebView_Click(object sender, RoutedEventArgs e)
         {
-            customSignInPanel.Visibility = Visibility.Collapsed;
-            captcha.Visibility = Visibility.Visible;
+            CustomSignInPanel.Visibility = Visibility.Collapsed;
+            Captcha.Visibility = Visibility.Visible;
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void SkipSignIn_Click(object sender, RoutedEventArgs e)
         {
 	        Roblox.SkippedSignIn = true;
             Close();
@@ -135,12 +153,50 @@ namespace IrisRobloxMultiTool.Windows
             if (e.Key != Key.Enter) return;
 
             e.Handled = true;
-            Button_Click(sender, new RoutedEventArgs());
+            Login_Clicked(sender, new RoutedEventArgs());
         }
 
 		private void Button_Click_3(object sender, RoutedEventArgs e)
 		{
             // Do get help
+		}
+
+		private async void SubmitTwoFactor_Click(object sender, RoutedEventArgs e)
+		{
+			await SignInView.CoreWebView2.ExecuteScriptAsync($$"""
+			                                                   set(document.getElementById('two-step-verification-code-input'), '{{TwoFactorBox.Text}}');
+			                                                   document.querySelector('button[aria-label="Verify"]').click() 
+			                                                   """);
+
+			SubmitTwoFactor.IsEnabled = false;
+
+			while (true)
+			{
+				await Task.Delay(250);
+				string loginError = await SignInView.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('form-control-label bottom-label xsmall')[0].textContent");
+				if (!loginError.Trim().IsNullOrEmpty())
+				{
+					ErrorLabel.Content = loginError.Substring(1, loginError.Length - 2);
+					SubmitTwoFactor.IsEnabled = true;
+					break;
+				}
+
+
+				if (!SignInView.CoreWebView2.Source.ToLower().Contains("login"))
+				{
+					Application.Current.Dispatcher.Invoke(() =>
+					{
+						Captcha.Visibility = Visibility.Hidden;
+					});
+					break;
+				}
+			}
+		}
+
+		private void TwoFactorBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			bool isDigit = e.Text.All(char.IsDigit);
+			e.Handled = !isDigit;
 		}
 	}
 }

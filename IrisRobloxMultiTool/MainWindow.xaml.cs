@@ -40,20 +40,20 @@ namespace IrisRobloxMultiTool
             JsonElement root = json.RootElement;
             string latestVersion = root.GetProperty("tag_name").GetString() ?? "";
 
-            if (App.CurrentVersion.StartsWith(latestVersion)) return;
+            if (CurrentVersion.StartsWith(latestVersion)) return;
 
             UpdateAvailable = true;
 
             AboutTab.Content += " | Update Available";
 
-            //MessageBoxResult result = App.CustomMessageBox.ShowDialog("There is an update, would you like to download now?", "IRMT", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = CustomBox.ShowDialog("There is an update, would you like to download now?", "IRMT", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-            //if (result == MessageBoxResult.Yes)
-	           // Process.Start("https://github.com/RiisDev/IrisRobloxMultiTool/releases");
+            if (result == MessageBoxResult.Yes)
+                Process.Start("explorer.exe", "https://github.com/RiisDev/IrisRobloxMultiTool/releases");
 		}
 
 
-        private readonly List<string> _nonCookieTabs = ["Home", "API Checker", "We Are Devs Keygen", "About"];
+        private readonly List<string> _nonCookieTabs = ["Home", "API Checker", "About"];
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -76,9 +76,9 @@ namespace IrisRobloxMultiTool
             {
                 await Task.Run(async () =>
                 {
-	                await UserPFP.Dispatcher.InvokeAsync(() =>
+	                await UserPfp.Dispatcher.InvokeAsync(() =>
 	                {
-		                UserPFP.ImageSource = !Roblox.Account.ProfilePicture.IsNullOrEmpty() ? GetBitmapFromUrl(Roblox.Account.ProfilePicture) : UserPFP.ImageSource;
+		                UserPfp.ImageSource = !Roblox.Account.ProfilePicture.IsNullOrEmpty() ? GetBitmapFromUrl(Roblox.Account.ProfilePicture) : UserPfp.ImageSource;
 	                });
                 });
             }

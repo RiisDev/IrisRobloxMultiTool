@@ -42,7 +42,7 @@
             <ui:NavigationFluent.Items>
                 <ui:NavigationHeader/>
                 <ui:NavigationHeader/>
-                <ui:NavigationItem Height="40"  Content="API Checker" PageType="{x:Type pages:APIChecker}" Icon="TopSpeed20" Tag="mods" IconFilled="True" />
+                <ui:NavigationItem Height="40"  Content="API Checker" PageType="{x:Type pages:ApiChecker}" Icon="TopSpeed20" Tag="mods" IconFilled="True" />
                 <ui:NavigationItem Height="40"  Content="Asset Downloader" PageType="{x:Type pages:AssetDownloader}" Icon="ArrowDownload48" Tag="appearance" IconFilled="True" />
                <ui:NavigationItem Name="AboutTab" Height="40"  Content="About" PageType="{x:Type pages:About}" Icon="QuestionCircle48" Tag="about" IconFilled="True" />
             </ui:NavigationFluent.Items>
@@ -53,7 +53,7 @@
         </Border>
         <Ellipse Height="50" Width="50" Margin="14,53,869,334">
             <Ellipse.Fill>
-                <ImageBrush x:Name="UserPFP"  ImageSource="https://cdn.discordapp.com/embed/avatars/0.png" Stretch="UniformToFill"/>
+                <ImageBrush x:Name="UserPfp"  ImageSource="https://cdn.discordapp.com/embed/avatars/0.png" Stretch="UniformToFill"/>
             </Ellipse.Fill>
         </Ellipse>
         <Label Name="PlayerName" Content="RiisDev" HorizontalAlignment="Left" Margin="69,63,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" Foreground="White" Width="151"/>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -18,34 +16,17 @@ namespace IrisRobloxMultiTool.Windows
 
         public MessageBoxResult Result { get; private set; }
 
-        private readonly Dictionary<MessageBoxImage, ImageSource> MessageBoxImageToSystemIcon = new();
-        //{
-        //    { MessageBoxImage.Information, ImageConvert.ImageSourceFromBitmap(Properties.Resources.information)},
-        //    { MessageBoxImage.Exclamation, ImageConvert.ImageSourceFromBitmap(Properties.Resources.exclamation)},
-        //    { MessageBoxImage.Question, ImageConvert.ImageSourceFromBitmap(Properties.Resources.question) },
-        //    { MessageBoxImage.Error, ImageConvert.ImageSourceFromBitmap(Properties.Resources.error) }
-        //};
 
         public MessageBoxResult ShowDialog(string description, string? title = "Iris Roblox Multi Tool", MessageBoxButton messageBoxButton = MessageBoxButton.OK, MessageBoxImage messageBoxImage = MessageBoxImage.None)
         {
             return Dispatcher.Invoke(() =>
             {
-                mainTitle.Title = title;
-                descriptionLabel.Content = description;
+                MainTitle.Title = title;
+                DescriptionLabel.Content = description;
                 ButtonLeft.Visibility = Visibility.Hidden;
                 ButtonMiddle.Visibility = Visibility.Hidden;
                 ButtonRight.Visibility = Visibility.Hidden;
-
-                if (messageBoxImage != MessageBoxImage.None)
-                {
-                    mainTitle.Icon = messageBoxImage switch
-                    {
-                        //MessageBoxImage.Asterisk => MessageBoxImageToSystemIcon[MessageBoxImage.Information],
-                        //MessageBoxImage.Hand => MessageBoxImageToSystemIcon[MessageBoxImage.Error],
-                        //_ => MessageBoxImageToSystemIcon[messageBoxImage]
-                    };
-                }
-
+				
                 switch (messageBoxButton)
                 {
                     case MessageBoxButton.OK:
@@ -123,6 +104,9 @@ namespace IrisRobloxMultiTool.Windows
                         };
 
                         break;
+                    case MessageBoxButton.AbortRetryIgnore:
+                    case MessageBoxButton.RetryCancel:
+                    case MessageBoxButton.CancelTryContinue:
                     default:
                         throw new ArgumentOutOfRangeException(nameof(messageBoxButton), messageBoxButton, null);
                 }
@@ -134,21 +118,4 @@ namespace IrisRobloxMultiTool.Windows
 
     }
 
-    public class ImageConvert
-    {
-        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool DeleteObject([In] IntPtr hObject);
-
-        public static ImageSource ImageSourceFromBitmap(Bitmap bmp)
-        {
-            IntPtr handle = bmp.GetHbitmap();
-            try
-            {
-                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { DeleteObject(handle); }
-        }
-
-    }
 }

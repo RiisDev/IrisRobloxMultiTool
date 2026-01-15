@@ -1,12 +1,13 @@
-﻿global using static IrisRobloxMultiTool.Classes.Logging;
-global using static IrisRobloxMultiTool.Classes.Config;
-global using System.Net;
+﻿global using System.Net;
 global using System.Net.Http;
 global using System.Text.Json;
-
+global using static IrisRobloxMultiTool.Classes.Config;
+global using static IrisRobloxMultiTool.Classes.Logging;
+using IrisRobloxMultiTool.Windows;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace IrisRobloxMultiTool.Classes;
@@ -56,6 +57,10 @@ public static class Config
 	public static RobloxApi Roblox { get; } = new ();
 
 	public static bool UpdateAvailable { get; set; }
+
+	public static CustomMessageBox CustomBox { get; } = new();
+
+	public static string CurrentVersion { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "-1";
 }
 
 public static class TypeExtender

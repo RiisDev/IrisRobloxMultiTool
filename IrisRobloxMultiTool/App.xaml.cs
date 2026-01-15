@@ -1,8 +1,5 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Reflection;
-using System.Windows;
-using IrisRobloxMultiTool.Windows;
+﻿using System.Windows;
+using System.Windows.Threading;
 
 namespace IrisRobloxMultiTool
 {
@@ -11,14 +8,10 @@ namespace IrisRobloxMultiTool
     /// </summary>
     public partial class App : Application
     {
-	    public static CustomMessageBox CustomMessageBox;
-	    public static string CurrentVersion = "";
-
-		private void Application_Startup(object sender, StartupEventArgs e)
-	    {
-		    CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "-1";
-		    CustomMessageBox = new CustomMessageBox();
-	    }
+		private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		{
+			Log(e.Exception.ToString());
+		}
 	}
 
 }

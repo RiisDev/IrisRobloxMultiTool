@@ -16,9 +16,9 @@
         <ui:TitleBar
             Grid.Row="0"
             UseSnapLayout="True" CanMaximize="False" ShowMaximize="False" ForceShutdown="True" Icon="/Images/IRMTIcon.ico"/>
-        <Canvas Name="customSignInPanel">
+        <Canvas Name="CustomSignInPanel">
             <ui:TextBox 
-                Name="usernameTextBox"
+                Name="UsernameTextBox"
                 Canvas.Left="107"
                 TextAlignment="Left" 
                 TextWrapping="NoWrap" 
@@ -31,13 +31,28 @@
                 ForceCursor="True" 
                 />
             <ui:PasswordBox 
-                Name="passwordTextBox"
+                Name="PasswordTextBox"
                 Canvas.Left="107" 
                 TextWrapping="Wrap" 
                 PlaceholderText="Password" 
                 Canvas.Top="322" 
                 Width="246" KeyDown="passwordTextBox_KeyDown"
                 />
+            <ui:TextBox 
+                Name="TwoFactorBox"
+                Canvas.Left="107"
+                TextAlignment="Center" 
+                TextWrapping="NoWrap" 
+                Canvas.Top="300" 
+                Width="246" 
+                Height="32" 
+                VerticalAlignment="Top" 
+                PlaceholderText="000000" 
+                ClearButtonEnabled="False" 
+                ForceCursor="True"
+                MaxLength="6"
+                Visibility="Hidden" PreviewTextInput="TwoFactorBox_PreviewTextInput" 
+            />
             <ui:Button 
                 Name="SignInButton"
                 Content="Sign In" 
@@ -49,8 +64,23 @@
                 Background="#007ddf" 
                 MouseOverBackground="#209cff"
                 PressedBackground="#00599f"
-                ClickMode="Press" HorizontalAlignment="Center" Click="Button_Click"
+                ClickMode="Press" HorizontalAlignment="Center" Click="Login_Clicked"
                 />
+            <ui:Button 
+                Name="SubmitTwoFactor"
+                Content="Submit 2FA" 
+                Canvas.Left="132"
+                Canvas.Top="390" 
+                Width="196" 
+                Appearance="Secondary" 
+                VerticalAlignment="Top"
+                Background="#007ddf" 
+                MouseOverBackground="#209cff"
+                PressedBackground="#00599f"
+                ClickMode="Press" 
+                HorizontalAlignment="Center"
+                Visibility="Hidden" Click="SubmitTwoFactor_Click"
+            />
 
             <ui:Button 
                 Content="Get Help" 
@@ -65,7 +95,7 @@
 
             <Label Content="Login With Your Roblox Account" Canvas.Left="54" Canvas.Top="207" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#87FFFFFF" FontFamily="Segoe UI Variable Small Semibold"/>
             <Image Height="142" Canvas.Left="70" Canvas.Top="41" Width="332" Source="pack://application:,,,/Images/IRMTIcon.png"/>
-            <Label Name="errorLabel" Content="" Canvas.Left="107" Canvas.Top="362" HorizontalAlignment="Left" VerticalAlignment="Center" Width="246" HorizontalContentAlignment="Center" Foreground="#87FF0000"/>
+            <Label Name="ErrorLabel" Content="" Canvas.Left="107" Canvas.Top="362" HorizontalAlignment="Left" VerticalAlignment="Center" Width="246" HorizontalContentAlignment="Center" Foreground="#87FF0000"/>
             <ui:Button 
                 Content="Old Sign In Method" 
                 Width="196" 
@@ -73,7 +103,7 @@
                 ClickMode="Press" 
                 Canvas.Left="132" 
                 Canvas.Top="470" 
-                HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_Click_1"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Click="OpenWebView_Click"
             />
             <ui:Button 
                 Content="Skip (Disables Features)" 
@@ -85,12 +115,12 @@
                 MouseOverBackground="#209cff"
                 PressedBackground="#00599f"
                 ClickMode="Press"
-                HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_Click_2"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Click="SkipSignIn_Click"
                 />
 
         </Canvas>
-        <DockPanel Name="captcha" Margin="0,33,0,0" Visibility="Hidden">
-            <wv2:WebView2 Name="signInView"/>
+        <DockPanel Name="Captcha" Margin="0,33,0,0" Visibility="Hidden">
+            <wv2:WebView2 Name="SignInView"/>
         </DockPanel>
 
 

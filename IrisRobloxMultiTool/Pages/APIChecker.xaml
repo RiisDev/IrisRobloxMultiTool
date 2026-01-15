@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      x:Class="IrisRobloxMultiTool.Pages.APIChecker"
+      x:Class="IrisRobloxMultiTool.Pages.ApiChecker"
       mc:Ignorable="d" 
       d:DesignHeight="380" d:DesignWidth="668"
       Title="APIChecker" Loaded="Page_Loaded">
@@ -22,9 +22,9 @@
         <Label Margin="28,37,28,307" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Foreground="White" FontWeight="Bold" Text="Audio Searching API is "/>
-                <TextBlock Foreground="Lime" Name="AudioAPIOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
+                <TextBlock Foreground="Lime" Name="AudioApiOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
                 <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="AudioAPIPing"  TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                <TextBlock Foreground="Orange" Name="AudioApiPing"  TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,283,28,61" Opacity="0.05" />
@@ -37,43 +37,37 @@
         <Label Margin="28,242,28,102" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Foreground="White" FontWeight="Bold" Text="Thumbnail API is "/>
-                <TextBlock Foreground="Lime" Name="ThumbnailAPIStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
+                <TextBlock Foreground="Lime" Name="ThumbnailApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
                 <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="ThumbnailAPIPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                <TextBlock Foreground="Orange" Name="ThumbnailApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,201,28,143" Opacity="0.05" />
         <Label Margin="28,201,28,143" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Foreground="White" FontWeight="Bold" Text="Marketplace API is "/>
-                <TextBlock Foreground="Lime" Name="MarketplaceAPIStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
+                <TextBlock Foreground="Lime" Name="MarketplaceApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
                 <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="MarketplaceAPIPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                <TextBlock Foreground="Orange" Name="MarketplaceApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,160,28,184" Opacity="0.05" />
         <Label Margin="28,160,28,184" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Linkvertise Bypass API is "/>
-                <TextBlock Foreground="Lime" Name="LinkvertiseAPIStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="LinkvertiseAPIPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                <TextBlock Foreground="White" FontWeight="Bold" Text="Unused API Slot"/>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,119,28,225" Opacity="0.05" />
         <Label Margin="28,119,28,225" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Iris Roblox Multi Tool API is "/>
-                <TextBlock Foreground="Lime" Name="IRMTAPIStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="IRMTAPIPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+                <TextBlock Foreground="White" FontWeight="Bold" Text="Unused API Slot"/>
             </StackPanel>
         </Label>
         <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,78,28,266" Opacity="0.05" />
         <Label Margin="28,78,28,266" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Foreground="White" FontWeight="Bold" Text="Catalog Search API is "/>
-                <TextBlock Foreground="Lime" Name="CatalogSearchAPI" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
+                <TextBlock Foreground="Lime" Name="CatalogSearchApi" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
                 <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
                 <TextBlock Foreground="Orange" Name="CatalogSearchPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
             </StackPanel>
