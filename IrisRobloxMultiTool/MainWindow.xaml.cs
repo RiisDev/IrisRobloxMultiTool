@@ -44,8 +44,8 @@ namespace IrisRobloxMultiTool
 
             UpdateAvailable = true;
 
-            AboutTab.Content += " | Update Available";
-
+            await AppInvokeAsync(() => AboutTab.Content += " | Update Available");
+			
             MessageBoxResult result = CustomBox.ShowDialog("There is an update, would you like to download now?", "IRMT", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)
@@ -55,9 +55,9 @@ namespace IrisRobloxMultiTool
 
         private readonly List<string> _nonCookieTabs = ["Home", "API Checker", "About"];
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            await CheckForUpdates();
+            _ = Task.Run(async () => await CheckForUpdates());
 
             if (Roblox.SkippedSignIn)
             {
@@ -74,13 +74,15 @@ namespace IrisRobloxMultiTool
             }
             else
             {
-                await Task.Run(async () =>
-                {
-	                await UserPfp.Dispatcher.InvokeAsync(() =>
-	                {
-		                UserPfp.ImageSource = !Roblox.Account.ProfilePicture.IsNullOrEmpty() ? GetBitmapFromUrl(Roblox.Account.ProfilePicture) : UserPfp.ImageSource;
-	                });
-                });
+	            _ = Task.Run(async () =>
+	            {
+		            await AppInvokeAsync(() =>
+		            {
+			            UserPfp.ImageSource = !Roblox.Account.ProfilePicture.IsNullOrEmpty()
+				            ? GetBitmapFromUrl(Roblox.Account.ProfilePicture)
+				            : UserPfp.ImageSource;
+		            });
+	            });
             }
 
             PlayerName.Content = Roblox.Account.Name;

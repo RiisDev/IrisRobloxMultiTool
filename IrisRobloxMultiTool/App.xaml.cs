@@ -1,16 +1,15 @@
-﻿using System.Windows;
-using System.Windows.Threading;
-
-namespace IrisRobloxMultiTool
+﻿namespace IrisRobloxMultiTool
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
-		private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		private void Application_Startup(object sender, System.Windows.StartupEventArgs e)
 		{
-			Log(e.Exception.ToString());
+			TaskScheduler.UnobservedTaskException += (_, exception) => Log(exception.Exception);
+			AppDomain.CurrentDomain.UnhandledException += (_, exception) => Log(exception.ExceptionObject.ToString()!);
+			DispatcherUnhandledException += (_, exception) => Log(exception.Exception);
 		}
 	}
 

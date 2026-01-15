@@ -102,27 +102,24 @@ namespace IrisRobloxMultiTool.Windows
                 string codeNeeded = await SignInView.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('modal-protection-shield-icon').length");
                 if (codeNeeded != "0")
                 {
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						CustomSignInPanel.Visibility = Visibility.Visible;
-						Captcha.Visibility = Visibility.Hidden;
+	                await AppInvokeAsync(() =>
+	                {
+		                CustomSignInPanel.Visibility = Visibility.Visible;
+		                Captcha.Visibility = Visibility.Hidden;
 
-						UsernameTextBox.Visibility = Visibility.Hidden;
-						PasswordTextBox.Visibility = Visibility.Hidden;
-						SignInButton.Visibility = Visibility.Hidden;
+		                UsernameTextBox.Visibility = Visibility.Hidden;
+		                PasswordTextBox.Visibility = Visibility.Hidden;
+		                SignInButton.Visibility = Visibility.Hidden;
 
-						TwoFactorBox.Visibility = Visibility.Visible;
-						SubmitTwoFactor.Visibility = Visibility.Visible;
+		                TwoFactorBox.Visibility = Visibility.Visible;
+		                SubmitTwoFactor.Visibility = Visibility.Visible;
 					});
 					break;
                 }
 
                 if (!SignInView.CoreWebView2.Source.ToLower().Contains("login"))
 				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						Captcha.Visibility = Visibility.Hidden;
-					});
+					await AppInvokeAsync(() => Captcha.Visibility = Visibility.Hidden);
 					break;
 				}
             }
@@ -184,10 +181,7 @@ namespace IrisRobloxMultiTool.Windows
 
 				if (!SignInView.CoreWebView2.Source.ToLower().Contains("login"))
 				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						Captcha.Visibility = Visibility.Hidden;
-					});
+					await AppInvokeAsync(() => Captcha.Visibility = Visibility.Hidden);
 					break;
 				}
 			}

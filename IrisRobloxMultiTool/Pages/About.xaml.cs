@@ -1,90 +1,122 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace IrisRobloxMultiTool.Pages
 {
-    /// <summary>
-    /// Interaction logic for HomePage.xaml
-    /// </summary>
     public partial class About
     {
-        private readonly WebClient _client = new();
-        private bool _discordclicked;
-        private bool _updateclicked;
+        private bool _discordClicked;
+        private bool _updateClicked;
 
         public About() => InitializeComponent();
         private void Canvas_MouseLeave(object sender, MouseEventArgs e) => Mouse.OverrideCursor = null;
-        private static void SetContent(ContentControl label, string content) => label.Dispatcher.Invoke(() => label.Content = content);
         
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Hand;
-            _discordclicked = true;
+            _discordClicked = true;
         }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (_discordclicked && Mouse.OverrideCursor == Cursors.Hand) Process.Start("https://discord.gg/7mJaZC5");
-            _discordclicked = false;
+            if (_discordClicked && Mouse.OverrideCursor == Cursors.Hand) Process.Start("explorer.exe", "https://discord.gg/7mJaZC5");
+            _discordClicked = false;
             Mouse.OverrideCursor = null;
         }
 
-        private string GetDiscordMemberCount()
+        private async Task<string> GetDiscordMemberCount()
         {
-            //dynamic jsonReturn =
-            //    JToken.Parse(_client.DownloadString(
-            //        "https://discord.com/api/v9/invites/7mJaZC5?with_counts=true&with_expiration=true"));
-            //return jsonReturn.approximate_presence_count ?? 0;
-            return "0";
+            string json = await BaseClient.GetStringAsync("https://discord.com/api/v9/invites/yyuggrH?with_counts=true");
+            JsonDocument document = JsonDocument.Parse(json);
+            JsonElement root = document.RootElement;
+            if (!root.TryGetProperty("approximate_presence_count", out JsonElement countElement)) return "0";
+
+            int count = countElement.GetInt32();
+            return count.ToString();
         }
         
-        private void DoGithubChecks()
+        private async Task DoGithubChecks()
         {
-            _client.Headers.Add(HttpRequestHeader.Accept, "application/vnd.github+json");
-            _client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-            //JArray releasesData = JArray.Parse(_client.DownloadString("https://api.github.com/repos/IrisV3rm/IrisRobloxMultiTool/releases"));
+	        try
+	        {
 
-            int downloads = 5;//releasesData.Sum(t => (int)t["assets"]?[0]?["download_count"]);
+		        BaseClient.DefaultRequestHeaders.Clear();
+		        BaseClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+		        BaseClient.DefaultRequestHeaders.Add("User-Agent", "request");
 
-            SetContent(DownloadCount, downloads.ToString());
-            //SetContent(ReleaseVersion, $"V{App.CurrentVersion.Substring(0, App.CurrentVersion.LastIndexOf(".", StringComparison.Ordinal))}");
-            SetContent(OnlineCount, $"{GetDiscordMemberCount()} ONLINE");
+		        string releasesJson = await BaseClient.GetStringAsync("https://api.github.com/repos/RiisDev/IrisRobloxMultiTool/releases");
+		        using JsonDocument jsonDocument = JsonDocument.Parse(releasesJson);
+		        JsonElement rootElement = jsonDocument.RootElement;
 
-            //if (App.UpdateAvailable)
-            //{
-            //    UpdateVersionLabel.Content = $@"Update Available: v{releasesData[0]["tag_name"]}";
+		        string releaseBody = rootElement[0].GetProperty("body").GetString() ?? "Failed to find release body.";
+		        string releaseVersion = "v" + (rootElement[0].GetProperty("tag_name").GetString() ?? "0.0.0");
 
-            //    UpdateClickCanvas.MouseLeave += delegate { Mouse.OverrideCursor = null; };
-            //    UpdateClickCanvas.MouseLeftButtonDown += delegate
-            //    {
-            //        Mouse.OverrideCursor = Cursors.Hand;
-            //        _updateclicked = true;
-            //    };
-            //    UpdateClickCanvas.MouseLeftButtonUp += delegate
-            //    {
-            //        if (_updateclicked && Mouse.OverrideCursor == Cursors.Hand) App.DoUpdate();
-            //        _updateclicked = false;
-            //        Mouse.OverrideCursor = null;
-            //    };
-            //}
-            //else
-            //{
-            //    VersionCanvas.Effect = null;
-            //    UpdateAvailableLabel.Visibility = Visibility.Collapsed;
-            //}
+		        long downloadCount = 0;
 
-            Paragraph newParagraph = new();
-            //newParagraph.Inlines.Add((string)releasesData[0]["body"] ?? string.Empty);
-            RootTextBox.Dispatcher.Invoke(() => RootTextBox.Document.Blocks.Add(newParagraph));
+		        if (rootElement.ValueKind == JsonValueKind.Array)
+		        {
+			        foreach (JsonElement element in rootElement.EnumerateArray())
+			        {
+				        if (!element.TryGetProperty("assets", out JsonElement assets)) continue;
+				        if (assets.ValueKind != JsonValueKind.Array || assets.GetArrayLength() == 0) continue;
 
-            _client.Dispose();
+				        foreach (JsonElement asset in assets.EnumerateArray())
+				        {
+					        if (!asset.TryGetProperty("download_count", out JsonElement downloadCountElement)) continue;
+					        if (downloadCountElement.ValueKind != JsonValueKind.Number) continue;
+					        downloadCount += downloadCountElement.GetInt32();
+				        }
+			        }
+		        }
+
+		        SetContent(DownloadCount, downloadCount.ToString());
+		        SetContent(ReleaseVersion, $"V{CurrentVersion[..CurrentVersion.LastIndexOf($".", StringComparison.Ordinal)]}");
+
+		        if (UpdateAvailable)
+		        {
+					SetContent(UpdateVersionLabel, $"Update Available: {releaseVersion}");
+
+			        UpdateClickCanvas.MouseLeave += delegate { Mouse.OverrideCursor = null; };
+			        UpdateClickCanvas.MouseLeftButtonDown += delegate
+			        {
+				        Mouse.OverrideCursor = Cursors.Hand;
+				        _updateClicked = true;
+			        };
+			        UpdateClickCanvas.MouseLeftButtonUp += delegate
+			        {
+				        if (_updateClicked && Mouse.OverrideCursor == Cursors.Hand)
+					        Process.Start("explorer.exe", "https://github.com/RiisDev/IrisRobloxMultiTool/releases/latest");
+
+				        _updateClicked = false;
+				        Mouse.OverrideCursor = null;
+			        };
+		        }
+		        else
+		        {
+			        VersionCanvas.Effect = null;
+			        UpdateAvailableLabel.Visibility = Visibility.Collapsed;
+		        }
+
+				await AppInvokeAsync(() =>
+				{
+					Paragraph newParagraph = new();
+					newParagraph.Inlines.Add(releaseBody);
+					RootTextBox.Document.Blocks.Add(newParagraph);
+
+				});
+
+	        }
+	        catch (Exception ex)
+	        {
+				Log(ex);
+	        }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e) => DoGithubChecks();
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+	        _ = Task.Run(async () => SetContent(OnlineCount, $"{await GetDiscordMemberCount()} ONLINE"));
+	        _ = Task.Run(async () => await DoGithubChecks());
+        }
     }
 }

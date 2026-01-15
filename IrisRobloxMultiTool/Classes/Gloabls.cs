@@ -3,12 +3,17 @@ global using System.Net.Http;
 global using System.Text.Json;
 global using static IrisRobloxMultiTool.Classes.Config;
 global using static IrisRobloxMultiTool.Classes.Logging;
+global using static IrisRobloxMultiTool.Classes.TypeExtender;
 using IrisRobloxMultiTool.Windows;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace IrisRobloxMultiTool.Classes;
 
@@ -66,6 +71,28 @@ public static class Config
 public static class TypeExtender
 {
 	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? value) => string.IsNullOrEmpty(value);
+
+	public static void AppInvoke(Action action) => Application.Current.Dispatcher.Invoke(action);
+
+	public static async Task AppInvokeAsync(Action action) => await Application.Current.Dispatcher.InvokeAsync(action);
+
+	public static void SetProperty<TControl, TValue>(TControl? control, Expression<Func<TControl, TValue>> propertyExpression, TValue newValue) where TControl : DependencyObject
+	{
+		ArgumentNullException.ThrowIfNull(control);
+		
+		if (propertyExpression.Body is not MemberExpression memberExpression)
+			throw new ArgumentException("Expression must target a property.", nameof(propertyExpression));
+
+		if (memberExpression.Member is not PropertyInfo propertyInfo)
+			throw new ArgumentException("Member is not a property.", nameof(propertyExpression));
+
+		Dispatcher dispatcher = control.Dispatcher;
+
+		if (dispatcher.CheckAccess()) propertyInfo.SetValue(control, newValue);
+		else AppInvoke(() => { propertyInfo.SetValue(control, newValue); });
+	}
+
+	public static void SetContent(ContentControl label, string content) => SetProperty(label, x=> x.Content, content);
 }
 
 public static class Logging
@@ -99,4 +126,6 @@ public static class Logging
 			Console.ResetColor();
 		}
 	}
+
+	public static void Log(Exception message, State state = State.Error, [CallerMemberName] string caller = "", [CallerFilePath] string callerFilePath = "") => Log(message.ToString(), state, caller, callerFilePath);
 }

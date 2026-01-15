@@ -67,7 +67,6 @@ namespace IrisRobloxMultiTool.Pages
             };
         }
 
-
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
 	        List<RobloxAssetCheck> robloxApiChecks =
@@ -122,11 +121,8 @@ namespace IrisRobloxMultiTool.Pages
 
         private static void UpdateLabel(TextBlock label, string text, SolidColorBrush foreground)
         {
-            label.Dispatcher.Invoke(() =>
-            {
-                label.Text = text;
-                label.Foreground = foreground;
-            });
+			SetProperty(label, x=> x.Text, text);
+			SetProperty(label, x=> x.Foreground, foreground);
         }
     }
 

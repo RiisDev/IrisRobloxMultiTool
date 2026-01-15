@@ -1,9 +1,4 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
 
 namespace IrisRobloxMultiTool.Windows
 {
@@ -15,7 +10,6 @@ namespace IrisRobloxMultiTool.Windows
         public CustomMessageBox() => InitializeComponent();
 
         public MessageBoxResult Result { get; private set; }
-
 
         public MessageBoxResult ShowDialog(string description, string? title = "Iris Roblox Multi Tool", MessageBoxButton messageBoxButton = MessageBoxButton.OK, MessageBoxImage messageBoxImage = MessageBoxImage.None)
         {

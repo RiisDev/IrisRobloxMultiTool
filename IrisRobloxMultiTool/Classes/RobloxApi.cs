@@ -52,8 +52,7 @@ namespace IrisRobloxMultiTool.Classes
 
 			RobloxContainer.Add(new Uri("https://auth.roblox.com"), new Cookie(".ROBLOSECURITY", Account.Cookie, "/", "auth.roblox.com"));
 			RobloxContainer.Add(new Uri("https://roblox.com"), new Cookie(".ROBLOSECURITY", Account.Cookie, "/", "roblox.com"));
-
-
+			
 			HttpResponseMessage response = await RobloxClient.GetAsync("https://www.roblox.com/my/account/json");
 			response.EnsureSuccessStatusCode();
 
