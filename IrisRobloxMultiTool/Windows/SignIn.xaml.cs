@@ -21,7 +21,7 @@ namespace IrisRobloxMultiTool.Windows
             }
             catch (Exception ex) {
                 Log(ex.ToString());
-                CustomBox.ShowDialog("Something went wrong while trying to sign in, please report on github.", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.ShowDialog("Something went wrong while trying to sign in, please report on github.");
                 return;
             }
             SignInView.CoreWebView2InitializationCompleted += SignInView_CoreWebView2InitializationCompleted;

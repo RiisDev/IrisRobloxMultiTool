@@ -9,86 +9,93 @@
       Title="APIChecker" Loaded="Page_Loaded">
 
     <Grid>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,-4,28,348" Opacity="0.05"/>
-        <Label Margin="28,-4,28,348" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Asset Delivery API is "/>
-                <TextBlock Foreground="Lime" Name="AssetDeliveryOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="AssetDeliveryPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,37,28,307" Opacity="0.05" />
-        <Label Margin="28,37,28,307" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Audio Searching API is "/>
-                <TextBlock Foreground="Lime" Name="AudioApiOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="AudioApiPing"  TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,283,28,61" Opacity="0.05" />
-        <Label Margin="28,283,28,61" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="White" FontWeight="Bold" Text="Authentication Ticket API is "/>
-                    <TextBlock Foreground="Lime" Name="AuthenticationTicketStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                    <TextBlock Foreground="Orange" Name="TAuthenticationTicketPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
+        <StackPanel VerticalAlignment="Center">
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,10,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Asset Delivery API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="AssetDeliveryOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="AssetDeliveryPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
                 </StackPanel>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,242,28,102" Opacity="0.05" />
-        <Label Margin="28,242,28,102" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Thumbnail API is "/>
-                <TextBlock Foreground="Lime" Name="ThumbnailApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="ThumbnailApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,201,28,143" Opacity="0.05" />
-        <Label Margin="28,201,28,143" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Marketplace API is "/>
-                <TextBlock Foreground="Lime" Name="MarketplaceApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="MarketplaceApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,160,28,184" Opacity="0.05" />
-        <Label Margin="28,160,28,184" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Toolbox (Audio) Classification is "/>
-                <TextBlock Foreground="Lime" Name="AssetDetailsStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="AssetDetailsPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,119,28,225" Opacity="0.05" />
-        <Label Margin="28,119,28,225" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Toolbox (Audio) Downloader is "/>
-                <TextBlock Foreground="Lime" Name="AudioDownloadStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="AudioDownloadPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,78,28,266" Opacity="0.05" />
-        <Label Margin="28,78,28,266" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Catalog Search API is "/>
-                <TextBlock Foreground="Lime" Name="CatalogSearchApi" TextDecorations="Underline" FontWeight="Bold" Text="Online"/>
-                <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of "/>
-                <TextBlock Foreground="Orange" Name="CatalogSearchPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms"/>
-            </StackPanel>
-        </Label>
-        <Border ClipToBounds="True" CornerRadius="6" Background="White" Margin="28,324,28,20" Opacity="0.05" />
-        <Label Margin="28,324,28,20" HorizontalAlignment="Center" Opacity="100" VerticalAlignment="Center" FontSize="14px">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="White" FontWeight="Bold" Text="Unused API Slot"/>
-            </StackPanel>
-        </Label>
+            </Border>
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Audio Searching API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="AudioApiOnlineStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="AudioApiPing"  TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Authentication Ticket API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="AuthenticationTicketStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="TAuthenticationTicketPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Thumbnail API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="ThumbnailApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="ThumbnailApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Marketplace API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="MarketplaceApiStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="MarketplaceApiPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Toolbox (Audio) Classification is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="AssetDetailsStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="AssetDetailsPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Toolbox (Audio) Downloader is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="AudioDownloadStatus" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="AudioDownloadPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Catalog Search API is " FontSize="14px"/>
+                    <TextBlock Foreground="Lime" Name="CatalogSearchApi" TextDecorations="Underline" FontWeight="Bold" Text="Online" FontSize="14px"/>
+                    <TextBlock Foreground="White" FontWeight="Bold" Text=" with a speed of " FontSize="14px"/>
+                    <TextBlock Foreground="Orange" Name="CatalogSearchPing" TextDecorations="Underline" FontWeight="Bold" Text="85ms" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#0CFFFFFF" CornerRadius="6" Height="35" Padding="10" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Unused API Slot" FontSize="14px"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        
 
     </Grid>
 </Page>

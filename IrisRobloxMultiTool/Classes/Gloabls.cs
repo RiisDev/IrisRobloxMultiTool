@@ -63,9 +63,7 @@ public static class Config
 	public static RobloxApi Roblox { get; } = new ();
 
 	public static bool UpdateAvailable { get; set; }
-
-	public static CustomMessageBox CustomBox { get; } = new();
-
+	
 	public static string CurrentVersion { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "-1";
 }
 

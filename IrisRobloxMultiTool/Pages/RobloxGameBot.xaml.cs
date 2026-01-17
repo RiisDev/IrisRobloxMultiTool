@@ -1,8 +1,13 @@
-﻿using IrisRobloxMultiTool.Classes;
+﻿using IrisRobloxMultiTool.Windows;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace IrisRobloxMultiTool.Pages
 {
@@ -11,7 +16,9 @@ namespace IrisRobloxMultiTool.Pages
     /// </summary>
     public partial class RobloxGameBot
 	{
-	    [DllImport("user32.dll")]
+		private readonly BotProcessInfoViewModel _botProcessModel;
+
+		[DllImport("user32.dll")]
 	    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
 		private static readonly CookieContainer RobloxContainer = new();
@@ -66,7 +73,7 @@ namespace IrisRobloxMultiTool.Pages
 			return clientAssertionToken ?? throw new InvalidOperationException("Failed to get assertion token");
 		}
 
-	    private async Task<string> GetAuthenticationTicket(string cookie, string assertionToken)
+	    private async Task<string> GetAuthenticationTicket(string assertionToken)
 	    {
 		    using HttpRequestMessage request = new(HttpMethod.Post, "https://auth.roblox.com/v1/authentication-ticket/");
 		    request.Content = JsonContent.Create(new { clientAssertion = assertionToken });
@@ -74,7 +81,12 @@ namespace IrisRobloxMultiTool.Pages
 		    return authenticationTicketResponse.Headers.GetValues("rbx-authentication-ticket").First();
 		}
 
-		public RobloxGameBot() => InitializeComponent();
+		public RobloxGameBot()
+		{
+			InitializeComponent();
+			_botProcessModel = new BotProcessInfoViewModel();
+			ProcessListGrid.DataContext = _botProcessModel;
+		}
 
 		private string GetLaunchCode(long placeId, string authCode)
         {
@@ -90,6 +102,7 @@ namespace IrisRobloxMultiTool.Pages
 			using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(@"roblox-player\shell\open\command");
 			if (key is null) throw new InvalidOperationException("Roblox is not installed on this system.");
 			string? value = key.GetValue(null) as string;
+			if (value is null) throw new InvalidOperationException("Roblox is not installed on this system. 0x1");
 			string trimmedValue = value.Trim('"');
 			string robloxParsed = trimmedValue[..trimmedValue.IndexOf('"')];
 			return robloxParsed;
@@ -98,26 +111,153 @@ namespace IrisRobloxMultiTool.Pages
 		private async Task<Process?> LaunchRobloxGame(long placeId, string cookie)
 		{
 			string assertionToken = await GetAssertionToken(cookie);
-			string authTicket = await GetAuthenticationTicket(cookie, assertionToken);
+			string authTicket = await GetAuthenticationTicket(assertionToken);
 			string robloxPath = GetRobloxLocation();
 			
-			Process robloxProcess = Process.Start(robloxPath, GetLaunchCode(placeId, authTicket));
+			ProcessStartInfo startInfo = new()
+			{
+				FileName = robloxPath,
+				Arguments = GetLaunchCode(placeId, authTicket),
+				CreateNoWindow = true,
+				UseShellExecute = false
+			};
+
+			Process? robloxProcess = Process.Start(startInfo);
 
 			_ = Task.Run(async() =>
 			{
-				while (!robloxProcess.HasExited)
+				while (!robloxProcess?.HasExited ?? false)
 				{
 					ShowWindow(robloxProcess.MainWindowHandle, 0);
+
+					robloxProcess.PriorityClass = ProcessPriorityClass.Idle; 
+					robloxProcess.ProcessorAffinity = new IntPtr(1);
+
 					await Task.Delay(150);
 				}
 			});
 
-			return Process.GetProcessesByName("RobloxPlayerBeta").First();
+			return robloxProcess;
 		}
 
+		private readonly CancellationTokenSource _cts = new ();
+		
 		private void Grid_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
+			if (Process.GetProcessesByName("RobloxPlayerBeta").Length > 0) 
+			{ CustomMessageBox.ShowDialog("Roblox is currently running, please close all clients and then reload application page."); return; }
+
 			try { _ = new Mutex(true, "ROBLOX_singletonMutex"); } catch {/**/}
+
+			_ = Task.Run(async () =>
+			{
+				try
+				{
+					while (!_cts.IsCancellationRequested)
+					{
+						foreach (BotProcessInfo processInfo in _botProcessModel.BotProcessInfos)
+						{
+							processInfo.ActiveTime = processInfo.ActiveTime.Add(TimeSpan.FromSeconds(1));
+						}
+
+						await Task.Delay(1000);
+					}
+				} catch {/**/}
+
+			});
+
+			_botProcessModel.BotProcessInfos.Clear();
+
+			for (int i = 0; i < 5; i++) // Simulate 5 bot processes
+			{
+				_botProcessModel.BotProcessInfos.Add(new BotProcessInfo(this)
+				{
+					Username = $"User{i + 1}",
+					UserId = 1000 + i,
+					ProcessId = 5000 + i,
+					ActiveTime = TimeSpan.Zero
+				});
+				AppInvoke(UpdateLayout);
+			}
+		}
+		
+		private string _selectedFilePath = string.Empty;
+		
+		private void SelectBotFile_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dlg = new()
+			{
+				Filter = "All Files (*.*)|*.*",
+				Title = "Select Bot Input File"
+			};
+
+			if (dlg.ShowDialog() != true) return;
+			_selectedFilePath = dlg.FileName;
+
+			CustomMessageBox.ShowDialog($"Selected file: {Path.GetFileName(_selectedFilePath)}");
+		}
+
+		private void ClearBotFile_Click(object sender, RoutedEventArgs e)
+		{
+			_selectedFilePath = string.Empty;
+			CustomMessageBox.ShowDialog("Input file cleared.");
+		}
+
+
+		private void StartBot_Click(object sender, RoutedEventArgs e)
+		{
+			string placeId = PlaceIdBox.Text;
+			bool isHidden = WindowModeToggle.IsChecked ?? false;
+
+			if (string.IsNullOrWhiteSpace(placeId))
+			{
+				CustomMessageBox.ShowDialog("Please enter a Place ID.");
+				return;
+			}
+
+			if (string.IsNullOrWhiteSpace(_selectedFilePath))
+			{
+				CustomMessageBox.ShowDialog("Please select an input file.");
+				return;
+			}
+
+			_botProcessModel.BotProcessInfos.Clear();
+
+			CustomMessageBox.ShowDialog($"Started botting for Place ID {placeId} in {(isHidden ? "Hidden" : "Tiny Window")} mode.");
+		}
+
+		private void Page_Unloaded(object sender, RoutedEventArgs e) => _cts.Cancel();
+	}
+
+	public sealed class BotProcessInfoViewModel
+	{
+		public ObservableCollection<BotProcessInfo> BotProcessInfos { get; } = [];
+	}
+
+	public class BotProcessInfo(Page page)
+	{
+		public required string Username
+		{
+			get;
+			set { field = value; AppInvoke(page.UpdateLayout); }
+		}
+
+		public required int UserId
+		{
+			get;
+			set { field = value; AppInvoke(page.UpdateLayout); }
+		}
+
+		public required int ProcessId
+		{
+			get;
+			set { field = value; AppInvoke(page.UpdateLayout); }
+		}
+
+		public required TimeSpan ActiveTime
+		{
+			get;
+			set { field = value; AppInvoke(page.UpdateLayout); }
 		}
 	}
 }

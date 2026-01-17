@@ -2,114 +2,114 @@
 
 namespace IrisRobloxMultiTool.Windows
 {
-    /// <summary>
-    /// Interaction logic for MessageBox.xaml
-    /// </summary>
-    public partial class CustomMessageBox
-    {
-        public CustomMessageBox() => InitializeComponent();
+	public partial class CustomMessageBox
+	{
+		public CustomMessageBox() => InitializeComponent();
 
-        public MessageBoxResult Result { get; private set; }
+		public static MessageBoxResult ShowDialog(string description, string title = "Iris Roblox Multi Tool", MessageBoxButton messageBoxButton = MessageBoxButton.OK)
+		{
+			MessageBoxResult result = MessageBoxResult.None;
 
-        public MessageBoxResult ShowDialog(string description, string? title = "Iris Roblox Multi Tool", MessageBoxButton messageBoxButton = MessageBoxButton.OK, MessageBoxImage messageBoxImage = MessageBoxImage.None)
-        {
-            return Dispatcher.Invoke(() =>
-            {
-                MainTitle.Title = title;
-                DescriptionLabel.Content = description;
-                ButtonLeft.Visibility = Visibility.Hidden;
-                ButtonMiddle.Visibility = Visibility.Hidden;
-                ButtonRight.Visibility = Visibility.Hidden;
-				
-                switch (messageBoxButton)
-                {
-                    case MessageBoxButton.OK:
-                        ButtonRight.Visibility = Visibility.Visible;
-                        ButtonRight.Content = "OK";
+			AppInvoke(() =>
+			{
+				CustomMessageBox messageBox = new()
+				{
+					Owner = Application.Current.MainWindow,
+					MainTitle =
+					{
+						Title = title
+					},
+					DescriptionLabel =
+					{
+						Content = description
+					}
+				};
 
-                        ButtonRight.Click += delegate
-                        {
-                            Result = MessageBoxResult.OK;
-                            Hide();
-                        };
+				messageBox.ConfigureButtons(messageBoxButton);
 
-                        break;
-                    case MessageBoxButton.OKCancel:
-                        ButtonRight.Visibility = Visibility.Visible;
-                        ButtonMiddle.Visibility = Visibility.Visible;
+				_ = messageBox.ShowDialog();
+				result = messageBox.Result;
+			});
+			
+			return result;
+		}
 
-                        ButtonRight.Content = "Cancel";
-                        ButtonMiddle.Content = "OK";
+		public MessageBoxResult Result { get; private set; }
 
-                        ButtonMiddle.Click += delegate
-                        {
-                            Result = MessageBoxResult.OK;
-                            Hide();
-                        };
-                        ButtonRight.Click += delegate
-                        {
-                            Result = MessageBoxResult.Cancel;
-                            Hide();
-                        };
+		private void ConfigureButtons(MessageBoxButton messageBoxButton)
+		{
+			ButtonLeft.Visibility = Visibility.Hidden;
+			ButtonMiddle.Visibility = Visibility.Hidden;
+			ButtonRight.Visibility = Visibility.Hidden;
 
-                        break;
-                    case MessageBoxButton.YesNo:
-                        ButtonRight.Visibility = Visibility.Visible;
-                        ButtonMiddle.Visibility = Visibility.Visible;
+			ButtonLeft.Click -= Button_Click;
+			ButtonMiddle.Click -= Button_Click;
+			ButtonRight.Click -= Button_Click;
 
-                        ButtonRight.Content = "No";
-                        ButtonMiddle.Content = "Yes";
+			switch (messageBoxButton)
+			{
+				case MessageBoxButton.OK:
+					ButtonRight.Visibility = Visibility.Visible;
+					ButtonRight.Content = "OK";
+					ButtonRight.Tag = MessageBoxResult.OK;
+					ButtonRight.Click += Button_Click;
+					break;
 
-                        ButtonMiddle.Click += delegate
-                        {
-                            Result = MessageBoxResult.Yes;
-                            Hide();
-                        };
-                        ButtonRight.Click += delegate
-                        {
-                            Result = MessageBoxResult.No;
-                            Hide();
-                        };
+				case MessageBoxButton.YesNo:
+					ButtonMiddle.Visibility = Visibility.Visible;
+					ButtonRight.Visibility = Visibility.Visible;
 
-                        break;
-                    case MessageBoxButton.YesNoCancel:
-                        ButtonRight.Visibility = Visibility.Visible;
-                        ButtonMiddle.Visibility = Visibility.Visible;
-                        ButtonLeft.Visibility = Visibility.Visible;
+					ButtonMiddle.Content = "Yes";
+					ButtonMiddle.Tag = MessageBoxResult.Yes;
 
-                        ButtonRight.Content = "Cancel";
-                        ButtonMiddle.Content = "No";
-                        ButtonLeft.Content = "Yes";
+					ButtonRight.Content = "No";
+					ButtonRight.Tag = MessageBoxResult.No;
 
-                        ButtonLeft.Click += delegate
-                        {
-                            Result = MessageBoxResult.Yes;
-                            Hide();
-                        };
-                        ButtonMiddle.Click += delegate
-                        {
-                            Result = MessageBoxResult.No;
-                            Hide();
-                        };
-                        ButtonRight.Click += delegate
-                        {
-                            Result = MessageBoxResult.Cancel;
-                            Hide();
-                        };
+					ButtonMiddle.Click += Button_Click;
+					ButtonRight.Click += Button_Click;
+					break;
 
-                        break;
-                    case MessageBoxButton.AbortRetryIgnore:
-                    case MessageBoxButton.RetryCancel:
-                    case MessageBoxButton.CancelTryContinue:
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(messageBoxButton), messageBoxButton, null);
-                }
+				case MessageBoxButton.YesNoCancel:
+					ButtonLeft.Visibility = Visibility.Visible;
+					ButtonMiddle.Visibility = Visibility.Visible;
+					ButtonRight.Visibility = Visibility.Visible;
 
-                ShowDialog();
-                return Result;
-            });
-        }
+					ButtonLeft.Content = "Yes";
+					ButtonLeft.Tag = MessageBoxResult.Yes;
 
-    }
+					ButtonMiddle.Content = "No";
+					ButtonMiddle.Tag = MessageBoxResult.No;
 
+					ButtonRight.Content = "Cancel";
+					ButtonRight.Tag = MessageBoxResult.Cancel;
+
+					ButtonLeft.Click += Button_Click;
+					ButtonMiddle.Click += Button_Click;
+					ButtonRight.Click += Button_Click;
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(messageBoxButton));
+			}
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			if (sender is FrameworkElement element &&
+				element.Tag is MessageBoxResult result)
+			{
+				Result = result;
+				DialogResult = true;
+				Close();
+			}
+		}
+
+		private void MainTitle_CloseClicked(object sender, RoutedEventArgs e)
+		{
+			e.Handled = true;
+			Result = MessageBoxResult.Cancel;
+			DialogResult = false;
+			Close();
+		}
+	}
 }

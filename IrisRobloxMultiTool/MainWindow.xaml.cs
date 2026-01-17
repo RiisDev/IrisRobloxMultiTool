@@ -45,10 +45,10 @@ namespace IrisRobloxMultiTool
             UpdateAvailable = true;
 
             await AppInvokeAsync(() => AboutTab.Content += " | Update Available");
-			
-            MessageBoxResult result = CustomBox.ShowDialog("There is an update, would you like to download now?", "IRMT", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-            if (result == MessageBoxResult.Yes)
+            MessageBoxResult result = CustomMessageBox.ShowDialog("There is an update, would you like to download now?", "IRMT", MessageBoxButton.YesNo);
+
+			if (result == MessageBoxResult.Yes)
                 Process.Start("explorer.exe", "https://github.com/RiisDev/IrisRobloxMultiTool/releases");
 		}
 
@@ -90,5 +90,9 @@ namespace IrisRobloxMultiTool
             VerifiedIcon.Visibility = Roblox.Account.IsVerified ? Visibility.Visible : Visibility.Hidden;
         }
 
+		private void UiWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			RootFrame.Height = e.NewSize.Height - 60;
+		}
     }
 }

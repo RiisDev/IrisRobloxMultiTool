@@ -13,14 +13,13 @@
     mc:Ignorable="d"
     Title="Sign In" 
     Loaded="OnLoaded" 
-    ResizeMode="NoResize" 
+    ResizeMode="CanResize" 
     Background="{x:Null}" 
     Height="453" 
     Width="933"
     MinHeight="453" 
-    MinWidth="933" 
-    MaxHeight="453" 
-    MaxWidth="933" Icon="/Images/IRMTIcon.ico" 
+    MinWidth="933"
+    Icon="/Images/IRMTIcon.ico" SizeChanged="UiWindow_SizeChanged" 
     >
     <Grid>
 
@@ -37,7 +36,7 @@
             x:Name="RootNavigation" 
             Grid.Column="0"
             Margin="0,48,10,10"
-            Frame="{Binding ElementName=RootFrame}" 
+            Frame="{Binding ElementName=RootFrame}"
             SelectedPageIndex="0">
             <ui:NavigationFluent.Items>
                 <ui:NavigationHeader/>
@@ -48,26 +47,28 @@
                 <ui:NavigationItem Name="AboutTab" Height="40"  Content="About" PageType="{x:Type pages:About}" Icon="QuestionCircle48" Tag="about" IconFilled="True" />
             </ui:NavigationFluent.Items>
         </ui:NavigationFluent>
-        <Frame Name="RootFrame" Margin="255,48,10,10" Height="380"/>
-        <Border MinHeight="63.04" MinWidth="240" MaxHeight="63.04" MaxWidth="240" ClipToBounds="True" CornerRadius="8" Background="White" Opacity="0.03" Margin="10,48,683,326">
-            <Canvas Background="Transparent" />
-        </Border>
-        <Ellipse Height="50" Width="50" Margin="14,53,869,334">
-            <Ellipse.Fill>
-                <ImageBrush x:Name="UserPfp"  ImageSource="https://cdn.discordapp.com/embed/avatars/0.png" Stretch="UniformToFill"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Label Name="PlayerName" Content="RiisDev" HorizontalAlignment="Left" Margin="69,63,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" Foreground="White" Width="151"/>
-        <Viewbox HorizontalAlignment="Left" Name="VerifiedIcon" Margin="67,86,0,0" VerticalAlignment="Top" Width="25">
-            <Canvas Width="25" Height="25">
-                <Path Fill="DodgerBlue" Data="M21.6,9.84A4.57,4.57,0,0,1,21.18,9,4,4,0,0,1,21,8.07a4.21,4.21,0,0,0-.64-2.16,4.25,4.25,0,0,0-1.87-1.28,4.77,4.77,0,0,1-.85-.43A5.11,5.11,0,0,1,17,3.54a4.2,4.2,0,0,0-1.8-1.4A4.22,4.22,0,0,0,13,2.21a4.24,4.24,0,0,1-1.94,0,4.22,4.22,0,0,0-2.24-.07A4.2,4.2,0,0,0,7,3.54a5.11,5.11,0,0,1-.66.66,4.77,4.77,0,0,1-.85.43A4.25,4.25,0,0,0,3.61,5.91,4.21,4.21,0,0,0,3,8.07,4,4,0,0,1,2.82,9a4.57,4.57,0,0,1-.42.82A4.3,4.3,0,0,0,1.63,12a4.3,4.3,0,0,0,.77,2.16,4,4,0,0,1,.42.82,4.11,4.11,0,0,1,.15.95,4.19,4.19,0,0,0,.64,2.16,4.25,4.25,0,0,0,1.87,1.28,4.77,4.77,0,0,1,.85.43,5.11,5.11,0,0,1,.66.66,4.12,4.12,0,0,0,1.8,1.4,3,3,0,0,0,.87.13A6.66,6.66,0,0,0,11,21.81a4,4,0,0,1,1.94,0,4.33,4.33,0,0,0,2.24.06,4.12,4.12,0,0,0,1.8-1.4,5.11,5.11,0,0,1,.66-.66,4.77,4.77,0,0,1,.85-.43,4.25,4.25,0,0,0,1.87-1.28A4.19,4.19,0,0,0,21,15.94a4.11,4.11,0,0,1,.15-.95,4.57,4.57,0,0,1,.42-.82A4.3,4.3,0,0,0,22.37,12,4.3,4.3,0,0,0,21.6,9.84Zm-4.89.87-5,5a1,1,0,0,1-1.42,0l-3-3a1,1,0,1,1,1.42-1.42L11,13.59l4.29-4.3a1,1,0,0,1,1.42,1.42Z"/>
-            </Canvas>
-        </Viewbox>
-        <Viewbox Margin="94,88,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20">
-            <Canvas Width="100" Height="100">
-                <Path Fill="White" Data="M82,17.72A19.94,19.94,0,0,1,92,35V65.08A19.92,19.92,0,0,1,82,82.33L56,97.39a19.94,19.94,0,0,1-19.91,0L10,82.33A19.91,19.91,0,0,1,0,65.08V35A19.93,19.93,0,0,1,10,17.72L36,2.67A19.89,19.89,0,0,1,56,2.67ZM39.53,9.5,14.13,24.17a12.92,12.92,0,0,0-6.46,11.2V64.69a12.93,12.93,0,0,0,6.46,11.2l25.4,14.66a12.93,12.93,0,0,0,12.93,0l25.4-14.66a12.93,12.93,0,0,0,6.46-11.2V35.37a12.92,12.92,0,0,0-6.46-11.2L52.46,9.5a12.93,12.93,0,0,0-12.93,0ZM51.3,17.7l20,11.56a10.64,10.64,0,0,1,5.32,9.21V61.6a10.61,10.61,0,0,1-5.32,9.2l-20,11.57a10.61,10.61,0,0,1-10.62,0l-20-11.57a10.6,10.6,0,0,1-5.31-9.2V38.47a10.63,10.63,0,0,1,5.31-9.21l20-11.56a10.61,10.61,0,0,1,10.62,0ZM34.5,61.53h23v-23h-23Z"></Path>
-            </Canvas>
-        </Viewbox>
-        <Label Name="RobuxCount" Content="5,413" HorizontalAlignment="Left" Margin="115,87,0,0" VerticalAlignment="Top" Foreground="#1DA1F2"/>
+        <Frame  Name="RootFrame" VerticalAlignment="Center" Margin="255,40,5,5" />
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Border Height="63.04" Width="240" CornerRadius="8" Background="White" Opacity="0.03" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,47,0,0">
+                <Canvas Background="Transparent" />
+            </Border>
+            <Ellipse Height="50" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,53,0,0">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="UserPfp" ImageSource="https://cdn.discordapp.com/embed/avatars/0.png" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Label Name="PlayerName" Content="RiisDev" FontWeight="SemiBold" HorizontalAlignment="Left" Margin="69,53,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" Foreground="White" Width="151"/>
+            <Viewbox HorizontalAlignment="Left" Name="VerifiedIcon" Margin="67,76,0,0" VerticalAlignment="Top" Width="25">
+                <Canvas Width="25" Height="25">
+                    <Path Fill="DodgerBlue" Data="M21.6,9.84A4.57,4.57,0,0,1,21.18,9,4,4,0,0,1,21,8.07a4.21,4.21,0,0,0-.64-2.16,4.25,4.25,0,0,0-1.87-1.28,4.77,4.77,0,0,1-.85-.43A5.11,5.11,0,0,1,17,3.54a4.2,4.2,0,0,0-1.8-1.4A4.22,4.22,0,0,0,13,2.21a4.24,4.24,0,0,1-1.94,0,4.22,4.22,0,0,0-2.24-.07A4.2,4.2,0,0,0,7,3.54a5.11,5.11,0,0,1-.66.66,4.77,4.77,0,0,1-.85.43A4.25,4.25,0,0,0,3.61,5.91,4.21,4.21,0,0,0,3,8.07,4,4,0,0,1,2.82,9a4.57,4.57,0,0,1-.42.82A4.3,4.3,0,0,0,1.63,12a4.3,4.3,0,0,0,.77,2.16,4,4,0,0,1,.42.82,4.11,4.11,0,0,1,.15.95,4.19,4.19,0,0,0,.64,2.16,4.25,4.25,0,0,0,1.87,1.28,4.77,4.77,0,0,1,.85.43,5.11,5.11,0,0,1,.66.66,4.12,4.12,0,0,0,1.8,1.4,3,3,0,0,0,.87.13A6.66,6.66,0,0,0,11,21.81a4,4,0,0,1,1.94,0,4.33,4.33,0,0,0,2.24.06,4.12,4.12,0,0,0,1.8-1.4,5.11,5.11,0,0,1,.66-.66,4.77,4.77,0,0,1,.85-.43,4.25,4.25,0,0,0,1.87-1.28A4.19,4.19,0,0,0,21,15.94a4.11,4.11,0,0,1,.15-.95,4.57,4.57,0,0,1,.42-.82A4.3,4.3,0,0,0,22.37,12,4.3,4.3,0,0,0,21.6,9.84Zm-4.89.87-5,5a1,1,0,0,1-1.42,0l-3-3a1,1,0,1,1,1.42-1.42L11,13.59l4.29-4.3a1,1,0,0,1,1.42,1.42Z"/>
+                </Canvas>
+            </Viewbox>
+            <Viewbox Margin="94,79,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20">
+                <Canvas Width="100" Height="100">
+                    <Path Fill="White" Data="M82,17.72A19.94,19.94,0,0,1,92,35V65.08A19.92,19.92,0,0,1,82,82.33L56,97.39a19.94,19.94,0,0,1-19.91,0L10,82.33A19.91,19.91,0,0,1,0,65.08V35A19.93,19.93,0,0,1,10,17.72L36,2.67A19.89,19.89,0,0,1,56,2.67ZM39.53,9.5,14.13,24.17a12.92,12.92,0,0,0-6.46,11.2V64.69a12.93,12.93,0,0,0,6.46,11.2l25.4,14.66a12.93,12.93,0,0,0,12.93,0l25.4-14.66a12.93,12.93,0,0,0,6.46-11.2V35.37a12.92,12.92,0,0,0-6.46-11.2L52.46,9.5a12.93,12.93,0,0,0-12.93,0ZM51.3,17.7l20,11.56a10.64,10.64,0,0,1,5.32,9.21V61.6a10.61,10.61,0,0,1-5.32,9.2l-20,11.57a10.61,10.61,0,0,1-10.62,0l-20-11.57a10.6,10.6,0,0,1-5.31-9.2V38.47a10.63,10.63,0,0,1,5.31-9.21l20-11.56a10.61,10.61,0,0,1,10.62,0ZM34.5,61.53h23v-23h-23Z"></Path>
+                </Canvas>
+            </Viewbox>
+            <Label Name="RobuxCount" Content="728" HorizontalAlignment="Left" FontWeight="SemiBold" Margin="115,79,0,0" VerticalAlignment="Top" Foreground="#FF00FF90"/>
+        </Grid>
     </Grid>
 </ui:UiWindow>

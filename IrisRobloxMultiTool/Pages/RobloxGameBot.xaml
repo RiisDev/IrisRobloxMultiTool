@@ -3,10 +3,81 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       x:Class="IrisRobloxMultiTool.Pages.RobloxGameBot"
       mc:Ignorable="d" 
       d:DesignHeight="380" d:DesignWidth="668"
-      Title="RobloxGameBot">
+      Title="RobloxGameBot" Unloaded="Page_Unloaded">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Loaded="Grid_Loaded">
+        <StackPanel>
 
-    <Grid Loaded="Grid_Loaded"/>
+            <!-- Input Section -->
+            <ui:Card Margin="0,0,0,5">
+                <StackPanel>
+                    <TextBlock Text="Game Bot Inputs" FontWeight="SemiBold"/>
+
+                    <ui:Button
+                        Content="Select Input File"
+                        Name="SelectBotFile"
+                        Icon="Document24"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Stretch"
+                        Click="SelectBotFile_Click"/>
+
+                    <ui:Button
+                        Content="Clear Input File"
+                        Name="ClearBotFile"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Stretch"
+                        Click="ClearBotFile_Click"/>
+
+                    <ui:TextBox
+                        PlaceholderText="Enter Place ID"
+                        Name="PlaceIdBox"
+                        Margin="0,10,0,0"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10" VerticalAlignment="Center">
+                        <TextBlock Text="Window Mode:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ui:ToggleSwitch Name="WindowModeToggle" />
+                    </StackPanel>
+
+                    <ui:Button
+                        Content="Start Botting"
+                        Icon="ArrowDownload20"
+                        HorizontalAlignment="Stretch"
+                        Click="StartBot_Click"/>
+                </StackPanel>
+            </ui:Card>
+
+            <!-- Process List -->
+            <ui:Card>
+                <StackPanel>
+                    <TextBlock Text="Active Processes" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <DataGrid Name="ProcessListGrid"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              MinHeight="100" 
+                              Focusable="False" 
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+                              CanUserSortColumns="False"
+                              ItemsSource="{Binding BotProcessInfos}"
+                              >
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
+                            <DataGridTextColumn Header="UserID" Binding="{Binding UserId}" Width="*"/>
+                            <DataGridTextColumn Header="Process ID" Binding="{Binding ProcessId}" Width="*"/>
+                            <DataGridTextColumn Header="Active Time" Binding="{Binding ActiveTime}" Width="*"/>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </StackPanel>
+            </ui:Card>
+
+
+        </StackPanel>
+    </ScrollViewer>
 </Page>
