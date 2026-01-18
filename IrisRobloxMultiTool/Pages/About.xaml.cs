@@ -10,7 +10,12 @@ namespace IrisRobloxMultiTool.Pages
         private bool _discordClicked;
         private bool _updateClicked;
 
-        public About() => InitializeComponent();
+        public About()
+        {
+	        InitializeComponent();
+	        SetContent(ReleaseVersion, $"V{CurrentVersion[..CurrentVersion.LastIndexOf($".", StringComparison.Ordinal)]}");
+		}
+
         private void Canvas_MouseLeave(object sender, MouseEventArgs e) => Mouse.OverrideCursor = null;
         
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -71,32 +76,31 @@ namespace IrisRobloxMultiTool.Pages
 		        }
 
 		        SetContent(DownloadCount, downloadCount.ToString());
-		        SetContent(ReleaseVersion, $"V{CurrentVersion[..CurrentVersion.LastIndexOf($".", StringComparison.Ordinal)]}");
 
-		        if (UpdateAvailable)
-		        {
+				if (UpdateAvailable)
+				{
 					SetContent(UpdateVersionLabel, $"Update Available: {releaseVersion}");
 
-			        UpdateClickCanvas.MouseLeave += delegate { Mouse.OverrideCursor = null; };
-			        UpdateClickCanvas.MouseLeftButtonDown += delegate
-			        {
-				        Mouse.OverrideCursor = Cursors.Hand;
-				        _updateClicked = true;
-			        };
-			        UpdateClickCanvas.MouseLeftButtonUp += delegate
-			        {
-				        if (_updateClicked && Mouse.OverrideCursor == Cursors.Hand)
-					        Process.Start("explorer.exe", "https://github.com/RiisDev/IrisRobloxMultiTool/releases/latest");
+					UpdateAvailableCanvas.MouseLeave += delegate { Mouse.OverrideCursor = null; };
+					UpdateAvailableCanvas.MouseLeftButtonDown += delegate
+					{
+						Mouse.OverrideCursor = Cursors.Hand;
+						_updateClicked = true;
+					};
+					UpdateAvailableCanvas.MouseLeftButtonUp += delegate
+					{
+						if (_updateClicked && Mouse.OverrideCursor == Cursors.Hand)
+							Process.Start("explorer.exe", "https://github.com/RiisDev/IrisRobloxMultiTool/releases/latest");
 
-				        _updateClicked = false;
-				        Mouse.OverrideCursor = null;
-			        };
-		        }
-		        else
-		        {
-			        VersionCanvas.Effect = null;
-			        UpdateAvailableLabel.Visibility = Visibility.Collapsed;
-		        }
+						_updateClicked = false;
+						Mouse.OverrideCursor = null;
+					};
+				}
+				else
+				{
+					UpdateAvailableCanvas.Effect = null;
+					UpdateVersionLabel.Visibility = Visibility.Collapsed;
+				}
 
 				await AppInvokeAsync(() =>
 				{
@@ -119,5 +123,7 @@ namespace IrisRobloxMultiTool.Pages
 	        _ = Task.Run(async () => SetContent(OnlineCount, $"{await GetDiscordMemberCount()} ONLINE"));
 	        _ = Task.Run(async () => await DoGithubChecks());
         }
+
+		private void Border_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateVersionLabel.Width = e.NewSize.Width - 50;
     }
 }
