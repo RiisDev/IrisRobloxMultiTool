@@ -31,14 +31,22 @@
                         HorizontalAlignment="Stretch"
                         Click="ClearBotFile_Click"/>
 
-                    <ui:TextBox
-                        PlaceholderText="Enter Place ID"
+                    <ui:NumberBox
+                        PlaceholderText="      Enter Place ID"
                         Name="PlaceIdBox"
-                        Margin="0,10,0,0"/>
+                        Text="8012418022"
+                        IntegersOnly="True"
+                        SpinButtonsEnabled="False"
+                        PlaceholderEnabled="True"
+                        Margin="0,10,0,0"  />
 
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,10" VerticalAlignment="Center">
-                        <TextBlock Text="Window Mode:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <ui:ToggleSwitch Name="WindowModeToggle" />
+                        <TextBlock Text="Hidden Client Mode:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ui:ToggleSwitch Name="HiddenClientToggle" />
+                        <TextBlock Text="Kill at 15 minutes:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                        <ui:ToggleSwitch Name="KillAt15" />
+                        <TextBlock Text="Restart at 15 minutes:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                        <ui:ToggleSwitch Name="RestartAt15" />
                     </StackPanel>
 
                     <ui:Button

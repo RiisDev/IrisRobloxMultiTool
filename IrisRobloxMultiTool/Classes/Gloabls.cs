@@ -4,7 +4,6 @@ global using System.Text.Json;
 global using static IrisRobloxMultiTool.Classes.Config;
 global using static IrisRobloxMultiTool.Classes.Logging;
 global using static IrisRobloxMultiTool.Classes.TypeExtender;
-using IrisRobloxMultiTool.Windows;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -72,8 +71,9 @@ public static class TypeExtender
 	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? value) => string.IsNullOrEmpty(value);
 
 	public static void AppInvoke(Action action) => Application.Current.Dispatcher.Invoke(action);
-
+	public static TResult AppInvoke<TResult>(Func<TResult> func) => Application.Current.Dispatcher.Invoke(func);
 	public static async Task AppInvokeAsync(Action action) => await Application.Current.Dispatcher.InvokeAsync(action);
+	public static async Task<TResult> AppInvokeAsync<TResult>(Func<TResult> func) => await Application.Current.Dispatcher.InvokeAsync(func);
 
 	public static void SetProperty<TControl, TValue>(TControl? control, Expression<Func<TControl, TValue>> propertyExpression, TValue newValue) where TControl : DependencyObject
 	{

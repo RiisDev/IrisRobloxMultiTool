@@ -95,13 +95,11 @@ namespace IrisRobloxMultiTool.Windows
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender is FrameworkElement element &&
-				element.Tag is MessageBoxResult result)
-			{
-				Result = result;
-				DialogResult = true;
-				Close();
-			}
+			if (sender is not FrameworkElement { Tag: MessageBoxResult result }) return;
+
+			Result = result;
+			DialogResult = true;
+			Close();
 		}
 
 		private void MainTitle_CloseClicked(object sender, RoutedEventArgs e)

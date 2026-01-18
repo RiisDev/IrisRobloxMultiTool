@@ -2,6 +2,7 @@
 using IrisRobloxMultiTool.Windows;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -12,13 +13,6 @@ using Wpf.Ui.Common;
 
 namespace IrisRobloxMultiTool.Pages
 {
-	public enum InputType
-	{
-		SingleAsset,
-		GroupAsset,
-		FileInput
-	}
-
 	public partial class AssetDownloader
 	{
 		public string AssetDataUrl => GetTextContent(AssetId);
@@ -37,7 +31,7 @@ namespace IrisRobloxMultiTool.Pages
 
 			Loaded += (_, _) =>
 			{
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 0,
@@ -45,7 +39,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 25,
@@ -53,7 +47,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 50,
@@ -61,7 +55,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 100,
@@ -69,7 +63,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.CheckmarkCircle20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 0,
@@ -77,7 +71,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 25,
@@ -85,7 +79,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 50,
@@ -93,7 +87,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 100,
@@ -101,7 +95,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.CheckmarkCircle20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 0,
@@ -109,7 +103,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 25,
@@ -117,7 +111,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 50,
@@ -125,7 +119,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 100,
@@ -133,7 +127,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.CheckmarkCircle20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 0,
@@ -141,7 +135,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 25,
@@ -149,7 +143,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 50,
@@ -157,7 +151,7 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem(this)
+				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
 				{
 					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
 					Progress = 100,
@@ -255,34 +249,76 @@ namespace IrisRobloxMultiTool.Pages
 		}
 	}
 
-	public sealed class AssetDownloadItem(Page page)
+	public sealed class AssetDownloadItem : INotifyPropertyChanged
     {
-		public required long AssetId { get; set; }
+		public required long AssetId
+		{
+			get;
+			set
+			{
+				if (field == value) return;
+
+				field = value;
+				OnPropertyChanged(nameof(AssetId));
+			}
+		}
 
 		public required Uri? PreviewImage
-	    {
-		    get;
-		    set { field = value; AppInvoke(page.UpdateLayout); }
-	    }
+		{
+			get;
+			set
+			{
+				if (field == value) return;
+
+				field = value;
+				OnPropertyChanged(nameof(PreviewImage));
+			}
+		}
 
 		public required double Progress
-	    {
-		    get;
-		    set { field = value; AppInvoke(page.UpdateLayout); }
-	    }
+		{
+			get;
+			set
+			{
+				if (Math.Abs(field - value) < .001) return;
+
+				field = value;
+				OnPropertyChanged(nameof(Progress));
+			}
+		}
 
 		public required bool IsCompleted
-	    {
-		    get;
-		    set { field = value; AppInvoke(page.UpdateLayout); }
-	    }
+		{
+			get;
+			set
+			{
+				if (field == value) return;
+
+				field = value;
+				OnPropertyChanged(nameof(IsCompleted));
+			}
+		}
 
 		public required SymbolRegular StatusIcon
 		{
 			get;
-			set { field = value; AppInvoke(page.UpdateLayout); }
+			set
+			{
+				if (field == value) return;
+
+				field = value;
+				OnPropertyChanged(nameof(StatusIcon));
+			}
 		}
-    }
+
+
+		public event PropertyChangedEventHandler? PropertyChanged;
+
+		private void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
 
 	public sealed class AssetDownloadsViewModel
 	{

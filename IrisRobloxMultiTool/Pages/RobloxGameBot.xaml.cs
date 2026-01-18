@@ -1,13 +1,12 @@
 ﻿using IrisRobloxMultiTool.Windows;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace IrisRobloxMultiTool.Pages
 {
@@ -18,9 +17,18 @@ namespace IrisRobloxMultiTool.Pages
 	{
 		private readonly BotProcessInfoViewModel _botProcessModel;
 
-		[DllImport("user32.dll")]
-	    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+		[StructLayout(LayoutKind.Sequential)]
+		public struct Rect { public int Left; public int Top; public int Right; public int Bottom; public int Width => Right - Left; public int Height => Bottom - Top; }
+		public enum SetWindowPosFlags : uint { NoSendChanging = 0x0400 }
 
+	    [DllImport("user32.dll", SetLastError = true)]
+		static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SetWindowPosFlags uFlags);
+
+		[DllImport("user32.dll")]
+		public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+		[DllImport("user32.dll")]
+		private static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+		
 		private static readonly CookieContainer RobloxContainer = new();
 		private static readonly HttpClient Client = new(new HttpClientHandler
 	    {
@@ -40,7 +48,22 @@ namespace IrisRobloxMultiTool.Pages
 		    }
 	    };
 
-	    private async Task<string> GetCsrfToken(string cookie)
+		private static async Task<(string, string)> GetAccountInfo(string cookie)
+		{
+			using HttpRequestMessage request = new (HttpMethod.Get, "https://www.roblox.com/my/settings/json");
+			request.Headers.TryAddWithoutValidation("Cookie", $".ROBLOSECURITY={cookie}");
+			request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0");
+			using HttpResponseMessage response = await Client.SendAsync(request);
+			string responseBody = await response.Content.ReadAsStringAsync();
+			using JsonDocument document = JsonDocument.Parse(responseBody);
+
+			string? username = document.RootElement.GetProperty("DisplayName").GetString()?.Trim();
+			string userId = document.RootElement.GetProperty("UserId").GetRawText().Trim();
+
+			return (username ?? "Unknown", userId);
+		}
+
+	    private static async Task<string> GetCsrfToken(string cookie)
 	    {
 		    RobloxContainer.Add(new Uri("https://auth.roblox.com"), new Cookie(".ROBLOSECURITY", cookie, "/", "auth.roblox.com"));
 		    RobloxContainer.Add(new Uri("https://roblox.com"), new Cookie(".ROBLOSECURITY", cookie, "/", "roblox.com"));
@@ -56,7 +79,7 @@ namespace IrisRobloxMultiTool.Pages
 		    return headers.First();
 	    }
 
-	    private async Task<string> GetAssertionToken(string cookie)
+	    private static async Task<string> GetAssertionToken(string cookie)
 	    {
 		    string csrf = await GetCsrfToken(cookie);
 
@@ -88,7 +111,7 @@ namespace IrisRobloxMultiTool.Pages
 			ProcessListGrid.DataContext = _botProcessModel;
 		}
 
-		private string GetLaunchCode(long placeId, string authCode)
+		private static string GetLaunchCode(long placeId, string authCode)
         {
 	        Random rnd = new();
 	        long browserTrackerId = 55393295400 + rnd.Next(1, 100);
@@ -110,75 +133,63 @@ namespace IrisRobloxMultiTool.Pages
 
 		private async Task<Process?> LaunchRobloxGame(long placeId, string cookie)
 		{
-			string assertionToken = await GetAssertionToken(cookie);
-			string authTicket = await GetAuthenticationTicket(assertionToken);
-			string robloxPath = GetRobloxLocation();
-			
-			ProcessStartInfo startInfo = new()
+			try
 			{
-				FileName = robloxPath,
-				Arguments = GetLaunchCode(placeId, authTicket),
-				CreateNoWindow = true,
-				UseShellExecute = false
-			};
+				string assertionToken = await GetAssertionToken(cookie);
+				string authTicket = await GetAuthenticationTicket(assertionToken);
+				string robloxPath = GetRobloxLocation();
 
-			Process? robloxProcess = Process.Start(startInfo);
-
-			_ = Task.Run(async() =>
-			{
-				while (!robloxProcess?.HasExited ?? false)
+				ProcessStartInfo startInfo = new()
 				{
-					ShowWindow(robloxProcess.MainWindowHandle, 0);
+					FileName = robloxPath,
+					Arguments = GetLaunchCode(placeId, authTicket),
+					CreateNoWindow = true,
+					UseShellExecute = false
+				};
 
-					robloxProcess.PriorityClass = ProcessPriorityClass.Idle; 
-					robloxProcess.ProcessorAffinity = new IntPtr(1);
+				Process? robloxProcess = Process.Start(startInfo);
 
-					await Task.Delay(150);
-				}
-			});
+				_ = Task.Run(async () =>
+				{
+					await AppInvokeAsync(async () =>
+					{
+						while (!robloxProcess?.HasExited ?? false)
+						{
+							if (HiddenClientToggle.IsChecked ?? false) ShowWindow(robloxProcess.MainWindowHandle, 0);
+							else if (GetWindowRect(robloxProcess.MainWindowHandle, out Rect rectangle))
+								if (rectangle is { Height: > 5, Width: > 5 })
+									SetWindowPos(robloxProcess.MainWindowHandle, IntPtr.Zero, 0, 0, 1, 1,
+										SetWindowPosFlags.NoSendChanging);
 
-			return robloxProcess;
+							robloxProcess.PriorityClass = ProcessPriorityClass.Idle;
+							robloxProcess.ProcessorAffinity = new IntPtr(1);
+
+							await Task.Delay(150);
+						}
+					});
+				});
+
+				return robloxProcess;
+			}
+			catch (Exception ex)
+			{
+				CustomMessageBox.ShowDialog(ex.Message);
+				Log(ex);
+
+				return null;
+			}
 		}
 
 		private readonly CancellationTokenSource _cts = new ();
 		
-		private void Grid_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		private void Grid_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (Process.GetProcessesByName("RobloxPlayerBeta").Length > 0) 
 			{ CustomMessageBox.ShowDialog("Roblox is currently running, please close all clients and then reload application page."); return; }
 
 			try { _ = new Mutex(true, "ROBLOX_singletonMutex"); } catch {/**/}
 
-			_ = Task.Run(async () =>
-			{
-				try
-				{
-					while (!_cts.IsCancellationRequested)
-					{
-						foreach (BotProcessInfo processInfo in _botProcessModel.BotProcessInfos)
-						{
-							processInfo.ActiveTime = processInfo.ActiveTime.Add(TimeSpan.FromSeconds(1));
-						}
-
-						await Task.Delay(1000);
-					}
-				} catch {/**/}
-
-			});
-
 			_botProcessModel.BotProcessInfos.Clear();
-
-			for (int i = 0; i < 5; i++) // Simulate 5 bot processes
-			{
-				_botProcessModel.BotProcessInfos.Add(new BotProcessInfo(this)
-				{
-					Username = $"User{i + 1}",
-					UserId = 1000 + i,
-					ProcessId = 5000 + i,
-					ActiveTime = TimeSpan.Zero
-				});
-				AppInvoke(UpdateLayout);
-			}
 		}
 		
 		private string _selectedFilePath = string.Empty;
@@ -194,7 +205,7 @@ namespace IrisRobloxMultiTool.Pages
 			if (dlg.ShowDialog() != true) return;
 			_selectedFilePath = dlg.FileName;
 
-			CustomMessageBox.ShowDialog($"Selected file: {Path.GetFileName(_selectedFilePath)}");
+			CustomMessageBox.ShowDialog($"Selected cookie file: {Path.GetFileName(_selectedFilePath)}");
 		}
 
 		private void ClearBotFile_Click(object sender, RoutedEventArgs e)
@@ -207,23 +218,63 @@ namespace IrisRobloxMultiTool.Pages
 		private void StartBot_Click(object sender, RoutedEventArgs e)
 		{
 			string placeId = PlaceIdBox.Text;
-			bool isHidden = WindowModeToggle.IsChecked ?? false;
 
-			if (string.IsNullOrWhiteSpace(placeId))
-			{
-				CustomMessageBox.ShowDialog("Please enter a Place ID.");
-				return;
-			}
+			if (string.IsNullOrWhiteSpace(placeId)) { CustomMessageBox.ShowDialog("Please enter a Place ID."); return; }
 
-			if (string.IsNullOrWhiteSpace(_selectedFilePath))
-			{
-				CustomMessageBox.ShowDialog("Please select an input file.");
-				return;
-			}
+			if (string.IsNullOrWhiteSpace(_selectedFilePath)) { CustomMessageBox.ShowDialog("Please select an input file."); return; }
 
 			_botProcessModel.BotProcessInfos.Clear();
 
-			CustomMessageBox.ShowDialog($"Started botting for Place ID {placeId} in {(isHidden ? "Hidden" : "Tiny Window")} mode.");
+			string[] lines = File.ReadAllLines(_selectedFilePath);
+
+			foreach (string line in lines)
+			{
+				string cookie = line.Trim();
+				if (string.IsNullOrWhiteSpace(cookie)) continue;
+
+				_ = Task.Run(() =>
+				{
+					AppInvoke(async () =>
+					{
+						(string username, string userId) = await GetAccountInfo(cookie);
+
+						RestartCookie:
+						Process? botProcess = await LaunchRobloxGame(long.Parse(placeId), cookie);
+
+						if (botProcess is null) return;
+						
+						BotProcessInfo botInfo = new()
+						{
+							Username = username,
+							UserId = long.Parse(userId),
+							ProcessId = botProcess.Id,
+							ActiveTime = TimeSpan.Zero
+						};
+
+						_botProcessModel.BotProcessInfos.Add(botInfo);
+
+						// ReSharper disable once AccessToModifiedClosure
+						botProcess.Exited += (_, _) => _botProcessModel.BotProcessInfos.Remove(botInfo);
+
+						while (!_cts.IsCancellationRequested && !botProcess.HasExited)
+						{
+							botInfo.ActiveTime += TimeSpan.FromSeconds(1);
+
+							if (KillAt15.IsChecked is not null && KillAt15.IsChecked.Value && botInfo.ActiveTime >= TimeSpan.FromMinutes(15))
+								botProcess.Kill(true);
+
+							if (KillAt15.IsChecked is not null && KillAt15.IsChecked.Value && botInfo.ActiveTime >= TimeSpan.FromMinutes(15))
+							{
+								botProcess.Kill(true);
+								goto RestartCookie;
+							}
+
+							await Task.Delay(1000);
+						}
+					});
+				});
+			}
+
 		}
 
 		private void Page_Unloaded(object sender, RoutedEventArgs e) => _cts.Cancel();
@@ -234,30 +285,31 @@ namespace IrisRobloxMultiTool.Pages
 		public ObservableCollection<BotProcessInfo> BotProcessInfos { get; } = [];
 	}
 
-	public class BotProcessInfo(Page page)
+	public sealed class BotProcessInfo : INotifyPropertyChanged
 	{
-		public required string Username
-		{
-			get;
-			set { field = value; AppInvoke(page.UpdateLayout); }
-		}
+		public required string Username { get; set; }
 
-		public required int UserId
-		{
-			get;
-			set { field = value; AppInvoke(page.UpdateLayout); }
-		}
+		public required long UserId { get; set; }
 
-		public required int ProcessId
-		{
-			get;
-			set { field = value; AppInvoke(page.UpdateLayout); }
-		}
+		public required int ProcessId { get; set; }
 
 		public required TimeSpan ActiveTime
 		{
 			get;
-			set { field = value; AppInvoke(page.UpdateLayout); }
+			set
+			{
+				if (field == value) return;
+
+				field = value;
+				OnPropertyChanged(nameof(ActiveTime));
+			}
+		}
+
+		public event PropertyChangedEventHandler? PropertyChanged;
+
+		private void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
