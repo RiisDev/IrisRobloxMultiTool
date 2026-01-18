@@ -11,10 +11,26 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Wpf.Ui.Common;
 
+using static IrisRobloxMultiTool.Classes.RobloxApi;
+
 namespace IrisRobloxMultiTool.Pages
 {
 	public partial class AssetDownloader
 	{
+		/*
+		 * Catalog Info Details
+		 *
+		 * Single Request = GET https://catalog.roblox.com/v1/catalog/items/12730745477/details?itemType=asset
+		 *
+		 * Multi Request = POST https://catalog.roblox.com/v1/catalog/items/details
+		 * Post Data = {"items":[{"itemType":"Asset","id":1354235}]}
+		 *
+		 * Thumbnails = GET https://thumbnails.roblox.com/v1/assets?assetIds=12730745477&format=png&isCircular=false&size=150x150
+		 *
+		 */
+
+		record CatalogAssetInfo(long Id, AssetType AssetType, CatalogType Type, Uri Thumbnail);
+
 		public string AssetDataUrl => GetTextContent(AssetId);
 		public string InputFile = null!;
 		public string OutputLocation = null!;
@@ -25,7 +41,6 @@ namespace IrisRobloxMultiTool.Pages
 		public AssetDownloader()
 		{
 			InitializeComponent();
-			BaseAssetType_SelectionChanged(BaseAssetType, null!);
 			_assetDownloads = new AssetDownloadsViewModel();
 			DownloadControl.DataContext = _assetDownloads;
 
@@ -39,139 +54,10 @@ namespace IrisRobloxMultiTool.Pages
 					StatusIcon = SymbolRegular.ArrowDownload20,
 					AssetId = 1354235
 				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 25,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 50,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 100,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.CheckmarkCircle20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 0,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 25,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 50,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 100,
-					IsCompleted = true,
-					StatusIcon = SymbolRegular.CheckmarkCircle20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 0,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 25,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 50,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 100,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.CheckmarkCircle20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 0,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 25,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 50,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.ArrowDownload20,
-					AssetId = 1354235
-				});
-				_assetDownloads.AssetDownloads.Add(new AssetDownloadItem()
-				{
-					PreviewImage = new Uri("https://tr.rbxcdn.com/180DAY-d3a466e4129542c484d6ec662d65b9f9/420/420/ShirtAccessory/Webp/noFilter"),
-					Progress = 100,
-					IsCompleted = false,
-					StatusIcon = SymbolRegular.CheckmarkCircle20,
-					AssetId = 1354235
-				});
+				
 			};
 		}
 
-		private static readonly Dictionary<string, IReadOnlyList<string>> AssetSubTypes = new ()
-		{
-			{ "Accessories", new List<string> { "Head", "Face", "Neck", "Shoulder", "Front", "Back", "Waist", "Gear" } },
-			{ "Animations", new List<string> { "Bundle", "Emote" } },
-			{ "Audio", new List<string>() },
-			{ "Body", new List<string> { "Full Bodies", "Hair", "Head", "Classic Head", "Classic Face" } },
-			{ "Clothing", new List<string> { "T-Shirt", "Shirt", "Sweaters", "Jackets", "Pants", "Shorts", "Dresses & Skirts", "Bodysuits", "Shoes", "Classic Shirts", "Classic T-Shirts", "Classic Pants" } },
-			{ "Game Asset", new List<string> { "Mesh", "Model", "Plugin", "Texture", } }
-		};
-		
 		private void OpenFileDialog(object sender, RoutedEventArgs e)
 		{
 			if (sender is not Control control) return;
@@ -229,24 +115,6 @@ namespace IrisRobloxMultiTool.Pages
 
 		private string GetTextContent(TextBox textBox) => Dispatcher.Invoke(() => textBox.Text);
 
-		private void BaseAssetType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			AppInvoke(() =>
-			{
-				if (AssetSubTypesBox is null) return;
-
-				AssetSubTypesBox.Items.Clear();
-				foreach (string subType in AssetSubTypes[((ComboBoxItem)BaseAssetType.SelectedItem).Content.ToString()!])
-				{
-					AssetSubTypesBox.Items.Add(new ComboBoxItem
-					{
-						Content = subType
-					});
-				}
-				AssetSubTypesBox.SelectedIndex = 0;
-				UpdateLayout();
-			});
-		}
 	}
 
 	public sealed class AssetDownloadItem : INotifyPropertyChanged
