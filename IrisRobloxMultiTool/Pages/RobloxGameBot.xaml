@@ -19,6 +19,7 @@
                     <ui:Button
                         Content="Select Input File"
                         Name="SelectBotFile"
+                        BorderBrush="#66F32929"
                         Icon="Document24"
                         Margin="0,10,0,0"
                         HorizontalAlignment="Stretch"
@@ -28,13 +29,14 @@
                         Content="Clear Input File"
                         Name="ClearBotFile"
                         Margin="0,10,0,0"
+                        Visibility="Collapsed"
                         HorizontalAlignment="Stretch"
                         Click="ClearBotFile_Click"/>
 
                     <ui:NumberBox
                         PlaceholderText="      Enter Place ID"
                         Name="PlaceIdBox"
-                        Text="8012418022"
+                        Text=""
                         IntegersOnly="True"
                         SpinButtonsEnabled="False"
                         PlaceholderEnabled="True"
@@ -53,6 +55,8 @@
                         Content="Start Botting"
                         Icon="ArrowDownload20"
                         HorizontalAlignment="Stretch"
+                        IsEnabled="False"
+                        Name="StartBotting"
                         Click="StartBot_Click"/>
                 </StackPanel>
             </ui:Card>

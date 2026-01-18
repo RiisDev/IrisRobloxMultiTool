@@ -7,6 +7,7 @@ using System.IO;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Media;
 
 namespace IrisRobloxMultiTool.Pages
 {
@@ -103,6 +104,8 @@ namespace IrisRobloxMultiTool.Pages
 		    using HttpResponseMessage authenticationTicketResponse = await Client.SendAsync(request);
 		    return authenticationTicketResponse.Headers.GetValues("rbx-authentication-ticket").First();
 		}
+
+	    public string InputFile = null!;
 
 		public RobloxGameBot()
 		{
@@ -205,13 +208,18 @@ namespace IrisRobloxMultiTool.Pages
 			if (dlg.ShowDialog() != true) return;
 			_selectedFilePath = dlg.FileName;
 
-			CustomMessageBox.ShowDialog($"Selected cookie file: {Path.GetFileName(_selectedFilePath)}");
+			SelectBotFile.BorderBrush = new SolidColorBrush(Color.FromArgb(60, 0, 255, 0));
+			ClearBotFile.Visibility = Visibility.Visible;
+			StartBotting.IsEnabled = true;
 		}
 
 		private void ClearBotFile_Click(object sender, RoutedEventArgs e)
 		{
 			_selectedFilePath = string.Empty;
-			CustomMessageBox.ShowDialog("Input file cleared.");
+
+			SelectBotFile.BorderBrush = new SolidColorBrush(Color.FromArgb(40, 243, 41, 41));
+			ClearBotFile.Visibility = Visibility.Collapsed;
+			StartBotting.IsEnabled = false;
 		}
 
 

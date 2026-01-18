@@ -21,7 +21,7 @@
 
                     <TextBlock Text="Input Data" FontWeight="SemiBold"/>
                     <ui:TextBox
-                        PlaceholderText="Enter Url (group, or individual asset)"
+                        PlaceholderText="Enter Asset Url"
                         Name="AssetId"
                         Margin="0,10,0,0"
                         IsEnabled="{Binding IsChecked, ElementName=SingleAsset}"
